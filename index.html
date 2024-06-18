@@ -1,11 +1,67 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>SmartWardrobe</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/scripts.js"></script>
+  <title>SmartWardrobe</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="js/scripts.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
+  <header class="header-container">
+    <h1 id=the-main-title>
+      My wardrobes <!-- delete-->
+    </h1>
+    <h3>
+      Making Outfitting Easy
+    </h3>
+    <nav>
+      <div class="search-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none" id="the-ring">
+          <path
+            d="M10 23C11.375 23 12.5 21.9385 12.5 20.641H7.5C7.5 21.9385 8.625 23 10 23ZM17.5 15.9231V10.0256C17.5 6.40462 15.4625 3.37333 11.875 2.57128V1.76923C11.875 0.790256 11.0375 0 10 0C8.9625 0 8.125 0.790256 8.125 1.76923V2.57128C4.55 3.37333 2.5 6.39282 2.5 10.0256V15.9231L0 18.2821V19.4615H20V18.2821L17.5 15.9231ZM15 17.1026H5V10.0256C5 7.10051 6.8875 4.71795 10 4.71795C13.1125 4.71795 15 7.10051 15 10.0256V17.1026Z"
+            fill="black" />
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search">
+        <span id="search-icon">
+          <button>
+            <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+              <path
+                d="M16.1458 14.2083H15.1254L14.7638 13.8596C16.0296 12.3871 16.7917 10.4754 16.7917 8.39583C16.7917 3.75875 13.0329 0 8.39583 0C3.75875 0 0 3.75875 0 8.39583C0 13.0329 3.75875 16.7917 8.39583 16.7917C10.4754 16.7917 12.3871 16.0296 13.8596 14.7638L14.2083 15.1254V16.1458L20.6667 22.5912L22.5912 20.6667L16.1458 14.2083ZM8.39583 14.2083C5.17958 14.2083 2.58333 11.6121 2.58333 8.39583C2.58333 5.17958 5.17958 2.58333 8.39583 2.58333C11.6121 2.58333 14.2083 5.17958 14.2083 8.39583C14.2083 11.6121 11.6121 14.2083 8.39583 14.2083Z"
+                fill="black" />
+            </svg>
+        </span>
+        </button>
+      </div>
+      <div class="dropdown-center">
+        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="images/ronit-atias.png" alt="userImg">
+          UserName
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">MyProfile</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">LogOut</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+  </main>
 
 </body>
+
 </html>

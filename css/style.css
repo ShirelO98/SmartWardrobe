@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+header,
+main,
+footer,
+nav,
+section,
+header,
+div {
+  display: block;
+}
+
+.header-container {
+  width: 100vw;
+  height: 187px;
+  flex-shrink: 0;
+  background: rgb(194, 192, 192);
+}
+
+header > h3 {
+  color: #8c8c8d;
+  font-family: "Source Sans 3";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 265px;
+  height: 26px;
+  flex-shrink: 0;
+  margin-top: 98px;
+  margin-left: 93px;
+  position: absolute;
+}
+
+#the-main-title {
+  width: 265px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #000;
+  font-family: "Source Sans 3";
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 35px;
+  margin-left: 93px;
+  position: absolute;
+}
+
+.search-container {
+  position: absolute;
+  top: 70px;
+  right: 450px;
+}
+
+.search-container > #searchInput {
+  border-radius: 30px;
+  background: #d9d9d9;
+  border-radius: 30px;
+  background: #d9d9d9;
+  border: none;
+  text-align: center;
+}
+
+.search-container > input {
+  position: absolute;
+  width: 158px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 30px;
+  background: #d9d9d9;
+}
+
+#search-icon > button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 22.591px;
+  height: 22.591px;
+  flex-shrink: 0;
+  fill: #000;
+  position: absolute;
+  margin-top: 11px;
+  margin-left: 7px;
+}
+
+.search-container > #the-ring {
+  width: 20px;
+  height: 23px;
+  flex-shrink: 0;
+  fill: #000;
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 170px;
+}
+
+.dropdown-center {
+  position: absolute;
+  top: 37px;
+  right: 27px;
+}
+
+.dropdown-toggle {
+  border: none !important;
+}
+
+.dropdown-toggle:hover,
+.dropdown-toggle:focus {
+  color: #0d6efd !important;
+}
+
+.dropdown-toggle:hover::after {
+  border-top-color: #0d6efd !important;
+}
+
+.dropdown-center > button {
+  color: #000;
+  font-family: "Source Sans 3";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
