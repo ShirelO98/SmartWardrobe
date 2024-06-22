@@ -1,32 +1,30 @@
-function dropDownSideNav(event) {
-  event.preventDefault(); // Prevent default behavior of <a> tag
-  const Messages = document.getElementById("Messages_");
+function dropDownSideNav() {
   const dropdownContent = document.querySelector(".dropdown-menu-side");
-
   if (dropdownContent.style.display === "block") {
     dropdownContent.style.display = "none";
   } else {
     dropdownContent.style.display = "block";
-    Messages.style.paddingBottom = "0px";
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+
+function closeOpenSideNav() {
   let sidebar = document.getElementById('sidebar');
   let toggleButton = document.getElementById('sidebarToggle');
-  toggleButton.style.background = 'none'; 
-  toggleButton.style.color = 'white'; 
+  sidebar.classList.toggle('show');
+  toggleButton.style.background = 'none';
+  toggleButton.style.color = 'white';
 
-  toggleButton.addEventListener('click', function () {
-    sidebar.classList.toggle('show');
-    if (sidebar.classList.contains('show')) {
-      sidebar.classList.remove('hidden');
-      toggleButton.style.color = 'white';
-    } else {
-      sidebar.classList.add('hidden');
-      toggleButton.style.color = 'black';
-    }
-  });
-});
-
-
+  
+  if (sidebar.classList.contains('show')) {
+    sidebar.classList.remove('hidden');
+    toggleButton.style.color = 'white';
+    document.getElementsByTagName('main')[0].style.marginLeft = '330px';
+    document.querySelector('.header-container').style.marginLeft = '330px';
+  } else {
+    sidebar.classList.add('hidden');
+    toggleButton.style.color = 'black';
+    document.querySelector('.header-container').style.marginLeft = '0px';
+    document.getElementsByTagName('main')[0].style.marginLeft = '0px';
+  }
+}

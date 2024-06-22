@@ -23,11 +23,12 @@ div {
 }
 
 .header-container {
-  /* width: calc(100vw - 100px); for aside - delete!!!! */
-  width: 100vw;
   height: 187px;
+  width: 100%;
   flex-shrink: 0;
   background: none;
+  display: block;
+  margin-left: 330px;
 }
 
 header > h3 {
@@ -115,10 +116,9 @@ header > h3 {
 .profile-button {
   text-decoration: none;
   color: black;
-  
 }
 
-.container-profile-button >  li {
+.container-profile-button > li {
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: white;
@@ -197,9 +197,13 @@ body {
   text-decoration: none;
 }
 
+main
+{
+  margin-left: 330px;
+}
+
 #my-wardRobes {
-  width: 100%;
-  margin-left: 86px;
+  margin-left: 89px;
   margin-top: 147px;
   display: flex;
   flex-wrap: wrap;
@@ -311,18 +315,18 @@ body {
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1100;
+  z-index: 1;
   background: black;
   border: none;
   font-size: 1.5em;
   cursor: pointer;
+  color: white;
 }
 
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
   height: 100%;
   background-color: black;
   transition: all 0.3s;
@@ -419,6 +423,7 @@ body {
   flex-shrink: 0;
   margin-left: 40px;
   background: none;
+  margin-top: 10px;
 }
 .nav-link .dropdown-toggle {
   text-decoration: none;
