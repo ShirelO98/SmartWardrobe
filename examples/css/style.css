@@ -1,0 +1,154 @@
+* {
+  margin: 10;
+  padding: auto;
+}
+header,
+footer,
+main {
+  display: block;
+}
+nav {
+  width: 330px;
+  height: 1024px;
+  flex-shrink: 0;
+  background: #000;
+}
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+  width: 100%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.hamburger {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1100;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: black;
+  padding-top: 50px;
+  transition: all 0.3s;
+  width: 330px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+}
+#logout_ {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-right: 11px;
+  margin-left: 4px;
+}
+.sidebar a {
+  display: block;
+  color: #495057;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 0px;
+}
+
+.dropdown-menu {
+  display: none;
+  border: none;
+  background-color: black;
+  margin-left: 60px;
+  margin-bottom: 22px;
+  padding: 0px;
+}
+.dropdown-menu a {
+  margin-bottom: 30px;
+}
+#Mywardrobe_logo {
+  margin-right: 10px;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+#Mywardrobe_logoS {
+  width: 6px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-right: 19px;
+  margin-left: 24px;
+}
+#BR {
+  width: 273px;
+  height: 3px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #444;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  margin-left: 29px;
+  margin-right: 28px;
+}
+#logo {
+  width: 240px;
+  height: 80px;
+  flex-shrink: 0;
+  margin-left: 40px;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.closet_img {
+  width: 25px;
+  height: 32px;
+  margin-right: 7px;
+}
+.Icons_ {
+  width: 28px;
+  height: 22px;
+  flex-shrink: 0;
+  fill: #8c8c8d;
+  margin-right: 10px;
+  margin-left: 52px;
+}
+#nav_footer {
+  margin-top: 15px;
+}
+#nav_footer ul {
+  list-style: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.show {
+    transform: translateX(0);
+  }
+  .content {
+    margin-left: 0;
+    width: 100%;
+  }
+  #logo {
+    width: 200px;
+    height: auto;
+    margin-left: 18px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
