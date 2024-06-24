@@ -197,8 +197,7 @@ body {
   text-decoration: none;
 }
 
-main
-{
+main {
   margin-left: 330px;
 }
 
@@ -207,7 +206,7 @@ main
   margin-top: 147px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   position: absolute;
 }
 
@@ -219,8 +218,8 @@ main
   align-items: center;
   justify-content: center;
   border-radius: 50px;
-  margin-right: 188px;
-  margin-bottom: 106px;
+  margin-right: 80px;
+  margin-bottom: 100px;
 }
 
 .plus-wardrobe {
@@ -235,8 +234,8 @@ main
   height: 213px;
   background: #fff;
   border-radius: 50px;
-  margin-right: 188px;
-  margin-bottom: 106px;
+  margin-right: 80px;
+  margin-bottom: 100px;
 }
 
 .wardrobe-card > button > .add-item {
@@ -306,7 +305,6 @@ main
   font-weight: normal;
 }
 
-/*  side bar*/
 .sidebar.hidden {
   transform: translateX(-100%);
 }
@@ -469,6 +467,31 @@ main
 
 .navbar-toggler-icon {
   background: none;
+}
+
+#form-toAdd-wardrobe {
+  background: none;
+}
+
+#form-toAdd-wardrobe > label {
+  text-align: center;
+  background: none;
+  font-size: larger;
+}
+
+#form-toAdd-wardrobe input {
+  margin-top: 5px;
+}
+
+.edit-input-container {
+  background: none;
+  text-align: center;
+}
+
+.ed{
+  font-size: 15px;
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
