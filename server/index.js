@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8081;
-const {userRouter}=require('./routers/userrouter');
+
+const { userRouter } = require("./routers/userrouter");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/user',userRouter);
+app.use("/user", userRouter);
 
 app.listen(port);
 console.log(`listening on port ${port}`);
