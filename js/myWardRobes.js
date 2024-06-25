@@ -63,7 +63,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     const myWardRobesSection = document.getElementById('my-wardRobes');
     myWardRobesSection.appendChild(wardrobeCard);
     addToDropdown(wardrobeName);
-    
+
     deleteButton.addEventListener('click', function () {
         wardrobeCard.remove();
         removeFromDropdown(wardrobeName);
@@ -76,7 +76,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
         const inputField = document.createElement('input');
         inputField.className = 'form-control ed';
         inputField.type = 'text';
-        inputField.maxLength = 18; 
+        inputField.maxLength = 18;
         inputField.value = currentName;
         inputContainer.appendChild(inputField);
         const saveButton = document.createElement('button');
@@ -110,7 +110,6 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
             window.location.href = 'wardrobe.html';
         }
     });
-    
 }
 
 function createButton(className, text) {
