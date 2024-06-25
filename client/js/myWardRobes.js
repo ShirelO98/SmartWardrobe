@@ -1,3 +1,8 @@
+function init() {
+    createWardrobeCard("Ran's wardrobe", 64, 87, 90);
+    createWardrobeCard("Adar's wardrobe", 44, 17, 87); 
+}
+
 function createWardrobeForm() {
     const div = document.createElement('div');
     div.className = 'wardrobe-card-empty';
