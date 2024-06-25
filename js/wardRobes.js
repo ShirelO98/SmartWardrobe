@@ -59,17 +59,17 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     wardrobeCard.appendChild(readyToWearHeader);
     const myWardRobesSection = document.getElementById('my-wardRobes');
     myWardRobesSection.appendChild(wardrobeCard);
-
+    addToDropdown(wardrobeName);
+    
     deleteButton.addEventListener('click', function () {
         wardrobeCard.remove();
+        removeFromDropdown(wardrobeName);
     });
 
     editButton.addEventListener('click', function () {
         const currentName = nameHeader.textContent.trim();
         const inputContainer = document.createElement('div');
         inputContainer.classList.add('edit-input-container');
-        
-        // Create an input field with a maximum length of 25 characters
         const inputField = document.createElement('input');
         inputField.className = 'form-control ed';
         inputField.type = 'text';
@@ -115,4 +115,31 @@ function createHeader(text, classNames) {
     classNames.forEach(className => header.classList.add(className));
     header.textContent = text;
     return header;
+}
+
+function addToDropdown(wardrobeName) {
+    const wardrobeInAccordion = document.getElementById('wardrobe-in-accordion');
+    const dropdownItem = document.createElement('a');
+    dropdownItem.classList.add('dropdown-item');
+    dropdownItem.href = '#';
+    const closetImg = document.createElement('img');
+    closetImg.src = 'images/closet.png';
+    closetImg.alt = '';
+    closetImg.classList.add('closet_img');
+    const wardrobeText = document.createTextNode(`${wardrobeName}`);
+    dropdownItem.appendChild(closetImg);
+    dropdownItem.appendChild(wardrobeText);
+    wardrobeInAccordion.appendChild(dropdownItem);
+}
+
+function removeFromDropdown(wardrobeName) {
+    const wardrobeInAccordion = document.getElementById('wardrobe-in-accordion');
+    const dropdownItems = wardrobeInAccordion.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+        const itemText = item.textContent.trim();
+        if (itemText === wardrobeName) {
+            item.remove();
+        }
+    });
 }
