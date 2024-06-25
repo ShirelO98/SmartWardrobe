@@ -4,6 +4,11 @@ window.onload = () => {
     document.getElementById("looks-button").onclick = changeButtonState;
     document.getElementById("navbarDropdownMenuLink").onclick = dropDownSideNav;
     document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
+    let itemTypeBtn = document.getElementsByClassName("items-type");
+  console.log(itemTypeBtn.length);
+  for (let i = 0; i < itemTypeBtn.length; i++) {
+    itemTypeBtn[i].addEventListener("click", ItemTypeSelectorBtn);
+  }
 };
 
 
