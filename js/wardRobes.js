@@ -61,12 +61,15 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     wardrobeCard.appendChild(outfitsNumberHeader);
     wardrobeCard.appendChild(readyToWearHeader);
     const myWardRobesSection = document.getElementById('my-wardRobes');
+    console.log("PUT/Wardrobes/id",wardrobeName);
     myWardRobesSection.appendChild(wardrobeCard);
     addToDropdown(wardrobeName);
     
     deleteButton.addEventListener('click', function () {
+        console.log("DElETE/Wardrobes/id",wardrobeName);
         wardrobeCard.remove();
         removeFromDropdown(wardrobeName);
+       
     });
 
     editButton.addEventListener('click', function () {
@@ -88,6 +91,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
             inputContainer.replaceWith(nameHeader);
             updateDropdown(wardrobeName, newName);
             wardrobeName = newName;
+            console.log("PUT/Wardrobes/id",newName);
         });
 
         inputContainer.appendChild(saveButton);
@@ -107,6 +111,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     buttonWardrobeTitle.addEventListener('click', function (event) {
         const cursorStyle = getComputedStyle(event.target).cursor;
         if (cursorStyle === 'pointer') {
+            console.log("GET/Wardrobes/id",wardrobeName);
             window.location.href = 'wardrobe.html';
         }
     });
