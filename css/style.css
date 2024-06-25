@@ -488,12 +488,21 @@ main {
   text-align: center;
 }
 
-.ed{
-  font-size: 15px;
-  text-align: center;
-  width: 100%;
+.sortAz-icon {
+  position: fixed;
+  margin-left: 50px;
+  margin-top: 70px;
+  font-size: 32px !important;
+  background: none;
 }
 
+.list-icon {
+  position: fixed;
+  right: 50px;
+  margin-top: 70px;
+  font-size: 32px !important;
+  background: none;
+}
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
