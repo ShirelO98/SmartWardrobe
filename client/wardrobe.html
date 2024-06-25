@@ -11,9 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script src="js/myWardRobes.js"></script>
+  <script src="js/wardRobe.js"></script>
   <script src="js/sidebar.js"></script>
-  <script src="js/loadDocWardrobe.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
@@ -72,12 +71,12 @@
     <section class="the-main-buttons">
       <section class="items-looks-buttons">
         <button id="items-button" class="empty-button">
-          <span>
+          <span class="item-bt">
             Items
           </span>
         </button>
         <button id="looks-button" class="empty-button">
-          <span>
+          <span class="look-bt">
             Looks
           </span>
         </button>
@@ -138,8 +137,6 @@
           </span>
         </button>
       </section>
-
-
     </section>
 
     <section id="wardRobe">
@@ -153,7 +150,8 @@
       <div class="item-card-fully">
         <span class="elipse-item">
         </span>
-          <img src="/images/shirt1.png" alt="">
+        <button class="empty-button"><span class="material-symbols-outlined edit-item-wardrobe">edit</span></button>
+        <img src="images/shirt1.png" alt="">
       </div>
     </section>
 
