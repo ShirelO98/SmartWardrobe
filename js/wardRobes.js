@@ -8,7 +8,7 @@ function createWardrobeForm() {
     label.textContent = 'Wardrobe Name';
     const inputText = document.createElement('input');
     inputText.type = 'text';
-    inputText.maxLength = 20;
+    inputText.maxLength = 18;
     inputText.className = 'form-control';
     inputText.setAttribute('aria-label', 'Sizing example input');
     inputText.setAttribute('aria-describedby', 'inputGroup-sizing-default');
@@ -73,7 +73,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
         const inputField = document.createElement('input');
         inputField.className = 'form-control ed';
         inputField.type = 'text';
-        inputField.maxLength = 25; 
+        inputField.maxLength = 18; 
         inputField.value = currentName;
         inputContainer.appendChild(inputField);
         const saveButton = document.createElement('button');
@@ -83,6 +83,8 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
             const newName = inputField.value.trim();
             nameHeader.textContent = newName;
             inputContainer.replaceWith(nameHeader);
+            updateDropdown(wardrobeName, newName);
+            wardrobeName = newName;
         });
         
         inputContainer.appendChild(saveButton);
@@ -97,7 +99,6 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
             saveButton.click();
         });
     });
-    
 }
 
 function createButton(className, text) {
@@ -140,6 +141,18 @@ function removeFromDropdown(wardrobeName) {
         const itemText = item.textContent.trim();
         if (itemText === wardrobeName) {
             item.remove();
+        }
+    });
+}
+
+function updateDropdown(oldName, newName) {
+    const wardrobeInAccordion = document.getElementById('wardrobe-in-accordion');
+    const dropdownItems = wardrobeInAccordion.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+        const itemText = item.textContent.trim();
+        if (itemText === oldName) {
+            item.childNodes[1].textContent = newName;
         }
     });
 }
