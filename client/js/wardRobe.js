@@ -44,8 +44,3 @@ function changeButtonState(event) {
         itemSpan.style.color = 'black';
     }
 }
-
-function addItem()
-{
-    
-}
