@@ -41,12 +41,12 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     wardrobeCard.appendChild(addButton);
     wardrobeCard.appendChild(deleteButton);
     wardrobeCard.appendChild(editButton);
-    const cardWardrobeButton = document.createElement('button');
-    cardWardrobeButton.id = 'card-button';
-    cardWardrobeButton.classList.add('empty-button');
+    const buttonWardrobeTitle = document.createElement('button');
+    buttonWardrobeTitle.classList.add('empty-button');
     const nameHeader = document.createElement('h3');
     nameHeader.classList.add('wordrobe-name');
     nameHeader.textContent = wardrobeName;
+    buttonWardrobeTitle.appendChild(nameHeader);
     const clothesNumberHeader = createHeader('Clothes - ' + clothesNumber, ['Clothes-number', 'cards-write']);
     const outfitsNumberHeader = createHeader('Outfits - ' + outfitsNumber, ['Outfits-number', 'cards-write']);
     const readyToWearHeader = document.createElement('h5');
@@ -56,13 +56,12 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     readyToWearSpan.classList.add('ready-to-wear-dont-bold', 'ready-to-wear');
     readyToWearSpan.textContent = readyToWearPercentage + '%';
     readyToWearHeader.appendChild(readyToWearSpan);
-    wardrobeCard.appendChild(nameHeader);
+    wardrobeCard.appendChild(buttonWardrobeTitle);
     wardrobeCard.appendChild(clothesNumberHeader);
     wardrobeCard.appendChild(outfitsNumberHeader);
     wardrobeCard.appendChild(readyToWearHeader);
-    cardWardrobeButton.appendChild(wardrobeCard);
     const myWardRobesSection = document.getElementById('my-wardRobes');
-    myWardRobesSection.appendChild(cardWardrobeButton);
+    myWardRobesSection.appendChild(wardrobeCard);
     addToDropdown(wardrobeName);
     
     deleteButton.addEventListener('click', function () {
@@ -90,7 +89,7 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
             updateDropdown(wardrobeName, newName);
             wardrobeName = newName;
         });
-        
+
         inputContainer.appendChild(saveButton);
         nameHeader.replaceWith(inputContainer);
         inputField.focus();
@@ -99,14 +98,19 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
                 saveButton.click();
             }
         });
+
         inputField.addEventListener('blur', function () {
             saveButton.click();
         });
     });
 
-    wardrobeCard.addEventListener('click', function () {
-        window.location.href = 'wardrobe.html';
+    buttonWardrobeTitle.addEventListener('click', function (event) {
+        const cursorStyle = getComputedStyle(event.target).cursor;
+        if (cursorStyle === 'pointer') {
+            window.location.href = 'wardrobe.html';
+        }
     });
+    
 }
 
 function createButton(className, text) {

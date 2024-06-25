@@ -13,7 +13,7 @@
     crossorigin="anonymous"></script>
   <script src="js/wardRobes.js"></script>
   <script src="js/sidebar.js"></script>
-  <script src="js/loadDoc.js"></script>
+  <script src="js/loadDocWardrobe.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
@@ -67,26 +67,32 @@
           <li class="breadcrumb-item active" aria-current="page">Items</li>
         </ol>
       </nav>
-      <button class="empty-button sorting-button">
-        <span class="material-symbols-outlined sortAz-icon">
-          sort_by_alpha
-          </span>
-      </button>
-      <button class="empty-button list-button">
-        <span class="material-symbols-outlined list-icon">
-          list
-          </span>
-      </button>
     </section>
 
+    <section class="the-main-buttons">
+        <section class="items-looks-buttons">
+            <button id="items-button" class="empty-button">
+                <span>
+                    Items
+                </span>
+            </button>
+            <button id="looks-button" class="empty-button">
+                <span>
+                    Looks
+                </span>
+            </button>
+        </section>
+
+       </section>
+
     <section id="wardRobe">
-      <div class="wardrobe-card-empty">
+      <!-- <div class="wardrobe-card-empty">
         <button class="empty-button plus-wardrobe-button">
           <span class="material-symbols-outlined plus-wardrobe">
             add
           </span>
         </button>
-      </div>
+      </div> -->
     </section>
 
     <section id="side_bar">
