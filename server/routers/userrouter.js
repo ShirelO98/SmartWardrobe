@@ -5,6 +5,6 @@ const userRouter = new Router();
 userRouter.get("/wardrobes", userController.getWardrobes);
 userRouter.post("/wardrobes/wardrobeName", userController.addWardrobe);
 userRouter.put("/wardrobes/wardrobeID/newName", userController.updateWardrobe);
-userRouter.delete("/wardrobes/wardrobeID");
+userRouter.delete("/wardrobes/wardrobeID",userController.deleteWardrobe);
 
 module.exports = { userRouter };
