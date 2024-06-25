@@ -635,15 +635,14 @@ main {
   width: 216px;
   height: 248px;
   background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 50px;
   margin-right: 50px;
   margin-bottom: 50px;
 }
 
 .item-card-fully > img {
+  margin-top: 25px;
+  margin-left: 20px;
   background: none;
 }
 
@@ -652,7 +651,17 @@ main {
   height: 18px;
   background: aquamarine;
   border-radius: 100%;
-  margin-top: 195px;
+  margin-top: 215px;
+  margin-left: 15px;
+  position: absolute;
+}
+
+.edit-item-wardrobe {
+  font-size: 28px !important;
+  margin-top: 15px;
+  margin-left: 175px;
+  background: none;
+  position: absolute;
 }
 
 @media (max-width: 768px) {
