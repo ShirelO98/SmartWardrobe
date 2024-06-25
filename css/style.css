@@ -503,6 +503,16 @@ main {
   font-size: 32px !important;
   background: none;
 }
+
+#wardRobe {
+  margin-left: 89px;
+  margin-top: 147px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: absolute;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
