@@ -1,20 +1,20 @@
 window.onload = () => {
-    initialItems();
-    document.getElementById("items-button").onclick = changeButtonState;
-    document.getElementById("looks-button").onclick = changeButtonState;
-    document.getElementById("navbarDropdownMenuLink").onclick = dropDownSideNav;
-    document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
-    let itemTypeBtn = document.getElementsByClassName("items-type");
-  console.log(itemTypeBtn.length);
-  for (let i = 0; i < itemTypeBtn.length; i++) {
-    itemTypeBtn[i].addEventListener("click", ItemTypeSelectorBtn);
-  }
+  initial();
+  document.getElementById("navbarDropdownMenuLink").onclick = dropDownSideNav;
+  document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
 };
 
-
 function initial() {
-    initialItems();
-    initDropDown();
+  initialItems();
+  initDropDown();
+  let itemsButton = document.getElementById("items-button");
+  itemsButton.addEventListener("click", changeButtonState);
+  let looksButton = document.getElementById("looks-button");
+  looksButton.addEventListener("click", changeButtonState);
+  let itemTypeBtn = document.getElementsByClassName("items-type");
+  for (let i = 0; i < itemTypeBtn.length; i++) {
+    itemTypeBtn[i].addEventListener("click", ItemTypeSelectorBtn);
+  }
 }
 
 function initialItems() {
@@ -25,10 +25,10 @@ function initialItems() {
 }
 
 function initDropDown() {
-    let wardrobeNames =  ["Ran's wardrobe", "Adar's wardrobe"];
-    for (let i = 0; i < wardrobeNames.length; i++) {
-        addToDropdown(wardrobeNames[i]);
-    }
+  let wardrobeNames = ["Ran's wardrobe", "Adar's wardrobe"];
+  for (let i = 0; i < wardrobeNames.length; i++) {
+    addToDropdown(wardrobeNames[i]);
+  }
 }
 
 function changeButtonState(event) {
