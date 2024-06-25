@@ -489,7 +489,7 @@ main {
 }
 
 .sortAz-icon {
-  position: fixed;
+  position: absolute;
   margin-left: 50px;
   margin-top: 70px;
   font-size: 32px !important;
@@ -497,7 +497,7 @@ main {
 }
 
 .list-icon {
-  position: fixed;
+  position: absolute;
   right: 50px;
   margin-top: 70px;
   font-size: 32px !important;
@@ -513,31 +513,110 @@ main {
   position: absolute;
 }
 
-.items-looks-buttons
-{
+.items-looks-buttons {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 225px;
+  background: none;
 }
 
 .items-looks-buttons > button {
   border-radius: 40px;
   background: #fff;
-  width: 182px;
-  height: 77px;
+  width: 150px;
+  height: 60px;
   display: block;
-  margin-top: 50px;
+  margin-top: 45px;
 }
 
 .items-looks-buttons > button > span {
   color: #000;
   font-family: "Source Sans 3";
-  font-size: 30px;
+  font-size: 25px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   background: none;
+}
+
+#types-of-items {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-left: 20px;
+  margin-top: 15px;
+}
+
+.plus-item-type {
+  font-size: 35px !important;
+  margin-top: 5px;
+}
+
+.items-type {
+  border-radius: 40px;
+  background: #fff;
+  width: 76px;
+  height: 43px;
+  display: inline-block;
+}
+
+.items-type > span {
+  color: #000;
+  font-family: "Source Sans 3";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: none;
+}
+
+.wardRobe-icons-action{
+margin-top: 5px;
+}
+
+.list-icon-wardrobe {
+  position: absolute;
+  right: 50px;
+  font-size: 32px !important;
+  background: none;
+}
+
+.sortAz-icon-wardrobe {
+  position: absolute;
+  margin-left: 20px;
+  font-size: 32px !important;
+  background: none;
+}
+
+.filter-icon-wardrobe
+{
+  position: absolute;
+  margin-left: 60px;
+  font-size: 32px !important;
+  background: none;
+}
+
+.removeSelction-icon-wardrobe
+{
+  position: absolute;
+  margin-left: 100px;
+  font-size: 32px !important;
+  background: none;
+}
+
+.delete-icon-wardrobe
+{
+  position: absolute;
+  margin-left: 140px;
+  font-size: 32px !important;
+  background: none;
+}
+
+.item-card-empty
+{
+  
 }
 
 @media (max-width: 768px) {
