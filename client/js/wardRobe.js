@@ -6,6 +6,7 @@ window.onload = () => {
 function initWardrobe() {
   initialItemsAndType();
   initDropDown();
+  createItemsCards();
   let plisItemsButton = document.querySelector('.plus-item-button');
   plisItemsButton.addEventListener("click", createItemForm);
   let itemsButton = document.getElementById("items-button");
@@ -88,13 +89,15 @@ function createItemForm() {
   closeButton.className = 'close-button';
   closeButton.innerHTML = '&times;';
   closeButton.onclick = function () {
-      wardRobeSection.removeChild(overlay);
+    wardRobeSection.removeChild(overlay);
   };
   formContainer.appendChild(closeButton);
 
   const form = document.createElement('form');
   form.id = 'multiStepForm';
+  form.enctype = 'multipart/form-data'; // Allows file uploads
   formContainer.appendChild(form);
+
   const progressBar = document.createElement('div');
   progressBar.className = 'progress';
   const progressBarInner = document.createElement('div');
@@ -107,32 +110,33 @@ function createItemForm() {
   formContainer.appendChild(progressBar);
 
   const steps = [
-      { inputs: ['Name', 'color', 'collection'] },
-      { inputs: ['style', 'season', 'price'] },
-      { inputs: ['material', 'brand', 'size'] }
+    { inputs: ['Name', 'Color', 'Collection'] },
+    { inputs: ['Style', 'Season', 'Price'] },
+    { inputs: ['Material', 'Brand', 'Size'] }
   ];
 
   steps.forEach((step, index) => {
-      const formStep = document.createElement('div');
-      formStep.className = 'form-step';
-      if (index !== 0) formStep.style.display = 'none';
+    const formStep = document.createElement('div');
+    formStep.className = 'form-step';
+    if (index !== 0) formStep.style.display = 'none';
 
-      step.inputs.forEach(inputName => {
-          const formGroup = document.createElement('div');
-          formGroup.className = 'form-group';
-          const label = document.createElement('label');
-          label.textContent = inputName.charAt(0).toUpperCase() + inputName.slice(1);
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.className = 'form-control';
-          input.name = inputName;
-          formGroup.appendChild(label);
-          formGroup.appendChild(input);
-          formStep.appendChild(formGroup);
-      });
+    step.inputs.forEach(inputName => {
+      const formGroup = document.createElement('div');
+      formGroup.className = 'form-group';
+      const label = document.createElement('label');
+      label.textContent = inputName.charAt(0).toUpperCase() + inputName.slice(1);
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'form-control';
+      input.name = inputName;
+      formGroup.appendChild(label);
+      formGroup.appendChild(input);
+      formStep.appendChild(formGroup);
+    });
 
-      form.appendChild(formStep);
+    form.appendChild(formStep);
   });
+
   const navButtons = document.createElement('div');
   navButtons.className = 'nav-buttons';
   const backButton = document.createElement('button');
@@ -145,21 +149,90 @@ function createItemForm() {
   nextButton.type = 'button';
   nextButton.className = 'btn btn-primary';
   nextButton.textContent = 'Next';
-  nextButton.onclick = function () { navigateSteps(1); };
+  nextButton.onclick = function () {
+    if (currentStep === steps.length - 1) {
+      submitForm();
+    } else {
+      navigateSteps(1);
+    }
+  };
   navButtons.appendChild(backButton);
   navButtons.appendChild(nextButton);
   formContainer.appendChild(navButtons);
   overlay.appendChild(formContainer);
   wardRobeSection.appendChild(overlay);
+
   let currentStep = 0;
+
   function navigateSteps(direction) {
-      const steps = document.querySelectorAll('.form-step');
-      steps[currentStep].style.display = 'none';
-      currentStep += direction;
-      steps[currentStep].style.display = 'block';
-      progressBarInner.style.width = `${(currentStep + 1) / steps.length * 100}%`;
-      progressBarInner.ariaValuenow = `${(currentStep + 1) / steps.length * 100}`;
-      backButton.style.display = currentStep === 0 ? 'none' : 'inline-block';
-      nextButton.textContent = currentStep === steps.length - 1 ? 'Submit' : 'Next';
+    const steps = document.querySelectorAll('.form-step');
+    steps[currentStep].style.display = 'none';
+    currentStep += direction;
+    steps[currentStep].style.display = 'block';
+    progressBarInner.style.width = `${(currentStep + 1) / steps.length * 100}%`;
+    progressBarInner.ariaValuenow = `${(currentStep + 1) / steps.length * 100}`;
+    backButton.style.display = currentStep === 0 ? 'none' : 'inline-block';
+    nextButton.textContent = currentStep === steps.length - 1 ? 'Submit' : 'Next';
+    if (currentStep === steps.length - 1) {
+      const fileInputGroup = document.createElement('div');
+      fileInputGroup.className = 'input-group mb-3';
+      const fileLabel = document.createElement('label');
+      fileLabel.className = 'input-group-text';
+      fileLabel.textContent = 'Upload';
+      fileInputGroup.appendChild(fileLabel);
+      const fileInput = document.createElement('input');
+      fileInput.type = "file";
+      fileInput.className = 'form-control';
+      fileInput.id = 'inputGroupFile01';
+      fileInputGroup.appendChild(fileInput);
+      form.appendChild(fileInputGroup);
+    } else {
+      const fileInputGroup = form.querySelector('.input-group.mb-3');
+      if (fileInputGroup) {
+        form.removeChild(fileInputGroup);
+      }
+    }
+  }
+
+  function submitForm() {
+    setTimeout(() => {
+      const notification = document.createElement('div');
+      notification.className = 'alert alert-success mt-3';
+      notification.textContent = 'Item successfully added!';
+      formContainer.insertBefore(notification, navButtons);
+      setTimeout(() => {
+        form.reset();
+        wardRobeSection.removeChild(overlay);
+      }, 2000);
+    }, 1000);
+  }
+}
+
+
+function createItemsCards() {
+  const wardRobeSection = document.getElementById('wardRobe');
+
+  for (let i = 1; i <= 11; i++) {
+    const itemCard = document.createElement('div');
+    itemCard.className = 'item-card-fully';
+
+    const ellipseSpan = document.createElement('span');
+    ellipseSpan.className = 'elipse-item';
+    itemCard.appendChild(ellipseSpan);
+
+    const editButton = document.createElement('button');
+    editButton.className = 'empty-button';
+    const editSpan = document.createElement('span');
+    editSpan.className = 'material-symbols-outlined edit-item-wardrobe';
+    editSpan.textContent = 'edit';
+    editButton.appendChild(editSpan);
+    itemCard.appendChild(editButton);
+
+    const img = document.createElement('img');
+    img.src = `images/items/${i}.png`;
+    img.alt = `Item ${i}`;
+    itemCard.appendChild(img);
+
+    wardRobeSection.appendChild(itemCard);
   }
 }
