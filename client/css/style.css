@@ -391,6 +391,7 @@ main {
   background: none;
 }
 
+
 #Mywardrobe_logo {
   margin-right: 10px;
   width: 28px;
@@ -516,7 +517,7 @@ main {
 #looks {
   margin-left: 89px;
   margin-top: 50px;
-  display: "none";
+  display: none;
   flex-wrap: wrap;
   justify-content: center;
   position: absolute;
