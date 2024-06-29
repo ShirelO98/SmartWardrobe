@@ -1,10 +1,9 @@
 window.onload = () => {
-  initial();
-  document.getElementById("navbarDropdownMenuLink").onclick = dropDownSideNav;
-  document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
+  initSideNav();
+  initWardrobe();
 };
 
-function initial() {
+function initWardrobe() {
   initialItems();
   initDropDown();
   let itemsButton = document.getElementById("items-button");

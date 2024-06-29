@@ -1,6 +1,13 @@
-function init() {
+window.onload = () => {
+    initSideNav();
+    initMyWardrobe();
+};
+
+
+function initMyWardrobe() {
     createWardrobeCard("Ran's wardrobe", 64, 87, 90);
     createWardrobeCard("Adar's wardrobe", 44, 17, 87); 
+    document.querySelector('.plus-wardrobe-button').onclick = createWardrobeForm;
 }
 
 function createWardrobeForm() {

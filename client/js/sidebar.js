@@ -1,3 +1,9 @@
+function initSideNav() {
+  document.getElementById("navbarDropdownMenuLink").onclick = dropDownSideNav;
+  document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
+}
+
+
 function dropDownSideNav() {
   const dropdownContent = document.querySelector(".dropdown-menu-side");
   if (dropdownContent.style.display === "block") {
@@ -15,7 +21,7 @@ function closeOpenSideNav() {
   toggleButton.style.background = 'none';
   toggleButton.style.color = 'white';
 
-  
+
   if (sidebar.classList.contains('show')) {
     sidebar.classList.remove('hidden');
     toggleButton.style.color = 'white';
