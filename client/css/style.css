@@ -391,7 +391,6 @@ main {
   background: none;
 }
 
-
 #Mywardrobe_logo {
   margin-right: 10px;
   width: 28px;
@@ -529,7 +528,7 @@ main {
   gap: 225px;
   background: none;
 }
- .items-looks-buttons > button {
+.items-looks-buttons > button {
   border-radius: 40px;
   background: #fff;
   width: 150px;
@@ -674,12 +673,11 @@ main {
 
 .item-card-fully-looks > ul {
   list-style: none;
-  background: none; 
+  background: none;
 }
 
 .item-card-fully-looks > ul > li {
   background: none;
-
 }
 
 .item-card-fully-looks > ul > li > img {
@@ -688,12 +686,16 @@ main {
   margin-top: -30px;
 }
 
-.item-card-fully-looks > ul > li:first-child > img{
+.item-card-fully-looks > ul > li:first-child > img {
   background: none;
   width: 75%;
   margin-top: 20px;
 }
-
+.item-card-fully-looks > ul > li:last-child > img {
+  background: none;
+  width: 65%;
+  margin-top: -60px;
+}
 
 
 .item-card-fully > img {
@@ -717,6 +719,24 @@ main {
   margin-top: 15px;
   margin-left: 175px;
   background: none;
+  position: absolute;
+}
+
+.edit-look-wardrobe {
+  font-size: 28px !important;
+  margin-top: 15px;
+  margin-left: 175px;
+  background: none;
+  position: absolute;
+}
+
+.elipse-item-looks {
+  width: 18px;
+  height: 18px;
+  background: aquamarine;
+  border-radius: 100%;
+  margin-top: 215px;
+  margin-left: 15px;
   position: absolute;
 }
 
@@ -770,7 +790,6 @@ main {
   display: flex;
   justify-content: space-between;
 }
-
 
 @media (max-width: 768px) {
   .sidebar {
