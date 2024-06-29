@@ -780,10 +780,17 @@ main {
   transition: width 0.3s;
 }
 .table-responsive {
+  display: none;
+  margin-top: -150px !important;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
   fill: #fff;
-  margin-top: 589px;
-  width: 55%;
+  width: 70%; 
+  margin: 0 auto; 
 }
+
 .table {
   text-align: center !important;
   color: #000;
@@ -792,16 +799,24 @@ main {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  width: 100%;;
+}
+
+.plus-item-button {
+  margin-bottom: 20px; 
 }
 
 .nav-buttons {
   display: flex;
   justify-content: space-between;
 }
-#itemsTable {
-  display: none;
-  margin-left: 89px;
-  margin-top: 50px;
+
+.plus-wardrobe-table
+{
+  font-size: 50px !important;
+  font-weight: bold !important;
+  color: #8c8c8d;
+  background: none;
 }
 
 @media (max-width: 768px) {

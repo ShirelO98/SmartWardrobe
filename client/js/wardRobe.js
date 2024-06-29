@@ -20,6 +20,13 @@ function initWardrobe() {
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   createLooksCards();
+  let addItemBttable = document.getElementsByClassName("plus-item-button-table")[0];
+  addItemBttable.onclick = () => {
+    const tableSection = document.getElementById("itemsTable");
+    tableSection.style.display = "none";
+    document.getElementById("wardRobe").style.display = "flex";
+    createItemForm();
+  }
 }
 
 function initialItemsAndType() {
@@ -133,7 +140,7 @@ function createItemForm() {
 
   const form = document.createElement("form");
   form.id = "multiStepForm";
-  form.enctype = "multipart/form-data"; // Allows file uploads
+  form.enctype = "multipart/form-data";
   formContainer.appendChild(form);
 
   const progressBar = document.createElement("div");
