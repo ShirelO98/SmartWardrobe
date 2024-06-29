@@ -52,14 +52,14 @@ function changeButtonState(event) {
   if (event.currentTarget === itemBut) {
     document.getElementById("looks").style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
-    document.getElementById("wardRobe").setAttribute("class", "active");
-    document.getElementById("looks").setAttribute("class", "inactive");
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "none";
     let breadCrumbs = document.getElementsByClassName("breadcrumb")[0];
     const crumbs = breadCrumbs.getElementsByTagName("li");
     lastCrumb = crumbs[crumbs.length - 1];
     lastCrumb.textContent = "Items";
+    let button = document.getElementById("layout-button");
+    button.textContent = "list";
     itemBut.style.backgroundColor = "black";
     itemSpan.style.color = "white";
     lookBut.style.backgroundColor = "white";
@@ -71,14 +71,14 @@ function changeButtonState(event) {
     itemSpan.style.color = "black";
     document.getElementById("wardRobe").style.display = "none";
     document.getElementById("looks").style.display = "flex";
-    document.getElementById("wardRobe").setAttribute("class", "inactive");
-    document.getElementById("looks").setAttribute("class", "active");
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "none";
     let breadCrumbs = document.getElementsByClassName("breadcrumb")[0];
     const crumbs = breadCrumbs.getElementsByTagName("li");
     lastCrumb = crumbs[crumbs.length - 1];
     lastCrumb.textContent = "Looks";
+    // let button = document.getElementById("layout-button");
+    // button.textContent = "";
   }
 }
 
@@ -279,14 +279,26 @@ function createItemCard(imageSrc, altText) {
 
   return itemCard;
 }
-
 function layoutDisplayBtn(event) {
-  let button = document.getElementById("layout-button");
-  button.textContent = "grid_view";
+  if (document.getElementById("layout-button").textContent == "list") {
+    let button = document.getElementById("layout-button");
+    button.textContent = "grid_view";
+    const tableSection = document.getElementById("itemsTable");
+    tableSection.style.display = "flex";
+    document.getElementById("wardRobe").style.display = "none";
+    document.getElementById("looks").style.display = "none";
+  } else if (
+    document.getElementById("layout-button").textContent == "grid_view"
+  ) {
+    let button = document.getElementById("layout-button");
+    button.textContent = "list";
+    const tableSection = document.getElementById("itemsTable");
+    tableSection.style.display = "none";
+    document.getElementById("wardRobe").style.display = "flex";
+  }
 }
-
 function createLooksCards() {
-  const looksSection = document.getElementById('looks');
+  const looksSection = document.getElementById("looks");
 
   const tShirts = [];
   for (let i = 1; i <= 4; i++) {
@@ -300,10 +312,10 @@ function createLooksCards() {
   for (let i = 1; i <= 4; i++) {
     shoes.push({ src: `images/items/shoes/${i}.png`, alt: `Shoes ${i}` });
   }
-  
-  tShirts.forEach(tShirt => {
-    pants.forEach(pant => {
-      shoes.forEach(shoe => {
+
+  tShirts.forEach((tShirt) => {
+    pants.forEach((pant) => {
+      shoes.forEach((shoe) => {
         const lookCard = createLookCard(tShirt, pant, shoe);
         looksSection.appendChild(lookCard);
       });
@@ -312,27 +324,27 @@ function createLooksCards() {
 }
 
 function createLookCard(tShirt, pant, shoe) {
-  const lookCard = document.createElement('div');
-  lookCard.className = 'item-card-fully-looks';
+  const lookCard = document.createElement("div");
+  lookCard.className = "item-card-fully-looks";
 
-  const ellipseSpan = document.createElement('span');
-  ellipseSpan.className = 'elipse-item-looks';
+  const ellipseSpan = document.createElement("span");
+  ellipseSpan.className = "elipse-item-looks";
   lookCard.appendChild(ellipseSpan);
 
-  const editButton = document.createElement('button');
-  editButton.className = 'empty-button';
-  const editSpan = document.createElement('span');
-  editSpan.className = 'material-symbols-outlined edit-look-wardrobe';
-  editSpan.textContent = 'edit';
+  const editButton = document.createElement("button");
+  editButton.className = "empty-button";
+  const editSpan = document.createElement("span");
+  editSpan.className = "material-symbols-outlined edit-look-wardrobe";
+  editSpan.textContent = "edit";
   editButton.appendChild(editSpan);
   lookCard.appendChild(editButton);
 
-  const ul = document.createElement('ul');
-  ul.className = 'list-unstyled';
+  const ul = document.createElement("ul");
+  ul.className = "list-unstyled";
 
-  const li1 = document.createElement('li');
-  const li2 = document.createElement('li');
-  const li3 = document.createElement('li');
+  const li1 = document.createElement("li");
+  const li2 = document.createElement("li");
+  const li3 = document.createElement("li");
 
   const imgTShirt = createItemImage(tShirt.src, tShirt.alt);
   const imgPants = createItemImage(pant.src, pant.alt);
@@ -352,7 +364,7 @@ function createLookCard(tShirt, pant, shoe) {
 }
 
 function createItemImage(src, alt) {
-  const img = document.createElement('img');
+  const img = document.createElement("img");
   img.src = src;
   img.alt = alt;
   return img;

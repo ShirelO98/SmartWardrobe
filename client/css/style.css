@@ -692,8 +692,6 @@ main {
   margin-top: 20px;
 }
 
-
-
 .item-card-fully > img {
   margin-top: 25px;
   margin-left: 20px;
@@ -781,12 +779,30 @@ main {
   background-color: #007bff;
   transition: width 0.3s;
 }
+.table-responsive {
+  fill: #fff;
+  margin-top: 589px;
+  width: 55%;
+}
+.table {
+  text-align: center !important;
+  color: #000;
+  font-family: "Source Sans 3";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .nav-buttons {
   display: flex;
   justify-content: space-between;
 }
-
+#itemsTable {
+  display: none;
+  margin-left: 89px;
+  margin-top: 50px;
+}
 
 @media (max-width: 768px) {
   .sidebar {
