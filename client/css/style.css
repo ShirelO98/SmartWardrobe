@@ -660,6 +660,16 @@ main {
   margin-bottom: 50px;
 }
 
+.item-card-fully-looks {
+  width: 233px;
+  height: 337px;
+  background: #fff;
+  border-radius: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
+
+
 .item-card-fully > img {
   margin-top: 25px;
   margin-left: 20px;
