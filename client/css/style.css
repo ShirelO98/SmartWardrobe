@@ -724,7 +724,7 @@ main {
 
 .edit-look-wardrobe {
   font-size: 28px !important;
-  margin-top: 15px;
+  margin-top: -280px;
   margin-left: 175px;
   background: none;
   position: absolute;
@@ -735,8 +735,8 @@ main {
   height: 18px;
   background: aquamarine;
   border-radius: 100%;
-  margin-top: 215px;
-  margin-left: 15px;
+  margin-top: 285px;
+  margin-left: -170px;
   position: absolute;
 }
 
