@@ -314,7 +314,7 @@ main {
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1;
+  z-index: 10;
   background: black;
   border: none;
   font-size: 1.5em;
@@ -391,6 +391,10 @@ main {
   background: none;
 }
 
+.sidebar > ul > li{
+  background: none;
+}
+
 #Mywardrobe_logo {
   margin-right: 10px;
   width: 28px;
@@ -410,11 +414,12 @@ main {
   height: 3px;
   flex-shrink: 0;
   border-radius: 10px;
-  background: #444;
+  background: #444444;
   margin-top: 20px;
   margin-bottom: 0px;
   margin-left: 29px;
   margin-right: 28px;
+
 }
 #logo {
   width: 240px;
@@ -459,9 +464,10 @@ main {
 .nav-link:hover {
   color: #0d6efd;
 }
-.sidebar > img {
+.sidebar > li {
   background: none;
 }
+
 #nav_footer ul {
   list-style: none;
 }
@@ -782,13 +788,13 @@ main {
 .table-responsive {
   display: none;
   margin-top: -150px !important;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; 
+  height: 100vh;
   fill: #fff;
-  width: 70%; 
-  margin: 0 auto; 
+  width: 70%;
+  margin: 0 auto;
 }
 
 .table {
@@ -799,11 +805,11 @@ main {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  width: 100%;;
+  width: 100%;
 }
 
 .plus-item-button {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .nav-buttons {
@@ -811,8 +817,7 @@ main {
   justify-content: space-between;
 }
 
-.plus-wardrobe-table
-{
+.plus-wardrobe-table {
   font-size: 50px !important;
   font-weight: bold !important;
   color: #8c8c8d;
@@ -825,26 +830,85 @@ main {
   background-repeat: no-repeat;
   background-position: right 10px top 50%;
   background-size: 10px 10px;
-  padding-right: 30px; 
+  padding-right: 30px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .sidebar {
     transform: translateX(-100%);
   }
   .sidebar.show {
     transform: translateX(0);
+    width: 100%;
+    z-index: 3;
   }
   .content {
     margin-left: 0;
     width: 100%;
   }
-  #logo {
-    width: 200px;
-    height: auto;
-    margin-left: 18px;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+
+  .items-looks-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    background: none;
   }
+  .items-looks-buttons > button {
+    border-radius: 40px;
+    background: #fff;
+    width: 100px;
+    height: 40px;
+    display: block;
+    margin-top: 45px;
+    z-index: 1;
+  }
+
+  .items-looks-buttons > button > span {
+    color: #000;
+    font-family: "Source Sans 3";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    background: none;
+  }
+
+  .header-container {
+    width: 100%;
+    display: flex;
+  }
+
+  .header-container > h1,
+  .header-container > h3 {
+    display: none;
+  }
+
+  .the-main-buttons {
+    z-index: -1;
+  }
+
+  .search-container {
+    display: inline;
+    position: absolute;
+    left: 30px;
+  }
+
+  .dropdown-toggle {
+    margin-top: 33px;
+  }
+  .dropdown-toggle > img {
+    display: none;
+  }
+
+  #my-wardRobes {
+    margin-left: 5px;
+    margin-top: 147px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: absolute;
+  }
+
+
 }
