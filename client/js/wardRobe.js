@@ -77,8 +77,27 @@ function changeButtonState(event) {
     const crumbs = breadCrumbs.getElementsByTagName("li");
     lastCrumb = crumbs[crumbs.length - 1];
     lastCrumb.textContent = "Looks";
-    // let button = document.getElementById("layout-button");
-    // button.textContent = "";
+    let button = document.getElementById("layout-button");
+    button.textContent = "";
+  }
+}
+
+function layoutDisplayBtn(event) {
+  let state = document.getElementById("layout-button").textContent.trim();
+  if (state === 'list') {
+    let button = document.getElementById("layout-button");
+    button.textContent = "grid_view";
+    const tableSection = document.getElementById("itemsTable");
+    tableSection.style.display = "flex";
+    document.getElementById("wardRobe").style.display = "none";
+    document.getElementById("looks").style.display = "none";
+  }
+  else if (state !== 'list') {
+    let button = document.getElementById("layout-button");
+    button.textContent = "list";
+    const tableSection = document.getElementById("itemsTable");
+    tableSection.style.display = "none";
+    document.getElementById("wardRobe").style.display = "flex";
   }
 }
 
@@ -191,12 +210,10 @@ function createItemForm() {
     steps[currentStep].style.display = "none";
     currentStep += direction;
     steps[currentStep].style.display = "block";
-    progressBarInner.style.width = `${
-      ((currentStep + 1) / steps.length) * 100
-    }%`;
-    progressBarInner.ariaValuenow = `${
-      ((currentStep + 1) / steps.length) * 100
-    }`;
+    progressBarInner.style.width = `${((currentStep + 1) / steps.length) * 100
+      }%`;
+    progressBarInner.ariaValuenow = `${((currentStep + 1) / steps.length) * 100
+      }`;
     backButton.style.display = currentStep === 0 ? "none" : "inline-block";
     nextButton.textContent =
       currentStep === steps.length - 1 ? "Submit" : "Next";
@@ -279,24 +296,7 @@ function createItemCard(imageSrc, altText) {
 
   return itemCard;
 }
-function layoutDisplayBtn(event) {
-  if (document.getElementById("layout-button").textContent == "list") {
-    let button = document.getElementById("layout-button");
-    button.textContent = "grid_view";
-    const tableSection = document.getElementById("itemsTable");
-    tableSection.style.display = "flex";
-    document.getElementById("wardRobe").style.display = "none";
-    document.getElementById("looks").style.display = "none";
-  } else if (
-    document.getElementById("layout-button").textContent == "grid_view"
-  ) {
-    let button = document.getElementById("layout-button");
-    button.textContent = "list";
-    const tableSection = document.getElementById("itemsTable");
-    tableSection.style.display = "none";
-    document.getElementById("wardRobe").style.display = "flex";
-  }
-}
+
 function createLooksCards() {
   const looksSection = document.getElementById("looks");
 
