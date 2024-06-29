@@ -1,6 +1,6 @@
 
 function initMyWardrobe() {
-    createWardrobeCard("Ran's wardrobe", 64, 87, 90);
+    createWardrobeCard("Ran's wardrobe", 12, 32, 90);
     createWardrobeCard("Adar's wardrobe", 44, 17, 87); 
     document.querySelector('.plus-wardrobe-button').onclick = createWardrobeForm;
 }

@@ -219,28 +219,42 @@ function createItemForm() {
 
 function createItemsCards() {
   const wardRobeSection = document.getElementById('wardRobe');
-
-  for (let i = 1; i <= 11; i++) {
-    const itemCard = document.createElement('div');
-    itemCard.className = 'item-card-fully';
-
-    const ellipseSpan = document.createElement('span');
-    ellipseSpan.className = 'elipse-item';
-    itemCard.appendChild(ellipseSpan);
-
-    const editButton = document.createElement('button');
-    editButton.className = 'empty-button';
-    const editSpan = document.createElement('span');
-    editSpan.className = 'material-symbols-outlined edit-item-wardrobe';
-    editSpan.textContent = 'edit';
-    editButton.appendChild(editSpan);
-    itemCard.appendChild(editButton);
-
-    const img = document.createElement('img');
-    img.src = `images/items/${i}.png`;
-    img.alt = `Item ${i}`;
-    itemCard.appendChild(img);
-
+  for (let i = 1; i <= 3; i++) {
+    const itemCard = createItemCard(`images/items/pants/${i}.png`, `Item ${i}`);
     wardRobeSection.appendChild(itemCard);
   }
+
+  for (let i = 1; i <= 4; i++) {
+    const itemCard = createItemCard(`images/items/shoes/${i}.png`, `Item ${i}`);
+    wardRobeSection.appendChild(itemCard);
+  }
+
+  for (let i = 1; i <= 4; i++) {
+    const itemCard = createItemCard(`images/items/t-shirt/${i}.png`, `Item ${i}`);
+    wardRobeSection.appendChild(itemCard);
+  }
+}
+
+function createItemCard(imageSrc, altText) {
+  const itemCard = document.createElement('div');
+  itemCard.className = 'item-card-fully';
+
+  const ellipseSpan = document.createElement('span');
+  ellipseSpan.className = 'elipse-item';
+  itemCard.appendChild(ellipseSpan);
+
+  const editButton = document.createElement('button');
+  editButton.className = 'empty-button';
+  const editSpan = document.createElement('span');
+  editSpan.className = 'material-symbols-outlined edit-item-wardrobe';
+  editSpan.textContent = 'edit';
+  editButton.appendChild(editSpan);
+  itemCard.appendChild(editButton);
+
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.alt = altText;
+  itemCard.appendChild(img);
+
+  return itemCard;
 }

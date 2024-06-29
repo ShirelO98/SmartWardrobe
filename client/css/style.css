@@ -664,10 +664,36 @@ main {
   width: 233px;
   height: 337px;
   background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50px;
   margin-right: 50px;
   margin-bottom: 50px;
 }
+
+.item-card-fully-looks > ul {
+  list-style: none;
+  background: none; 
+}
+
+.item-card-fully-looks > ul > li {
+  background: none;
+
+}
+
+.item-card-fully-looks > ul > li > img {
+  background: none;
+  width: 75%;
+  margin-top: -30px;
+}
+
+.item-card-fully-looks > ul > li:first-child > img{
+  background: none;
+  width: 75%;
+  margin-top: 20px;
+}
+
 
 
 .item-card-fully > img {
