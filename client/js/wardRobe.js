@@ -2,6 +2,7 @@ window.onload = () => {
   initSideNav();
   initWardrobe();
 };
+
 function initWardrobe() {
   initialItemsAndType();
   initDropDown();
@@ -21,6 +22,8 @@ function initWardrobe() {
   createLooksCards();
   let addItemBttable = document.getElementsByClassName("plus-item-button-table")[0];
   addItemBttable.onclick = () => {
+    let button = document.getElementById("layout-button");
+    button.textContent = "list";
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
