@@ -1,15 +1,25 @@
 exports.userController = {
-  async getWardrobes() {
-    console.log(`${this.req}`);
-  },
-  async addWardrobe() {
-    console.log(`${this.req.params.wardrobeName}`);
-  },
+  async getWardrobes(req, res) {
+    console.log("user")
 
-  async updateWardrobe() {
-    console.log(`${this.req.params.newname}`);
+    res.json({ message: "Get wardrobes" });
   },
-  async deleteWardrobe() {
-    console.log(`${this.req.params.wardrobename}`);
+  async addWardrobe(req, res) {
+    const { name } = req.params;
+    console.log(`name: ${name}`);
+
+    res.json({ message: "Wardrobe added" });
+  },
+  async updateWardrobe(req, res) {
+    const { wardrobeID, newName } = req.params;
+    console.log(`Wardrobe ID: ${wardrobeID}, New Name: ${newName}`);
+
+    res.json({ message: "Wardrobe updated" });
+  },
+  async deleteWardrobe(req, res) {
+    const { wardrobeID } = req.params;
+    console.log(`Wardrobe ID: ${wardrobeID}`);
+
+    res.json({ message: "Wardrobe deleted" });
   },
 };

@@ -512,6 +512,14 @@ main {
   justify-content: center;
   position: absolute;
 }
+#looks{
+  margin-left: 89px;
+  margin-top: 147px;
+  display:"none";
+  flex-wrap: wrap;
+  justify-content: center;
+  position: absolute;
+}
 
 .items-looks-buttons {
   display: flex;

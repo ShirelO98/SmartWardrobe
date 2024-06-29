@@ -1,10 +1,11 @@
+
 const { Router } = require("express");
 const { userController } = require("../controllers/userController");
 const userRouter = new Router();
 
-userRouter.get("/wardrobes", userController.getWardrobes);
-userRouter.post("/wardrobes/wardrobeName", userController.addWardrobe);
-userRouter.put("/wardrobes/wardrobeID/newName", userController.updateWardrobe);
-userRouter.delete("/wardrobes/wardrobeID",userController.deleteWardrobe);
+userRouter.get("/", userController.getWardrobes);
+userRouter.post("/wardrobe/:name", userController.addWardrobe); 
+userRouter.put("/:wardrobeID", userController.updateWardrobe); 
+userRouter.delete("/:wardrobeID", userController.deleteWardrobe); 
 
 module.exports = { userRouter };
