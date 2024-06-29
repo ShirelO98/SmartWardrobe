@@ -4,8 +4,7 @@ window.onload = () => {
 };
 
 function initWardrobe() {
-  console.log("here");
-  initialItems();
+  initialItemsAndType();
   initDropDown();
   let itemsButton = document.getElementById("items-button");
   itemsButton.addEventListener("click", changeButtonState);
@@ -17,11 +16,18 @@ function initWardrobe() {
   }
 }
 
-function initialItems() {
+function initialItemsAndType() {
   let button = document.getElementById("items-button");
   let span = button.querySelector("span");
   button.style.backgroundColor = "black";
   span.style.color = "white";
+  document.querySelectorAll('.items-type span').forEach(item => {
+    if (item.textContent.trim() === "All") {
+      allButton = item.parentElement;
+      allButton.style.backgroundColor = "black";
+      item.style.color = "white";
+    }
+  });
 }
 
 function initDropDown() {
