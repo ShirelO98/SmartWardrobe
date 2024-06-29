@@ -4,6 +4,7 @@ window.onload = () => {
 };
 
 function initWardrobe() {
+  console.log("GET/Wardrobes/id  NAME: ", wardrobeName);
   initialItemsAndType();
   initDropDown();
   createItemsCards();
@@ -20,7 +21,9 @@ function initWardrobe() {
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   createLooksCards();
-  let addItemBttable = document.getElementsByClassName("plus-item-button-table")[0];
+  let addItemBttable = document.getElementsByClassName(
+    "plus-item-button-table"
+  )[0];
   addItemBttable.onclick = () => {
     let button = document.getElementById("layout-button");
     button.textContent = "list";
@@ -28,10 +31,11 @@ function initWardrobe() {
     tableSection.style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
     createItemForm();
-  }
+  };
 }
 
 function initialItemsAndType() {
+  console.log("GET/Wardrobes/:id/Items ");
   let button = document.getElementById("items-button");
   let span = button.querySelector("span");
   button.style.backgroundColor = "black";
@@ -249,6 +253,8 @@ function createItemForm() {
   }
 
   function submitForm() {
+    console.log(`POST/Wardrobes/:id/Items body{
+      }`);
     setTimeout(() => {
       const notification = document.createElement("div");
       notification.className = "alert alert-success mt-3";
@@ -308,6 +314,7 @@ function createItemCard(imageSrc, altText) {
 }
 
 function createLooksCards() {
+  console.log("GET/Wardrobes/:id/Looks ");
   const looksSection = document.getElementById("looks");
 
   const tShirts = [];
