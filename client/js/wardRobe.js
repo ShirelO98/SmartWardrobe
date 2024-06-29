@@ -4,6 +4,7 @@ window.onload = () => {
 };
 
 function initWardrobe() {
+  console.log("here");
   initialItems();
   initDropDown();
   let itemsButton = document.getElementById("items-button");
