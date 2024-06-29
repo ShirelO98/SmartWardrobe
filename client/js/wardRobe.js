@@ -2,7 +2,6 @@ window.onload = () => {
   initSideNav();
   initWardrobe();
 };
-
 function initWardrobe() {
   initialItemsAndType();
   initDropDown();
@@ -84,15 +83,14 @@ function changeButtonState(event) {
 
 function layoutDisplayBtn(event) {
   let state = document.getElementById("layout-button").textContent.trim();
-  if (state === 'list') {
+  if (state === "list") {
     let button = document.getElementById("layout-button");
     button.textContent = "grid_view";
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "flex";
     document.getElementById("wardRobe").style.display = "none";
     document.getElementById("looks").style.display = "none";
-  }
-  else if (state !== 'list') {
+  } else if (state !== "list") {
     let button = document.getElementById("layout-button");
     button.textContent = "list";
     const tableSection = document.getElementById("itemsTable");
@@ -210,10 +208,12 @@ function createItemForm() {
     steps[currentStep].style.display = "none";
     currentStep += direction;
     steps[currentStep].style.display = "block";
-    progressBarInner.style.width = `${((currentStep + 1) / steps.length) * 100
-      }%`;
-    progressBarInner.ariaValuenow = `${((currentStep + 1) / steps.length) * 100
-      }`;
+    progressBarInner.style.width = `${
+      ((currentStep + 1) / steps.length) * 100
+    }%`;
+    progressBarInner.ariaValuenow = `${
+      ((currentStep + 1) / steps.length) * 100
+    }`;
     backButton.style.display = currentStep === 0 ? "none" : "inline-block";
     nextButton.textContent =
       currentStep === steps.length - 1 ? "Submit" : "Next";
