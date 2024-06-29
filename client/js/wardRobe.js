@@ -38,6 +38,8 @@ function changeButtonState(event) {
   let lookSpan = lookBut.querySelector("span");
 
   if (event.currentTarget === itemBut) {
+    document.getElementById("looks").style.display = "none";
+    document.getElementById("wardRobe").style.display = "flex";
     itemBut.style.backgroundColor = "black";
     itemSpan.style.color = "white";
     lookBut.style.backgroundColor = "white";
@@ -47,6 +49,8 @@ function changeButtonState(event) {
     lookSpan.style.color = "white";
     itemBut.style.backgroundColor = "white";
     itemSpan.style.color = "black";
+    document.getElementById("wardRobe").style.display = "none";
+    document.getElementById("looks").style.display = "flex";
   }
 }
 
