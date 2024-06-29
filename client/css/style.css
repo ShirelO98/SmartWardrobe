@@ -692,6 +692,8 @@ main {
   margin-top: 20px;
 }
 
+
+
 .item-card-fully > img {
   margin-top: 25px;
   margin-left: 20px;
@@ -713,6 +715,24 @@ main {
   margin-top: 15px;
   margin-left: 175px;
   background: none;
+  position: absolute;
+}
+
+.edit-look-wardrobe {
+  font-size: 28px !important;
+  margin-top: -280px;
+  margin-left: 175px;
+  background: none;
+  position: absolute;
+}
+
+.elipse-item-looks {
+  width: 18px;
+  height: 18px;
+  background: aquamarine;
+  border-radius: 100%;
+  margin-top: 285px;
+  margin-left: -170px;
   position: absolute;
 }
 
@@ -766,19 +786,7 @@ main {
   display: flex;
   justify-content: space-between;
 }
-#itemsTable {
-  display: none;
-  width: 1021px;
-  height: 467px;
-  margin-bottom: 29px;
-  margin-right: 44px;
-  margin-left: 89px;
-  margin-top: 50px;
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  position: absolute;
-}
+
 
 @media (max-width: 768px) {
   .sidebar {

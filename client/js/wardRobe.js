@@ -19,6 +19,7 @@ function initWardrobe() {
   }
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
+  createLooksCards();
 }
 
 function initialItemsAndType() {
@@ -282,4 +283,77 @@ function createItemCard(imageSrc, altText) {
 function layoutDisplayBtn(event) {
   let button = document.getElementById("layout-button");
   button.textContent = "grid_view";
+}
+
+function createLooksCards() {
+  const looksSection = document.getElementById('looks');
+
+  const tShirts = [];
+  for (let i = 1; i <= 4; i++) {
+    tShirts.push({ src: `images/items/t-shirt/${i}.png`, alt: `T-Shirt ${i}` });
+  }
+  const pants = [];
+  for (let i = 1; i <= 3; i++) {
+    pants.push({ src: `images/items/pants/${i}.png`, alt: `Pants ${i}` });
+  }
+  const shoes = [];
+  for (let i = 1; i <= 4; i++) {
+    shoes.push({ src: `images/items/shoes/${i}.png`, alt: `Shoes ${i}` });
+  }
+  
+  tShirts.forEach(tShirt => {
+    pants.forEach(pant => {
+      shoes.forEach(shoe => {
+        const lookCard = createLookCard(tShirt, pant, shoe);
+        looksSection.appendChild(lookCard);
+      });
+    });
+  });
+}
+
+function createLookCard(tShirt, pant, shoe) {
+  const lookCard = document.createElement('div');
+  lookCard.className = 'item-card-fully-looks';
+
+  const ellipseSpan = document.createElement('span');
+  ellipseSpan.className = 'elipse-item-looks';
+  lookCard.appendChild(ellipseSpan);
+
+  const editButton = document.createElement('button');
+  editButton.className = 'empty-button';
+  const editSpan = document.createElement('span');
+  editSpan.className = 'material-symbols-outlined edit-look-wardrobe';
+  editSpan.textContent = 'edit';
+  editButton.appendChild(editSpan);
+  lookCard.appendChild(editButton);
+
+  const ul = document.createElement('ul');
+  ul.className = 'list-unstyled';
+
+  const li1 = document.createElement('li');
+  const li2 = document.createElement('li');
+  const li3 = document.createElement('li');
+
+  const imgTShirt = createItemImage(tShirt.src, tShirt.alt);
+  const imgPants = createItemImage(pant.src, pant.alt);
+  const imgShoes = createItemImage(shoe.src, shoe.alt);
+
+  li1.appendChild(imgTShirt);
+  li2.appendChild(imgPants);
+  li3.appendChild(imgShoes);
+
+  ul.appendChild(li1);
+  ul.appendChild(li2);
+  ul.appendChild(li3);
+
+  lookCard.appendChild(ul);
+
+  return lookCard;
+}
+
+function createItemImage(src, alt) {
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  return img;
 }
