@@ -191,6 +191,7 @@ body {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  z-index: 0;
 }
 
 .main-Breadcrumb > ol > li > a {
@@ -506,21 +507,20 @@ main {
 
 #wardRobe {
   margin-left: 89px;
-  margin-top: 147px;
+  margin-top: 50px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   position: absolute;
 }
-#looks{
+#looks {
   margin-left: 89px;
-  margin-top: 147px;
-  display:"none";
+  margin-top: 50px;
+  display: "none";
   flex-wrap: wrap;
   justify-content: center;
   position: absolute;
 }
-
 .items-looks-buttons {
   display: flex;
   justify-content: center;
@@ -528,8 +528,7 @@ main {
   gap: 225px;
   background: none;
 }
-
-.items-looks-buttons > button {
+ .items-looks-buttons > button {
   border-radius: 40px;
   background: #fff;
   width: 150px;
@@ -631,6 +630,17 @@ main {
 .item-card-empty {
   width: 216px;
   height: 248px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
+.item-card-empty-looks {
+  width: 233px;
+  height: 337px;
   background: #fff;
   display: flex;
   align-items: center;
