@@ -387,7 +387,7 @@ main {
   background: none;
 }
 
-.sidebar > ul > li{
+.sidebar > ul > li {
   background: none;
 }
 
@@ -415,7 +415,6 @@ main {
   margin-bottom: 0px;
   margin-left: 29px;
   margin-right: 28px;
-
 }
 #logo {
   background-image: url(/client/images/logo-no-background3.png);
@@ -909,6 +908,4 @@ main {
     justify-content: center;
     position: absolute;
   }
-
-
 }
