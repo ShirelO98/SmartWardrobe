@@ -123,6 +123,30 @@ function createItemTypeButtons(types) {
   }
 }
 
+async function handleFilterButtonClick(filterValue) {
+  try {
+    const wardrobeCode = 6; // יש לשים את הקוד המתאים
+    const response = await fetch(`http://localhost:8081/items/${wardrobeCode}/${filterValue}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to fetch items");
+    }
+
+    const items = await response.json();
+    createItemsCards(items);
+
+  } catch (error) {
+    console.error("Failed to fetch items:", error.message);
+    alert("Failed to fetch items: " + error.message);
+  }
+}
+
 function changeButtonState(event) {
   let itemBut = document.getElementById("items-button");
   let itemSpan = itemBut.querySelector("span");
@@ -180,7 +204,7 @@ function layoutDisplayBtn(event) {
   }
 }
 
-function ItemTypeSelectorBtn(event) {
+async function ItemTypeSelectorBtn(event) {
   let itemTypeBtn = document.getElementsByClassName("items-type");
   for (let i = 0; i < itemTypeBtn.length; i++) {
     itemTypeBtn[i].style.backgroundColor = "white";
@@ -189,12 +213,26 @@ function ItemTypeSelectorBtn(event) {
     let span = parentBtn.querySelector("span");
     span.style.color = "black";
   }
+  
   let currentBtn = event.currentTarget;
   currentBtn.style.backgroundColor = "black";
-  let parentBtn = currentBtn;
-  let span = parentBtn.querySelector("span");
+  let span = currentBtn.querySelector("span");
   span.style.color = "white";
+
+  if (span.textContent.trim() === "Shirt") {
+    await handleFilterButtonClick(1);
+  }
+  else if (span.textContent.trim() === "Pants") {
+    await handleFilterButtonClick(2);
+  }
+  else if (span.textContent.trim() === "Shoes") {
+    await handleFilterButtonClick(3);
+  }
+  else if (span.textContent.trim() === "All") {
+    await fetchItems();
+  }
 }
+
 
 function createItemsCards(items) {
   const wardRobeSection = document.getElementById("wardRobe");
