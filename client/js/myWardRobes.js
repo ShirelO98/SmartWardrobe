@@ -1,6 +1,7 @@
 async function initMyWardrobe() {
   try {
-    const response = await fetch(`http://localhost:8081/wardrobe/1`);
+    const userId = sessionStorage.getItem("userId");
+    const response = await fetch(`http://localhost:8081/wardrobe/${userId}`);
     const wardrobes = await response.json();
     console.log("Fetched wardrobes:", wardrobes);
     wardrobes.forEach((wardrobe) => {
@@ -111,7 +112,7 @@ function createWardrobeCard(
     "outfits-number",
     "cards-write",
   ]);
-  
+
   const readyToWearHeader = document.createElement("h5");
   readyToWearHeader.classList.add("ready-to-wear");
   readyToWearHeader.textContent = "Ready to wear ";
