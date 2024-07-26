@@ -82,7 +82,7 @@ function createWardrobeForm() {
       }
       const data = await response.json();
       const wardrobeCode = data.wardrobeCode;
-      createWardrobeCard(wardrobeNewName, 0, 0, 0,wardrobeCode);
+      createWardrobeCard(wardrobeNewName, 0, 0, 0, wardrobeCode);
     } catch (error) {
     }
   });
@@ -214,27 +214,27 @@ function createWardrobeCard(
       saveButton.click();
     });
   });
-}
 
-inputContainer.appendChild(saveButton);
-nameHeader.replaceWith(inputContainer);
-inputField.focus();
-inputField.addEventListener("keypress", function (event) {
-  if (event.key === "Enter") {
+  inputContainer.appendChild(saveButton);
+  nameHeader.replaceWith(inputContainer);
+  inputField.focus();
+  inputField.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      saveButton.click();
+    }
+  });
+
+  inputField.addEventListener("blur", function () {
     saveButton.click();
-  }
-});
+  });
 
-inputField.addEventListener("blur", function () {
-  saveButton.click();
-});
-
-buttonWardrobeTitle.addEventListener("click", function (event) {
-  const cursorStyle = getComputedStyle(event.target).cursor;
-  if (cursorStyle === "pointer") {
-    window.location.href = "wardrobe.html";
-  }
-});
+  buttonWardrobeTitle.addEventListener("click", function (event) {
+    const cursorStyle = getComputedStyle(event.target).cursor;
+    if (cursorStyle === "pointer") {
+      window.location.href = "wardrobe.html";
+    }
+  });
+};
 
 function createButton(className, text) {
   const button = document.createElement("button");

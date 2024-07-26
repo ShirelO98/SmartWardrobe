@@ -4,6 +4,7 @@ window.onload = () => {
 };
 
 function initWardrobe() {
+  console.log("GET/Wardrobes/:id/Items ");
   fetchItems();
   initialItems();
   initDropDown();
@@ -28,7 +29,7 @@ function initWardrobe() {
 
 async function fetchItems() {
   try {
-    const wardrobeCode = 6; // fix it
+    const wardrobeCode = 29; // fix it
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}`, {
       method: "GET",
       headers: {
@@ -42,6 +43,7 @@ async function fetchItems() {
     }
 
     const items = await response.json();
+    console.log("Items:", items);
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
@@ -125,7 +127,7 @@ function createItemTypeButtons(types) {
 
 async function handleFilterButtonClick(filterValue) {
   try {
-    const wardrobeCode = 6; // יש לשים את הקוד המתאים
+    const wardrobeCode = 29; // יש לשים את הקוד המתאים
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}/${filterValue}`, {
       method: "GET",
       headers: {
