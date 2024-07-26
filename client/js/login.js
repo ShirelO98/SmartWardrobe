@@ -22,7 +22,14 @@ async function loginUser() {
 
     const userData = await response.json();
 
-    alert("Login successful!");
+    if (userData.user_type === 1) {
+      window.location.href = './index.html';
+    } else if (userData.user_type === '2') {
+      window.location.href = '#'; // Add the path to the stylist page
+    } else {
+      alert("Unknown user type!");
+    }
+
   } catch (error) {
     console.error("Login failed:", error.message);
     alert("Login failed: " + error.message);
