@@ -21,15 +21,18 @@ async function loginUser() {
     }
 
     const userData = await response.json();
+    const userDataString = JSON.stringify(userData);
+    localStorage.setItem("UserData", userDataString);
+    const retrievedUserDataString = localStorage.getItem("UserData");
+    console.log(retrievedUserDataString);
 
     if (userData.user_type === 1) {
-      window.location.href = './index.html';
-    } else if (userData.user_type === '2') {
-      window.location.href = '#'; // Add the path to the stylist page
+      window.location.href = "./index.html";
+    } else if (userData.user_type === "2") {
+      // window.location.href = "#"; // Add the path to the stylist page
     } else {
       alert("Unknown user type!");
     }
-
   } catch (error) {
     console.error("Login failed:", error.message);
     alert("Login failed: " + error.message);
