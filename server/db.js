@@ -8,6 +8,7 @@ module.exports = {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
     });
+    console.log("here");
   },
   async initialize() {
     if (connection) {
