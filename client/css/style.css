@@ -358,10 +358,6 @@ main {
   margin-left: 0px;
 }
 
-.sidebar > a > #logo {
-  background: none;
-}
-
 .sidebar > a {
   background: none;
   margin-left: 0px;
@@ -391,7 +387,7 @@ main {
   background: none;
 }
 
-.sidebar > ul > li{
+.sidebar > ul > li {
   background: none;
 }
 
@@ -419,16 +415,19 @@ main {
   margin-bottom: 0px;
   margin-left: 29px;
   margin-right: 28px;
-
 }
 #logo {
-  width: 240px;
+  background-image: url(/client/images/logo-no-background3.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #000;
+  width: 255px;
   height: 80px;
   flex-shrink: 0;
   margin-left: 40px;
-  background: none;
   margin-top: 10px;
 }
+
 .nav-link .dropdown-toggle {
   text-decoration: none;
   color: #495057;
@@ -909,6 +908,4 @@ main {
     justify-content: center;
     position: absolute;
   }
-
-
 }

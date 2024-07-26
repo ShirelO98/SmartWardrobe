@@ -1,0 +1,39 @@
+
+.vh-100 {
+    height: 100vh;
+    background-color:  #f3f3f3;
+  }
+  
+  .card {
+    border-radius: 1rem;
+  }
+  
+  .img-fluid {
+    border-radius: 1rem 0 0 1rem;
+  }
+  
+  .fa-cubes {
+    color: #ff6219;
+  }
+  
+  .h5-custom {
+    letter-spacing: 1px;
+  }
+  
+  .text-link {
+    color: #393f81;
+  }
+  
+  .text-link:hover {
+    color: #393f81;
+    text-decoration: underline;
+  }
+
+  #logo {
+    background-image: url(/client/images/logo-no-background3.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 255px;
+    height: 80px;
+    flex-shrink: 0;
+  }
