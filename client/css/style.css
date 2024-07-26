@@ -284,10 +284,12 @@ main {
 
 .Clothes-number {
   margin-left: 20px;
+  margin-right: 5px;
 }
 
 .Outfits-number {
   margin-left: 120px;
+  margin-right: 5px;
 }
 
 .ready-to-wear {

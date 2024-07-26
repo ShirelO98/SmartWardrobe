@@ -1,10 +1,15 @@
 async function initMyWardrobe() {
-  const userId=localStorage.getItem('userId');
   try {
-    const response = await fetch("http://localhost:8081/wardrobe/${userId}");
+    const response = await fetch(`http://localhost:8081/wardrobe/1`);
     const wardrobes = await response.json();
-    wardrobes.forEach(wardrobe => {
-      createWardrobeCard(wardrobe.wardrobe_name, wardrobe.items, wardrobe.looks,wardrobe.readyToWear );
+    console.log("Fetched wardrobes:", wardrobes);
+    wardrobes.forEach((wardrobe) => {
+      createWardrobeCard(
+        wardrobe.wardrobe_name,
+        wardrobe.items,
+        wardrobe.looks,
+        wardrobe.readytowear
+      );
     });
   } catch (error) {
     console.error("Failed to fetch wardrobes:", error);
@@ -15,21 +20,21 @@ async function initMyWardrobe() {
 function createWardrobeForm() {
   const div = document.createElement("div");
   div.className = "wardrobe-card-empty";
-  
+
   const form = document.createElement("form");
   form.action = "#";
   form.id = "form-toAdd-wardrobe";
-  
+
   const label = document.createElement("label");
   label.textContent = "Wardrobe Name";
-  
+
   const inputText = document.createElement("input");
   inputText.type = "text";
   inputText.maxLength = 18;
   inputText.className = "form-control";
   inputText.setAttribute("aria-label", "Sizing example input");
   inputText.setAttribute("aria-describedby", "inputGroup-sizing-default");
-  
+
   const inputButton = document.createElement("input");
   inputButton.className = "btn btn-primary";
   inputButton.type = "button";
@@ -39,7 +44,7 @@ function createWardrobeForm() {
   label.appendChild(inputButton);
   form.appendChild(label);
   div.appendChild(form);
-  
+
   const section = document.getElementById("my-wardRobes");
   section.appendChild(div);
 
@@ -50,9 +55,13 @@ function createWardrobeForm() {
       const response = await fetch("http://localhost:8081/wardrobe/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ wardrobe_name: wardrobeName, items: 0, looks: 0 })
+        body: JSON.stringify({
+          wardrobe_name: wardrobeName,
+          items: 0,
+          looks: 0,
+        }),
       });
 
       if (!response.ok) {
@@ -60,17 +69,26 @@ function createWardrobeForm() {
       }
 
       const newWardrobe = await response.json();
-      createWardrobeCard(newWardrobe.wardrobe_name, newWardrobe.items, newWardrobe.looks, newWardrobe.wardrobe_code);
+      createWardrobeCard(
+        newWardrobe.wardrobe_name,
+        newWardrobe.items,
+        newWardrobe.looks,
+        newWardrobe.wardrobe_code
+      );
     } catch (error) {
-     alert("Failed to add new wardrobe:", error);
+      alert("Failed to add new wardrobe:", error);
     }
   });
 }
 
-function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToWearPercentage) {
+function createWardrobeCard(
+  wardrobeName,
+  clothesNumber,
+  outfitsNumber,
+  readyToWearPercentage
+) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
-
   const addButton = createButton("add-item", "add");
   const deleteButton = createButton("delete-item", "delete");
   const editButton = createButton("edit-item", "edit");
@@ -85,8 +103,15 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
   nameHeader.textContent = wardrobeName;
   buttonWardrobeTitle.appendChild(nameHeader);
 
-  const clothesNumberHeader = createHeader("Clothes - " + clothesNumber, ["clothes-number", "cards-write"]);
-  const outfitsNumberHeader = createHeader("Outfits - " + outfitsNumber, ["outfits-number", "cards-write"]);
+  const clothesNumberHeader = createHeader(`Clothes - ${clothesNumber}`, [
+    "clothes-number",
+    "cards-write",
+  ]);
+  const outfitsNumberHeader = createHeader(`Outfits - ${outfitsNumber}`, [
+    "outfits-number",
+    "cards-write",
+  ]);
+  
   const readyToWearHeader = document.createElement("h5");
   readyToWearHeader.classList.add("ready-to-wear");
   readyToWearHeader.textContent = "Ready to wear ";
@@ -106,51 +131,57 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
 
   deleteButton.addEventListener("click", async function () {
     try {
-      const response = await fetch(`http://localhost:8081/wardrobe/${wardrobeCode}`, {
-        method: "DELETE",
-      });
-  
+      const response = await fetch(
+        `http://localhost:8081/wardrobe/${wardrobeCode}`,
+        {
+          method: "DELETE",
+        }
+      );
+
       if (!response.ok) {
         throw new Error("Failed to delete wardrobe");
       }
-  
-      wardrobeCard.remove(); 
-      removeFromDropdown(wardrobeName); 
+
+      wardrobeCard.remove();
+      removeFromDropdown(wardrobeName);
     } catch (error) {
       alert("Failed to delete wardrobe:", error);
     }
   });
-  
+
   editButton.addEventListener("click", function () {
     const currentName = nameHeader.textContent.trim();
     const inputContainer = document.createElement("div");
     inputContainer.classList.add("edit-input-container");
-  
+
     const inputField = document.createElement("input");
     inputField.className = "form-control ed";
     inputField.type = "text";
     inputField.maxLength = 18;
     inputField.value = currentName;
     inputContainer.appendChild(inputField);
-  
+
     const saveButton = document.createElement("button");
     saveButton.className = "btn btn-primary";
     saveButton.textContent = "Save";
     saveButton.addEventListener("click", async function () {
       const newName = inputField.value.trim();
       try {
-        const response = await fetch(`http://localhost:8081/wardrobe/${wardrobeCode}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ wardrobe_name: newName })
-        });
-  
+        const response = await fetch(
+          `http://localhost:8081/wardrobe/${wardrobeCode}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ wardrobe_name: newName }),
+          }
+        );
+
         if (!response.ok) {
           throw new Error("Failed to update wardrobe");
         }
-  
+
         nameHeader.textContent = newName; // Update the name in the DOM
         updateDropdown(wardrobeName, newName); // Update the dropdown list
         wardrobeName = newName; // Update the variable for future references
@@ -160,22 +191,6 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
         inputContainer.replaceWith(nameHeader); // Replace input with updated name
       }
     });
-  
-    inputContainer.appendChild(saveButton);
-    nameHeader.replaceWith(inputContainer);
-    inputField.focus();
-    inputField.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        saveButton.click();
-      }
-    });
-  
-    inputField.addEventListener("blur", function () {
-      saveButton.click();
-    });
-  });
-  
-    };
 
     inputContainer.appendChild(saveButton);
     nameHeader.replaceWith(inputContainer);
@@ -189,15 +204,28 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     inputField.addEventListener("blur", function () {
       saveButton.click();
     });
-  
-
-  buttonWardrobeTitle.addEventListener("click", function (event) {
-    const cursorStyle = getComputedStyle(event.target).cursor;
-    if (cursorStyle === "pointer") {
-      window.location.href = "wardrobe.html";
-    }
   });
+}
 
+inputContainer.appendChild(saveButton);
+nameHeader.replaceWith(inputContainer);
+inputField.focus();
+inputField.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    saveButton.click();
+  }
+});
+
+inputField.addEventListener("blur", function () {
+  saveButton.click();
+});
+
+buttonWardrobeTitle.addEventListener("click", function (event) {
+  const cursorStyle = getComputedStyle(event.target).cursor;
+  if (cursorStyle === "pointer") {
+    window.location.href = "wardrobe.html";
+  }
+});
 
 function createButton(className, text) {
   const button = document.createElement("button");
@@ -211,7 +239,7 @@ function createButton(className, text) {
 
 function createHeader(text, classNames) {
   const header = document.createElement("h5");
-  classNames.forEach(className => header.classList.add(className));
+  classNames.forEach((className) => header.classList.add(className));
   header.textContent = text;
   return header;
 }
@@ -235,7 +263,7 @@ function removeFromDropdown(wardrobeName) {
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
   const dropdownItems = wardrobeInAccordion.querySelectorAll(".dropdown-item");
 
-  dropdownItems.forEach(item => {
+  dropdownItems.forEach((item) => {
     const itemText = item.textContent.trim();
     if (itemText === wardrobeName) {
       item.remove();
@@ -247,7 +275,7 @@ function updateDropdown(oldName, newName) {
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
   const dropdownItems = wardrobeInAccordion.querySelectorAll(".dropdown-item");
 
-  dropdownItems.forEach(item => {
+  dropdownItems.forEach((item) => {
     const itemText = item.textContent.trim();
     if (itemText === oldName) {
       item.childNodes[1].textContent = newName;
