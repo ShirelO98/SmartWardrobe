@@ -1,15 +1,23 @@
 async function initMyWardrobe() {
   try {
-    const userId = sessionStorage.getItem("userId");
-    const response = await fetch(`http://localhost:8081/wardrobe/${userId}`);
+    const jsonString = localStorage.getItem("UserData");
+    const dataObject = JSON.parse(jsonString);
+    console.log("Parsed Object:", dataObject);
+    const userId = dataObject.UserID;
+    console.log(userId);
+    const response = await fetch(
+      `http://localhost:8081/wardrobe/all/${userId}`
+    );
     const wardrobes = await response.json();
     console.log("Fetched wardrobes:", wardrobes);
+
     wardrobes.forEach((wardrobe) => {
       createWardrobeCard(
         wardrobe.wardrobe_name,
         wardrobe.items,
         wardrobe.looks,
-        wardrobe.readytowear
+        wardrobe.readytowear,
+        wardrobe.wardrobe_code
       );
     });
   } catch (error) {
@@ -50,34 +58,32 @@ function createWardrobeForm() {
   section.appendChild(div);
 
   inputButton.addEventListener("click", async function () {
-    const wardrobeName = inputText.value;
+    const wardrobeNewName = inputText.value;
     section.removeChild(div);
+    const jsonString = localStorage.getItem("UserData");
+    const dataObject = JSON.parse(jsonString);
+    console.log("Parsed Object:", dataObject);
+    const UserId = dataObject.UserID;
+    console.log(UserId);
     try {
-      const response = await fetch("http://localhost:8081/wardrobe/", {
+      const response = await fetch(`http://localhost:8081/wardrobe/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          wardrobe_name: wardrobeName,
-          items: 0,
-          looks: 0,
+          wardrobeName: wardrobeNewName,
+          userId: UserId,
         }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to add wardrobe");
       }
-
-      const newWardrobe = await response.json();
-      createWardrobeCard(
-        newWardrobe.wardrobe_name,
-        newWardrobe.items,
-        newWardrobe.looks,
-        newWardrobe.wardrobe_code
-      );
+      const data = await response.json();
+      const wardrobeCode = data.wardrobeCode;
+      createWardrobeCard(wardrobeNewName, 0, 0, 0,wardrobeCode);
     } catch (error) {
-      alert("Failed to add new wardrobe:", error);
     }
   });
 }
@@ -86,10 +92,12 @@ function createWardrobeCard(
   wardrobeName,
   clothesNumber,
   outfitsNumber,
-  readyToWearPercentage
+  readyToWearPercentage,
+  wardrobeCode
 ) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
+  wardrobeCard.dataset.id = wardrobeCode;
   const addButton = createButton("add-item", "add");
   const deleteButton = createButton("delete-item", "delete");
   const editButton = createButton("edit-item", "edit");
@@ -175,7 +183,7 @@ function createWardrobeCard(
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ wardrobe_name: newName }),
+            body: JSON.stringify({ wardrobeName: newName }),
           }
         );
 
