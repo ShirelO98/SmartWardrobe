@@ -1,9 +1,10 @@
 async function initMyWardrobe() {
+  const userId=localStorage.getItem('userId');
   try {
-    const response = await fetch("http://localhost:8081/wardrobe/:userId");
+    const response = await fetch("http://localhost:8081/wardrobe/${userId}");
     const wardrobes = await response.json();
     wardrobes.forEach(wardrobe => {
-      createWardrobeCard(wardrobe.wardrobe_name, wardrobe.items, wardrobe.looks, );
+      createWardrobeCard(wardrobe.wardrobe_name, wardrobe.items, wardrobe.looks,wardrobe.readyToWear );
     });
   } catch (error) {
     console.error("Failed to fetch wardrobes:", error);
@@ -45,10 +46,8 @@ function createWardrobeForm() {
   inputButton.addEventListener("click", async function () {
     const wardrobeName = inputText.value;
     section.removeChild(div);
-
-    // Here you should add a function to save the new wardrobe to the backend
     try {
-      const response = await fetch("/user/Wardrobes/", {
+      const response = await fetch("http://localhost:8081/wardrobe/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -63,7 +62,7 @@ function createWardrobeForm() {
       const newWardrobe = await response.json();
       createWardrobeCard(newWardrobe.wardrobe_name, newWardrobe.items, newWardrobe.looks, newWardrobe.wardrobe_code);
     } catch (error) {
-      console.error("Failed to add new wardrobe:", error);
+     alert("Failed to add new wardrobe:", error);
     }
   });
 }
@@ -102,37 +101,81 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
   wardrobeCard.appendChild(readyToWearHeader);
 
   const myWardRobesSection = document.getElementById("my-wardRobes");
-  console.log("POST /Wardrobes/:id NAME: ", wardrobeName);
   myWardRobesSection.appendChild(wardrobeCard);
   addToDropdown(wardrobeName);
 
-  deleteButton.addEventListener("click", function () {
-    console.log("DELETE /Wardrobes/id - Name::", wardrobeName);
-    wardrobeCard.remove();
-    removeFromDropdown(wardrobeName);
+  deleteButton.addEventListener("click", async function () {
+    try {
+      const response = await fetch(`http://localhost:8081/wardrobe/${wardrobeCode}`, {
+        method: "DELETE",
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete wardrobe");
+      }
+  
+      wardrobeCard.remove(); 
+      removeFromDropdown(wardrobeName); 
+    } catch (error) {
+      alert("Failed to delete wardrobe:", error);
+    }
   });
-
+  
   editButton.addEventListener("click", function () {
     const currentName = nameHeader.textContent.trim();
     const inputContainer = document.createElement("div");
     inputContainer.classList.add("edit-input-container");
+  
     const inputField = document.createElement("input");
     inputField.className = "form-control ed";
     inputField.type = "text";
     inputField.maxLength = 18;
     inputField.value = currentName;
     inputContainer.appendChild(inputField);
+  
     const saveButton = document.createElement("button");
     saveButton.className = "btn btn-primary";
     saveButton.textContent = "Save";
-    saveButton.addEventListener("click", function () {
+    saveButton.addEventListener("click", async function () {
       const newName = inputField.value.trim();
-      nameHeader.textContent = newName;
-      inputContainer.replaceWith(nameHeader);
-      updateDropdown(wardrobeName, newName);
-      wardrobeName = newName;
-      console.log("PUT /Wardrobes/:id NAME:", newName);
+      try {
+        const response = await fetch(`http://localhost:8081/wardrobe/${wardrobeCode}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ wardrobe_name: newName })
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to update wardrobe");
+        }
+  
+        nameHeader.textContent = newName; // Update the name in the DOM
+        updateDropdown(wardrobeName, newName); // Update the dropdown list
+        wardrobeName = newName; // Update the variable for future references
+      } catch (error) {
+        console.error("Failed to update wardrobe:", error);
+      } finally {
+        inputContainer.replaceWith(nameHeader); // Replace input with updated name
+      }
     });
+  
+    inputContainer.appendChild(saveButton);
+    nameHeader.replaceWith(inputContainer);
+    inputField.focus();
+    inputField.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        saveButton.click();
+      }
+    });
+  
+    inputField.addEventListener("blur", function () {
+      saveButton.click();
+    });
+  });
+  
+    };
 
     inputContainer.appendChild(saveButton);
     nameHeader.replaceWith(inputContainer);
@@ -146,16 +189,15 @@ function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToW
     inputField.addEventListener("blur", function () {
       saveButton.click();
     });
-  });
+  
 
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const cursorStyle = getComputedStyle(event.target).cursor;
     if (cursorStyle === "pointer") {
-      console.log("GET /Wardrobes/id  NAME: ", wardrobeName);
       window.location.href = "wardrobe.html";
     }
   });
-}
+
 
 function createButton(className, text) {
   const button = document.createElement("button");

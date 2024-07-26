@@ -21,7 +21,7 @@ async function loginUser() {
     }
 
     const userData = await response.json();
-
+    localStorage.setItem('userId', userData.user_id)
     if (userData.user_type === 1) {
       window.location.href = './index.html';
     } else if (userData.user_type === '2') {
