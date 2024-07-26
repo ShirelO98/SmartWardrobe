@@ -1,24 +1,34 @@
-function initMyWardrobe() {
-  console.log("GET/user/Wardrobes/");
-  createWardrobeCard("Ran's wardrobe", 12, 48, 100);
-  createWardrobeCard("Adar's wardrobe", 44, 17, 87);
+async function initMyWardrobe() {
+  try {
+    const response = await fetch("http://localhost:8081/wardrobe/:userId");
+    const wardrobes = await response.json();
+    wardrobes.forEach(wardrobe => {
+      createWardrobeCard(wardrobe.wardrobe_name, wardrobe.items, wardrobe.looks, );
+    });
+  } catch (error) {
+    console.error("Failed to fetch wardrobes:", error);
+  }
   document.querySelector(".plus-wardrobe-button").onclick = createWardrobeForm;
 }
 
 function createWardrobeForm() {
   const div = document.createElement("div");
   div.className = "wardrobe-card-empty";
+  
   const form = document.createElement("form");
   form.action = "#";
   form.id = "form-toAdd-wardrobe";
+  
   const label = document.createElement("label");
   label.textContent = "Wardrobe Name";
+  
   const inputText = document.createElement("input");
   inputText.type = "text";
   inputText.maxLength = 18;
   inputText.className = "form-control";
   inputText.setAttribute("aria-label", "Sizing example input");
   inputText.setAttribute("aria-describedby", "inputGroup-sizing-default");
+  
   const inputButton = document.createElement("input");
   inputButton.className = "btn btn-primary";
   inputButton.type = "button";
@@ -28,45 +38,56 @@ function createWardrobeForm() {
   label.appendChild(inputButton);
   form.appendChild(label);
   div.appendChild(form);
+  
   const section = document.getElementById("my-wardRobes");
   section.appendChild(div);
 
-  inputButton.addEventListener("click", function () {
+  inputButton.addEventListener("click", async function () {
     const wardrobeName = inputText.value;
     section.removeChild(div);
-    createWardrobeCard(wardrobeName, 0, 0, 0);
+
+    // Here you should add a function to save the new wardrobe to the backend
+    try {
+      const response = await fetch("/user/Wardrobes/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ wardrobe_name: wardrobeName, items: 0, looks: 0 })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add wardrobe");
+      }
+
+      const newWardrobe = await response.json();
+      createWardrobeCard(newWardrobe.wardrobe_name, newWardrobe.items, newWardrobe.looks, newWardrobe.wardrobe_code);
+    } catch (error) {
+      console.error("Failed to add new wardrobe:", error);
+    }
   });
 }
 
-// Function to create a new wardrobe card
-function createWardrobeCard(
-  wardrobeName,
-  clothesNumber,
-  outfitsNumber,
-  readyToWearPercentage
-) {
+function createWardrobeCard(wardrobeName, clothesNumber, outfitsNumber, readyToWearPercentage) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
+
   const addButton = createButton("add-item", "add");
   const deleteButton = createButton("delete-item", "delete");
   const editButton = createButton("edit-item", "edit");
   wardrobeCard.appendChild(addButton);
   wardrobeCard.appendChild(deleteButton);
   wardrobeCard.appendChild(editButton);
+
   const buttonWardrobeTitle = document.createElement("button");
   buttonWardrobeTitle.classList.add("empty-button");
   const nameHeader = document.createElement("h3");
-  nameHeader.classList.add("wordrobe-name");
+  nameHeader.classList.add("wardrobe-name");
   nameHeader.textContent = wardrobeName;
   buttonWardrobeTitle.appendChild(nameHeader);
-  const clothesNumberHeader = createHeader("Clothes - " + clothesNumber, [
-    "Clothes-number",
-    "cards-write",
-  ]);
-  const outfitsNumberHeader = createHeader("Outfits - " + outfitsNumber, [
-    "Outfits-number",
-    "cards-write",
-  ]);
+
+  const clothesNumberHeader = createHeader("Clothes - " + clothesNumber, ["clothes-number", "cards-write"]);
+  const outfitsNumberHeader = createHeader("Outfits - " + outfitsNumber, ["outfits-number", "cards-write"]);
   const readyToWearHeader = document.createElement("h5");
   readyToWearHeader.classList.add("ready-to-wear");
   readyToWearHeader.textContent = "Ready to wear ";
@@ -74,17 +95,19 @@ function createWardrobeCard(
   readyToWearSpan.classList.add("ready-to-wear-dont-bold", "ready-to-wear");
   readyToWearSpan.textContent = readyToWearPercentage + "%";
   readyToWearHeader.appendChild(readyToWearSpan);
+
   wardrobeCard.appendChild(buttonWardrobeTitle);
   wardrobeCard.appendChild(clothesNumberHeader);
   wardrobeCard.appendChild(outfitsNumberHeader);
   wardrobeCard.appendChild(readyToWearHeader);
+
   const myWardRobesSection = document.getElementById("my-wardRobes");
   console.log("POST /Wardrobes/:id NAME: ", wardrobeName);
   myWardRobesSection.appendChild(wardrobeCard);
   addToDropdown(wardrobeName);
 
   deleteButton.addEventListener("click", function () {
-    console.log("DElETE/Wardrobes/id - Name::", wardrobeName);
+    console.log("DELETE /Wardrobes/id - Name::", wardrobeName);
     wardrobeCard.remove();
     removeFromDropdown(wardrobeName);
   });
@@ -108,7 +131,7 @@ function createWardrobeCard(
       inputContainer.replaceWith(nameHeader);
       updateDropdown(wardrobeName, newName);
       wardrobeName = newName;
-      console.log("PUT/Wardrobes/:id NAME:", newName);
+      console.log("PUT /Wardrobes/:id NAME:", newName);
     });
 
     inputContainer.appendChild(saveButton);
@@ -128,7 +151,7 @@ function createWardrobeCard(
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const cursorStyle = getComputedStyle(event.target).cursor;
     if (cursorStyle === "pointer") {
-      console.log("GET/Wardrobes/id  NAME: ", wardrobeName);
+      console.log("GET /Wardrobes/id  NAME: ", wardrobeName);
       window.location.href = "wardrobe.html";
     }
   });
@@ -146,7 +169,7 @@ function createButton(className, text) {
 
 function createHeader(text, classNames) {
   const header = document.createElement("h5");
-  classNames.forEach((className) => header.classList.add(className));
+  classNames.forEach(className => header.classList.add(className));
   header.textContent = text;
   return header;
 }
@@ -170,7 +193,7 @@ function removeFromDropdown(wardrobeName) {
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
   const dropdownItems = wardrobeInAccordion.querySelectorAll(".dropdown-item");
 
-  dropdownItems.forEach((item) => {
+  dropdownItems.forEach(item => {
     const itemText = item.textContent.trim();
     if (itemText === wardrobeName) {
       item.remove();
@@ -182,10 +205,12 @@ function updateDropdown(oldName, newName) {
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
   const dropdownItems = wardrobeInAccordion.querySelectorAll(".dropdown-item");
 
-  dropdownItems.forEach((item) => {
+  dropdownItems.forEach(item => {
     const itemText = item.textContent.trim();
     if (itemText === oldName) {
       item.childNodes[1].textContent = newName;
     }
   });
 }
+
+window.onload = initMyWardrobe;
