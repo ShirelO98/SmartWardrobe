@@ -40,8 +40,9 @@ async function fetchItems() {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to fetch items");
     }
-    
+
     const items = await response.json();
+    localStorage.setItem("itemsOfCurrentWardrobe", JSON.stringify(items));
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
@@ -183,12 +184,14 @@ function layoutDisplayBtn(event) {
     tableSection.style.display = "flex";
     document.getElementById("wardRobe").style.display = "none";
     document.getElementById("looks").style.display = "none";
+    loadListItems();
   } else if (state !== "list") {
     let button = document.getElementById("layout-button");
     button.textContent = "list";
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
+    clearTable();
   }
 }
 
@@ -333,6 +336,32 @@ function createItemCard(imageSrc, altText, itemStatus) {
 //   return lookCard;
 // }
 
+function loadListItems() {
+  const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
+  const table = document.getElementById("itemsTable");
+
+  // Append new rows for each item
+  items.forEach(item => {
+    const itemRow = document.createElement("tr");
+    const statusText = item.item_status == 1 ? "Available" : "Not Available";
+    itemRow.innerHTML = `
+      <td>${item.item_name}</td>
+      <td>${item.item_type}</td>
+      <td>${item.item_season}</td>
+      <td>${statusText}</td>
+    `;
+    table.querySelector('tbody').appendChild(itemRow);
+  });
+}
+
+function clearTable() {
+  const table = document.getElementById("itemsTable");
+  const tbody = table.querySelector('tbody');
+
+  tbody.innerHTML = '';
+}
+
+
 function createItemImage(src, alt) {
   const img = document.createElement("img");
   img.src = src;
@@ -375,4 +404,10 @@ function fetchAndInitWardrobeDropdown() {
   } else {
     console.error("No wardrobes found in local storage.");
   }
+}
+
+const updateBreadCrumbsinnerText = () => {
+  const currentWardrobeName = localStorage.getItem("currentWardrobeName");
+  const wardrobeName = document.getElementById("breadcrumbWardrobeName");
+  wardrobeName.innerText = currentWardrobeName;
 }

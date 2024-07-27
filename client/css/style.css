@@ -786,7 +786,7 @@ main {
 }
 .table-responsive {
   display: none;
-  margin-top: -150px !important;
+  /* margin-top: -150px !important; */
   flex-direction: column;
   align-items: center;
   justify-content: center;
