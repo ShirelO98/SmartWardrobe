@@ -187,7 +187,7 @@ function createWardrobeCard(
         saveButton.click();
       }
     });
-
+console.log("hi");
     inputField.addEventListener("blur", function () {
       saveButton.click();
     });
