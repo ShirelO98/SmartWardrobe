@@ -4,7 +4,6 @@ window.onload = () => {
 };
 
 function initWardrobe() {
-  console.log("GET/Wardrobes/:id/Items ");
   fetchItems();
   initialItems();
   initDropDown();
@@ -29,7 +28,7 @@ function initWardrobe() {
 
 async function fetchItems() {
   try {
-    const wardrobeCode = 29; // fix it
+    const wardrobeCode = 30; // fix it
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}`, {
       method: "GET",
       headers: {
@@ -43,7 +42,6 @@ async function fetchItems() {
     }
 
     const items = await response.json();
-    console.log("Items:", items);
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
@@ -91,13 +89,9 @@ function createItemTypeButtons(types) {
   const typesSection = document.getElementById("types-of-items");
   const existingButtons = typesSection.querySelectorAll(".items-type");
   existingButtons.forEach(button => button.remove());
-  const addButton = document.createElement("button");
-  addButton.className = "empty-button";
   const addSpan = document.createElement("span");
   addSpan.className = "material-symbols-outlined plus-item-type";
   addSpan.textContent = "add_circle";
-  addButton.appendChild(addSpan);
-  typesSection.appendChild(addButton);
   const allButton = document.createElement("button");
   allButton.className = "empty-button items-type";
   const allSpan = document.createElement("span");
@@ -127,7 +121,7 @@ function createItemTypeButtons(types) {
 
 async function handleFilterButtonClick(filterValue) {
   try {
-    const wardrobeCode = 29; // יש לשים את הקוד המתאים
+    const wardrobeCode = 30; // יש לשים את הקוד המתאים
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}/${filterValue}`, {
       method: "GET",
       headers: {
