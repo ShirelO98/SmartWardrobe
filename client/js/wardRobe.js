@@ -4,9 +4,11 @@ window.onload = () => {
 };
 
 function initWardrobe() {
+  updateBreadCrumbsinnerText();
   fetchItems();
   initialItems();
   fetchAndInitWardrobeDropdown();
+  initUserDate();
   let itemsButton = document.getElementById("items-button");
   itemsButton.addEventListener("click", changeButtonState);
   let looksButton = document.getElementById("looks-button");
@@ -14,16 +16,6 @@ function initWardrobe() {
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   createLooksCards();
-  let addItemBttable = document.getElementsByClassName(
-    "plus-item-button-table"
-  )[0];
-  addItemBttable.onclick = () => {
-    let button = document.getElementById("layout-button");
-    button.textContent = "list";
-    const tableSection = document.getElementById("itemsTable");
-    tableSection.style.display = "none";
-    document.getElementById("wardRobe").style.display = "flex";
-  };
 }
 
 async function fetchItems() {
@@ -40,8 +32,9 @@ async function fetchItems() {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to fetch items");
     }
-    
+
     const items = await response.json();
+    localStorage.setItem("itemsOfCurrentWardrobe", JSON.stringify(items));
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
@@ -128,6 +121,8 @@ async function handleFilterButtonClick(filterValue) {
 
     const items = await response.json();
     createItemsCards(items);
+    clearTable();
+    loadListItemsByFilter(items);
 
   } catch (error) {
     console.error("Failed to fetch items:", error.message);
@@ -183,12 +178,14 @@ function layoutDisplayBtn(event) {
     tableSection.style.display = "flex";
     document.getElementById("wardRobe").style.display = "none";
     document.getElementById("looks").style.display = "none";
+    loadListItems();
   } else if (state !== "list") {
     let button = document.getElementById("layout-button");
     button.textContent = "list";
     const tableSection = document.getElementById("itemsTable");
     tableSection.style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
+    clearTable();
   }
 }
 
@@ -217,10 +214,11 @@ async function ItemTypeSelectorBtn(event) {
     await handleFilterButtonClick(3);
   }
   else if (span.textContent.trim() === "All") {
+    clearTable();
+    loadListItems();
     await fetchItems();
   }
 }
-
 
 function createItemsCards(items) {
   const wardRobeSection = document.getElementById("wardRobe");
@@ -333,6 +331,45 @@ function createItemCard(imageSrc, altText, itemStatus) {
 //   return lookCard;
 // }
 
+function loadListItems() {
+  const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
+  const table = document.getElementById("itemsTable");
+
+  items.forEach(item => {
+    const itemRow = document.createElement("tr");
+    const statusText = item.item_status == 1 ? "Available" : "Not Available";
+    itemRow.innerHTML = `
+      <td>${item.item_name}</td>
+      <td>${item.item_type}</td>
+      <td>${item.item_season}</td>
+      <td>${statusText}</td>
+    `;
+    table.querySelector('tbody').appendChild(itemRow);
+  });
+}
+
+function loadListItemsByFilter(items) {
+  clearTable();
+  const table = document.getElementById("itemsTable");
+  items.forEach(item => {
+    const itemRow = document.createElement("tr");
+    const statusText = item.item_status == 1 ? "Available" : "Not Available";
+    itemRow.innerHTML = `
+      <td>${item.item_name}</td>
+      <td>${item.item_type}</td>
+      <td>${item.item_season}</td>
+      <td>${statusText}</td>
+    `;
+    table.querySelector('tbody').appendChild(itemRow);
+  });
+}
+
+function clearTable() {
+  const table = document.getElementById("itemsTable");
+  const tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
+}
+
 function createItemImage(src, alt) {
   const img = document.createElement("img");
   img.src = src;
@@ -375,4 +412,20 @@ function fetchAndInitWardrobeDropdown() {
   } else {
     console.error("No wardrobes found in local storage.");
   }
+}
+
+const updateBreadCrumbsinnerText = () => {
+  const currentWardrobeName = localStorage.getItem("currentWardrobeName");
+  const wardrobeName = document.getElementById("breadcrumbWardrobeName");
+  wardrobeName.innerText = currentWardrobeName;
+}
+
+function initUserDate ()
+{
+  const jsonString = localStorage.getItem("UserData");
+  const dataObject = JSON.parse(jsonString);
+  const userImg = document.getElementById("userImg_Name");
+  const userName = document.getElementById("userName");
+  userImg.src = dataObject.userImgUrl;
+  userName.innerText = `${ dataObject.userFirstName } ${ dataObject.userLastName }`;
 }
