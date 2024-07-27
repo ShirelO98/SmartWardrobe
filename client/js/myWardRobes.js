@@ -10,7 +10,6 @@ async function initMyWardrobe() {
     );
     const wardrobes = await response.json();
     console.log("Fetched wardrobes:", wardrobes);
-
     wardrobes.forEach((wardrobe) => {
       createWardrobeCard(
         wardrobe.wardrobe_name,
@@ -76,7 +75,9 @@ function createWardrobeForm() {
       const data = await response.json();
       const wardrobeCode = data.wardrobeCode;
       createWardrobeCard(wardrobeNewName, 0, 0, 0, wardrobeCode);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Failed to add wardrobe:", error);
+    }
   });
 }
 
@@ -89,7 +90,6 @@ function createWardrobeCard(
 ) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
-  wardrobeCard.dataset.id = wardrobeCode;
   const addButton = createButton("add-item", "add");
   const deleteButton = createButton("delete-item", "delete");
   const editButton = createButton("edit-item", "edit");
@@ -141,6 +141,7 @@ function createWardrobeCard(
       alert("Failed to delete wardrobe:", error);
     }
   });
+
   editButton.addEventListener("click", function () {
     const currentName = nameHeader.textContent.trim();
     const inputContainer = document.createElement("div");
@@ -176,7 +177,7 @@ function createWardrobeCard(
       } catch (error) {
         console.error("Failed to update wardrobe:", error);
       } finally {
-        inputContainer.replaceWith(nameHeader); // Replace input with updated name
+        inputContainer.replaceWith(nameHeader);
       }
     });
     inputContainer.appendChild(saveButton);
@@ -187,21 +188,9 @@ function createWardrobeCard(
         saveButton.click();
       }
     });
-console.log("hi");
     inputField.addEventListener("blur", function () {
       saveButton.click();
     });
-  });
-  inputContainer.appendChild(saveButton);
-  nameHeader.replaceWith(inputContainer);
-  inputField.focus();
-  inputField.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      saveButton.click();
-    }
-  });
-  inputField.addEventListener("blur", function () {
-    saveButton.click();
   });
 
   buttonWardrobeTitle.addEventListener("click", function (event) {
@@ -213,6 +202,7 @@ console.log("hi");
     }
   });
 }
+
 function createButton(className, text) {
   const button = document.createElement("button");
   button.classList.add("empty-button");
