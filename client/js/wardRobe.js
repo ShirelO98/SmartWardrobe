@@ -6,7 +6,7 @@ window.onload = () => {
 function initWardrobe() {
   fetchItems();
   initialItems();
-  initDropDown();
+  fetchAndInitWardrobeDropdown();
   let itemsButton = document.getElementById("items-button");
   itemsButton.addEventListener("click", changeButtonState);
   let looksButton = document.getElementById("looks-button");
@@ -28,7 +28,7 @@ function initWardrobe() {
 
 async function fetchItems() {
   try {
-    const wardrobeCode = 30; // fix it
+    const wardrobeCode = getCurrentWardrobe();
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}`, {
       method: "GET",
       headers: {
@@ -40,7 +40,7 @@ async function fetchItems() {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to fetch items");
     }
-
+    
     const items = await response.json();
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
@@ -66,17 +66,9 @@ function initialItems() {
   });
 }
 
-// fix it
-function initDropDown() {
-  let wardrobeNames = ["Ran's wardrobe", "Adar's wardrobe"];
-  for (let i = 0; i < wardrobeNames.length; i++) {
-    addToDropdown(wardrobeNames[i]);
-  }
-}
-
 function getUniqueItemTypes(items) {
   const itemTypeSet = new Set();
-  
+
   items.forEach(item => {
     if (item.item_type) {
       itemTypeSet.add(item.item_type);
@@ -121,7 +113,7 @@ function createItemTypeButtons(types) {
 
 async function handleFilterButtonClick(filterValue) {
   try {
-    const wardrobeCode = 30; // יש לשים את הקוד המתאים
+    const wardrobeCode = getCurrentWardrobe();
     const response = await fetch(`http://localhost:8081/items/${wardrobeCode}/${filterValue}`, {
       method: "GET",
       headers: {
@@ -209,7 +201,7 @@ async function ItemTypeSelectorBtn(event) {
     let span = parentBtn.querySelector("span");
     span.style.color = "black";
   }
-  
+
   let currentBtn = event.currentTarget;
   currentBtn.style.backgroundColor = "black";
   let span = currentBtn.querySelector("span");
@@ -235,7 +227,7 @@ function createItemsCards(items) {
   const addItemCard = wardRobeSection.querySelector(".item-card-empty");
   wardRobeSection.innerHTML = '';
   if (addItemCard) {
-    wardRobeSection.appendChild(addItemCard); 
+    wardRobeSection.appendChild(addItemCard);
   }
 
   items.forEach(item => {
@@ -346,4 +338,41 @@ function createItemImage(src, alt) {
   img.src = src;
   img.alt = alt;
   return img;
+}
+
+function getCurrentWardrobe() {
+  const currWardrobe = localStorage.getItem("currentWardrobeCode");
+  return currWardrobe;
+}
+
+function addToDropdown(wardrobeName, wardrobeCode) {
+  const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
+  const dropdownItem = document.createElement("a");
+  dropdownItem.classList.add("dropdown-item");
+  dropdownItem.addEventListener("click", function (event) {
+    const wardrobeCode1 = JSON.stringify(wardrobeCode);
+    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+
+    window.location.href = "wardrobe.html";
+  });
+  const closetImg = document.createElement("img");
+  closetImg.src = "images/closet.png";
+  closetImg.alt = "";
+  closetImg.classList.add("closet_img");
+  const wardrobeText = document.createTextNode(`${wardrobeName}`);
+  dropdownItem.appendChild(closetImg);
+  dropdownItem.appendChild(wardrobeText);
+  wardrobeInAccordion.appendChild(dropdownItem);
+}
+
+function fetchAndInitWardrobeDropdown() {
+  const wardrobesJson = localStorage.getItem("wardrobesOfUser");
+  if (wardrobesJson) {
+    const wardrobes = JSON.parse(wardrobesJson);
+    wardrobes.forEach((wardrobe) => {
+      addToDropdown(wardrobe.wardrobe_name, wardrobe.wardrobe_code);
+    });
+  } else {
+    console.error("No wardrobes found in local storage.");
+  }
 }
