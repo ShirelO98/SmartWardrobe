@@ -303,7 +303,7 @@ function deleteItem(item_id, itemCard) {
 
 function editStatusItem(item_id, itemCard) {
   const ellipseSpan = itemCard.querySelector('.elipse-item');
-  const newStatus = confirm('Is this item available? Click OK for change');
+  const newStatus = confirm('Click OK for change status of item or Cancel for close this window');
 
   fetch(`http://localhost:8081/items/${item_id}`, {
     method: 'PUT',
