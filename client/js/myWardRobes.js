@@ -9,7 +9,7 @@ async function initMyWardrobe() {
       `http://localhost:8081/wardrobe/all/${userId}`
     );
     const wardrobes = await response.json();
-    console.log("Fetched wardrobes:", wardrobes);
+    localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
     wardrobes.forEach((wardrobe) => {
       createWardrobeCard(
         wardrobe.wardrobe_name,
@@ -123,7 +123,7 @@ function createWardrobeCard(
   wardrobeCard.appendChild(readyToWearHeader);
   const myWardRobesSection = document.getElementById("my-wardRobes");
   myWardRobesSection.appendChild(wardrobeCard);
-  addToDropdown(wardrobeName);
+  addToDropdown(wardrobeName, wardrobeCode);
   deleteButton.addEventListener("click", async function () {
     try {
       const response = await fetch(
@@ -192,7 +192,6 @@ function createWardrobeCard(
       saveButton.click();
     });
   });
-
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
@@ -202,7 +201,6 @@ function createWardrobeCard(
     }
   });
 }
-
 function createButton(className, text) {
   const button = document.createElement("button");
   button.classList.add("empty-button");
@@ -220,11 +218,17 @@ function createHeader(text, classNames) {
   return header;
 }
 
-function addToDropdown(wardrobeName) {
+function addToDropdown(wardrobeName, wardrobeCode) {
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
   const dropdownItem = document.createElement("a");
   dropdownItem.classList.add("dropdown-item");
-  dropdownItem.href = "#";
+  dropdownItem.addEventListener("click", function (event) {
+    console.log("hi");
+    const wardrobeCode1 = JSON.stringify(wardrobeCode);
+    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+
+    window.location.href = "wardrobe.html";
+  });
   const closetImg = document.createElement("img");
   closetImg.src = "images/closet.png";
   closetImg.alt = "";
