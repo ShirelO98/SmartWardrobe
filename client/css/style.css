@@ -259,7 +259,7 @@ main {
   background: none;
 }
 
-.wordrobe-name {
+.wardrobe-name {
   background: none;
   color: #000;
   font-family: "Source Sans 3";
@@ -282,14 +282,12 @@ main {
   display: inline;
 }
 
-.Clothes-number {
+.clothes-number {
   margin-left: 20px;
-  margin-right: 5px;
 }
 
-.Outfits-number {
+.outfits-number {
   margin-left: 120px;
-  margin-right: 5px;
 }
 
 .ready-to-wear {

@@ -29,34 +29,27 @@ async function initMyWardrobe() {
 function createWardrobeForm() {
   const div = document.createElement("div");
   div.className = "wardrobe-card-empty";
-
   const form = document.createElement("form");
   form.action = "#";
   form.id = "form-toAdd-wardrobe";
-
   const label = document.createElement("label");
   label.textContent = "Wardrobe Name";
-
   const inputText = document.createElement("input");
   inputText.type = "text";
   inputText.maxLength = 18;
   inputText.className = "form-control";
   inputText.setAttribute("aria-label", "Sizing example input");
   inputText.setAttribute("aria-describedby", "inputGroup-sizing-default");
-
   const inputButton = document.createElement("input");
   inputButton.className = "btn btn-primary";
   inputButton.type = "button";
   inputButton.value = "Add Wardrobe";
-
   label.appendChild(inputText);
   label.appendChild(inputButton);
   form.appendChild(label);
   div.appendChild(form);
-
   const section = document.getElementById("my-wardRobes");
   section.appendChild(div);
-
   inputButton.addEventListener("click", async function () {
     const wardrobeNewName = inputText.value;
     section.removeChild(div);
@@ -82,9 +75,8 @@ function createWardrobeForm() {
       }
       const data = await response.json();
       const wardrobeCode = data.wardrobeCode;
-      createWardrobeCard(wardrobeNewName, 0, 0, 0,wardrobeCode);
-    } catch (error) {
-    }
+      createWardrobeCard(wardrobeNewName, 0, 0, 0, wardrobeCode);
+    } catch (error) {}
   });
 }
 
@@ -104,14 +96,12 @@ function createWardrobeCard(
   wardrobeCard.appendChild(addButton);
   wardrobeCard.appendChild(deleteButton);
   wardrobeCard.appendChild(editButton);
-
   const buttonWardrobeTitle = document.createElement("button");
   buttonWardrobeTitle.classList.add("empty-button");
   const nameHeader = document.createElement("h3");
   nameHeader.classList.add("wardrobe-name");
   nameHeader.textContent = wardrobeName;
   buttonWardrobeTitle.appendChild(nameHeader);
-
   const clothesNumberHeader = createHeader(`Clothes - ${clothesNumber}`, [
     "clothes-number",
     "cards-write",
@@ -120,7 +110,6 @@ function createWardrobeCard(
     "outfits-number",
     "cards-write",
   ]);
-
   const readyToWearHeader = document.createElement("h5");
   readyToWearHeader.classList.add("ready-to-wear");
   readyToWearHeader.textContent = "Ready to wear ";
@@ -128,16 +117,13 @@ function createWardrobeCard(
   readyToWearSpan.classList.add("ready-to-wear-dont-bold", "ready-to-wear");
   readyToWearSpan.textContent = readyToWearPercentage + "%";
   readyToWearHeader.appendChild(readyToWearSpan);
-
   wardrobeCard.appendChild(buttonWardrobeTitle);
   wardrobeCard.appendChild(clothesNumberHeader);
   wardrobeCard.appendChild(outfitsNumberHeader);
   wardrobeCard.appendChild(readyToWearHeader);
-
   const myWardRobesSection = document.getElementById("my-wardRobes");
   myWardRobesSection.appendChild(wardrobeCard);
   addToDropdown(wardrobeName);
-
   deleteButton.addEventListener("click", async function () {
     try {
       const response = await fetch(
@@ -146,30 +132,25 @@ function createWardrobeCard(
           method: "DELETE",
         }
       );
-
       if (!response.ok) {
         throw new Error("Failed to delete wardrobe");
       }
-
       wardrobeCard.remove();
       removeFromDropdown(wardrobeName);
     } catch (error) {
       alert("Failed to delete wardrobe:", error);
     }
   });
-
   editButton.addEventListener("click", function () {
     const currentName = nameHeader.textContent.trim();
     const inputContainer = document.createElement("div");
     inputContainer.classList.add("edit-input-container");
-
     const inputField = document.createElement("input");
     inputField.className = "form-control ed";
     inputField.type = "text";
     inputField.maxLength = 18;
     inputField.value = currentName;
     inputContainer.appendChild(inputField);
-
     const saveButton = document.createElement("button");
     saveButton.className = "btn btn-primary";
     saveButton.textContent = "Save";
@@ -186,21 +167,18 @@ function createWardrobeCard(
             body: JSON.stringify({ wardrobeName: newName }),
           }
         );
-
         if (!response.ok) {
           throw new Error("Failed to update wardrobe");
         }
-
-        nameHeader.textContent = newName; // Update the name in the DOM
-        updateDropdown(wardrobeName, newName); // Update the dropdown list
-        wardrobeName = newName; // Update the variable for future references
+        nameHeader.textContent = newName;
+        updateDropdown(wardrobeName, newName);
+        wardrobeName = newName;
       } catch (error) {
         console.error("Failed to update wardrobe:", error);
       } finally {
         inputContainer.replaceWith(nameHeader); // Replace input with updated name
       }
     });
-
     inputContainer.appendChild(saveButton);
     nameHeader.replaceWith(inputContainer);
     inputField.focus();
@@ -214,28 +192,27 @@ function createWardrobeCard(
       saveButton.click();
     });
   });
-}
-
-inputContainer.appendChild(saveButton);
-nameHeader.replaceWith(inputContainer);
-inputField.focus();
-inputField.addEventListener("keypress", function (event) {
-  if (event.key === "Enter") {
+  inputContainer.appendChild(saveButton);
+  nameHeader.replaceWith(inputContainer);
+  inputField.focus();
+  inputField.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      saveButton.click();
+    }
+  });
+  inputField.addEventListener("blur", function () {
     saveButton.click();
-  }
-});
+  });
 
-inputField.addEventListener("blur", function () {
-  saveButton.click();
-});
-
-buttonWardrobeTitle.addEventListener("click", function (event) {
-  const cursorStyle = getComputedStyle(event.target).cursor;
-  if (cursorStyle === "pointer") {
-    window.location.href = "wardrobe.html";
-  }
-});
-
+  buttonWardrobeTitle.addEventListener("click", function (event) {
+    console.log("hiiii");
+    const cursorStyle = getComputedStyle(event.target).cursor;
+    if (cursorStyle === "pointer") {
+      console.log("hello");
+      window.location.href = "wardrobe.html";
+    }
+  });
+}
 function createButton(className, text) {
   const button = document.createElement("button");
   button.classList.add("empty-button");
