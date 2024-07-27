@@ -15,18 +15,7 @@ function initWardrobe() {
   looksButton.addEventListener("click", changeButtonState);
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
-  console.log("wardrobe.js loaded");
   createLooksCards();
-  let addItemBttable = document.getElementsByClassName(
-    "plus-item-button-table"
-  )[0];
-  addItemBttable.onclick = () => {
-    let button = document.getElementById("layout-button");
-    button.textContent = "list";
-    const tableSection = document.getElementById("itemsTable");
-    tableSection.style.display = "none";
-    document.getElementById("wardRobe").style.display = "flex";
-  };
 }
 
 async function fetchItems() {
@@ -132,6 +121,8 @@ async function handleFilterButtonClick(filterValue) {
 
     const items = await response.json();
     createItemsCards(items);
+    clearTable();
+    loadListItemsByFilter(items);
 
   } catch (error) {
     console.error("Failed to fetch items:", error.message);
@@ -223,10 +214,11 @@ async function ItemTypeSelectorBtn(event) {
     await handleFilterButtonClick(3);
   }
   else if (span.textContent.trim() === "All") {
+    clearTable();
+    loadListItems();
     await fetchItems();
   }
 }
-
 
 function createItemsCards(items) {
   const wardRobeSection = document.getElementById("wardRobe");
@@ -343,7 +335,22 @@ function loadListItems() {
   const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
   const table = document.getElementById("itemsTable");
 
-  // Append new rows for each item
+  items.forEach(item => {
+    const itemRow = document.createElement("tr");
+    const statusText = item.item_status == 1 ? "Available" : "Not Available";
+    itemRow.innerHTML = `
+      <td>${item.item_name}</td>
+      <td>${item.item_type}</td>
+      <td>${item.item_season}</td>
+      <td>${statusText}</td>
+    `;
+    table.querySelector('tbody').appendChild(itemRow);
+  });
+}
+
+function loadListItemsByFilter(items) {
+  clearTable();
+  const table = document.getElementById("itemsTable");
   items.forEach(item => {
     const itemRow = document.createElement("tr");
     const statusText = item.item_status == 1 ? "Available" : "Not Available";
@@ -360,10 +367,8 @@ function loadListItems() {
 function clearTable() {
   const table = document.getElementById("itemsTable");
   const tbody = table.querySelector('tbody');
-
   tbody.innerHTML = '';
 }
-
 
 function createItemImage(src, alt) {
   const img = document.createElement("img");
