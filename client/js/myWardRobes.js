@@ -194,10 +194,10 @@ function createWardrobeCard(
   });
 
   buttonWardrobeTitle.addEventListener("click", function (event) {
-    console.log("hiiii");
+    const wardrobeCode1 = JSON.stringify(wardrobeCode);
+    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
     const cursorStyle = getComputedStyle(event.target).cursor;
     if (cursorStyle === "pointer") {
-      console.log("hello");
       window.location.href = "wardrobe.html";
     }
   });
