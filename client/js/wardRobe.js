@@ -4,15 +4,18 @@ window.onload = () => {
 };
 
 function initWardrobe() {
+  updateBreadCrumbsinnerText();
   fetchItems();
   initialItems();
   fetchAndInitWardrobeDropdown();
+  initUserDate();
   let itemsButton = document.getElementById("items-button");
   itemsButton.addEventListener("click", changeButtonState);
   let looksButton = document.getElementById("looks-button");
   looksButton.addEventListener("click", changeButtonState);
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
+  console.log("wardrobe.js loaded");
   createLooksCards();
   let addItemBttable = document.getElementsByClassName(
     "plus-item-button-table"
@@ -410,4 +413,14 @@ const updateBreadCrumbsinnerText = () => {
   const currentWardrobeName = localStorage.getItem("currentWardrobeName");
   const wardrobeName = document.getElementById("breadcrumbWardrobeName");
   wardrobeName.innerText = currentWardrobeName;
+}
+
+function initUserDate ()
+{
+  const jsonString = localStorage.getItem("UserData");
+  const dataObject = JSON.parse(jsonString);
+  const userImg = document.getElementById("userImg_Name");
+  const userName = document.getElementById("userName");
+  userImg.src = dataObject.userImgUrl;
+  userName.innerText = `${ dataObject.userFirstName } ${ dataObject.userLastName }`;
 }
