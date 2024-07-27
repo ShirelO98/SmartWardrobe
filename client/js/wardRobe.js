@@ -229,12 +229,12 @@ function createItemsCards(items) {
   }
 
   items.forEach(item => {
-    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status);
+    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
     wardRobeSection.appendChild(itemCard);
   });
 }
 
-function createItemCard(imageSrc, altText, itemStatus) {
+function createItemCard(imageSrc, altText, itemStatus, item_id) {
   const itemCard = document.createElement("div");
   itemCard.className = "item-card-fully";
 
@@ -248,11 +248,29 @@ function createItemCard(imageSrc, altText, itemStatus) {
 
   const editButton = document.createElement("button");
   editButton.className = "empty-button";
+  editButton.dataset.id = item_id;
   const editSpan = document.createElement("span");
   editSpan.className = "material-symbols-outlined edit-item-wardrobe";
   editSpan.textContent = "edit";
   editButton.appendChild(editSpan);
   itemCard.appendChild(editButton);
+
+  editButton.addEventListener('click', function () {
+    editStatusItem(editButton.dataset.id, itemCard);
+  });
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "empty-button";
+  deleteButton.dataset.id = item_id;
+  const deleteSpan = document.createElement("span");
+  deleteSpan.className = "material-symbols-outlined delete-icon-wardrobe";
+  deleteSpan.textContent = "delete";
+  deleteButton.appendChild(deleteSpan);
+  itemCard.appendChild(deleteButton);
+
+  deleteButton.addEventListener('click', function () {
+    deleteItem(deleteButton.dataset.id, itemCard);
+  });
 
   const img = document.createElement("img");
   img.src = imageSrc;
@@ -260,6 +278,58 @@ function createItemCard(imageSrc, altText, itemStatus) {
   itemCard.appendChild(img);
 
   return itemCard;
+}
+
+
+function deleteItem(item_id, itemCard) {
+  fetch(`http://localhost:8081/items/${item_id}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Item deleted:', data);
+      itemCard.remove();
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+
+function editStatusItem(item_id, itemCard) {
+  const ellipseSpan = itemCard.querySelector('.elipse-item');
+  const newStatus = confirm('Is this item available? Click OK for change');
+
+  fetch(`http://localhost:8081/items/${item_id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (newStatus === true) {
+        if (ellipseSpan.style.backgroundColor === 'red') {
+          ellipseSpan.style.backgroundColor = 'aquamarine';
+        }
+        else {
+          ellipseSpan.style.backgroundColor = 'red';
+        }
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
 }
 
 
@@ -420,12 +490,11 @@ const updateBreadCrumbsinnerText = () => {
   wardrobeName.innerText = currentWardrobeName;
 }
 
-function initUserDate ()
-{
+function initUserDate() {
   const jsonString = localStorage.getItem("UserData");
   const dataObject = JSON.parse(jsonString);
   const userImg = document.getElementById("userImg_Name");
   const userName = document.getElementById("userName");
   userImg.src = dataObject.userImgUrl;
-  userName.innerText = `${ dataObject.userFirstName } ${ dataObject.userLastName }`;
+  userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
 }

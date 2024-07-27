@@ -619,7 +619,8 @@ main {
 
 .delete-icon-wardrobe {
   position: absolute;
-  margin-left: 140px;
+  margin-top: 12px;
+  margin-left: 15px;
   font-size: 32px !important;
   background: none;
 }
