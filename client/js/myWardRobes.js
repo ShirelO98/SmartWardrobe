@@ -195,6 +195,7 @@ function createWardrobeCard(
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+    localStorage.setItem("currentWardrobeName",wardrobeName);
     const cursorStyle = getComputedStyle(event.target).cursor;
     if (cursorStyle === "pointer") {
       window.location.href = "wardrobe.html";
@@ -264,3 +265,5 @@ function updateDropdown(oldName, newName) {
 }
 
 window.onload = initMyWardrobe;
+
+
