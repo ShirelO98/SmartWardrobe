@@ -19,13 +19,10 @@ async function loginUser() {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to login");
     }
-
     const userData = await response.json();
     const userDataString = JSON.stringify(userData);
     localStorage.setItem("UserData", userDataString);
     const retrievedUserDataString = localStorage.getItem("UserData");
-    console.log(retrievedUserDataString);
-
     if (userData.user_type === 1) {
       window.location.href = "./index.html";
     } else if (userData.user_type === "2") {

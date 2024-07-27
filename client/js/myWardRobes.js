@@ -4,6 +4,11 @@ async function initMyWardrobe() {
     const dataObject = JSON.parse(jsonString);
     console.log("Parsed Object:", dataObject);
     const userId = dataObject.UserID;
+    const userImg = document.getElementById("userImg_Name");
+    const userName = document.getElementById("userName");
+    userImg.src = dataObject.userImgUrl;
+    userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
+
     console.log(userId);
     const response = await fetch(
       `http://localhost:8081/wardrobe/all/${userId}`
@@ -195,7 +200,7 @@ function createWardrobeCard(
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
-    localStorage.setItem("currentWardrobeName",wardrobeName);
+    localStorage.setItem("currentWardrobeName", wardrobeName);
     const cursorStyle = getComputedStyle(event.target).cursor;
     if (cursorStyle === "pointer") {
       window.location.href = "wardrobe.html";
@@ -265,5 +270,3 @@ function updateDropdown(oldName, newName) {
 }
 
 window.onload = initMyWardrobe;
-
-
