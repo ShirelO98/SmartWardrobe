@@ -15,7 +15,7 @@ function initWardrobe() {
   looksButton.addEventListener("click", changeButtonState);
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
-  createLooksCards();
+  fetchAllLooks();
 }
 
 async function fetchItems() {
@@ -332,74 +332,92 @@ function editStatusItem(item_id, itemCard) {
     });
 }
 
+async function fetchAllLooks() {
+  try {
+    const wardrobeCode = getCurrentWardrobe();
+    const response = await fetch(`http://localhost:8081/looks/${wardrobeCode}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
 
-// looks
-// function createLooksCards() {
-//   console.log("GET/Wardrobes/:id/Looks ");
-//   const looksSection = document.getElementById("looks");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to fetch looks");
+    }
 
-//   const tShirts = [];
-//   for (let i = 1; i <= 4; i++) {
-//     tShirts.push({ src: `images/items/t-shirt/${i}.png`, alt: `T-Shirt ${i}` });
-//   }
-//   const pants = [];
-//   for (let i = 1; i <= 3; i++) {
-//     pants.push({ src: `images/items/pants/${i}.png`, alt: `Pants ${i}` });
-//   }
-//   const shoes = [];
-//   for (let i = 1; i <= 4; i++) {
-//     shoes.push({ src: `images/items/shoes/${i}.png`, alt: `Shoes ${i}` });
-//   }
+    const looks = await response.json();
+    localStorage.setItem("looksOfCurrentWardrobe", JSON.stringify(looks));
+    renderLooksCards(looks);
 
-//   tShirts.forEach((tShirt) => {
-//     pants.forEach((pant) => {
-//       shoes.forEach((shoe) => {
-//         const lookCard = createLookCard(tShirt, pant, shoe);
-//         looksSection.appendChild(lookCard);
-//       });
-//     });
-//   });
-// }
+  } catch (error) {
+    console.error("Failed to fetch looks:", error.message);
+    alert("Failed to fetch looks: " + error.message);
+  }
+}
 
-// function createLookCard(tShirt, pant, shoe) {
-//   const lookCard = document.createElement("div");
-//   lookCard.className = "item-card-fully-looks";
 
-//   const ellipseSpan = document.createElement("span");
-//   ellipseSpan.className = "elipse-item-looks";
-//   lookCard.appendChild(ellipseSpan);
+function renderLooksCards() {
+  const looksSection = document.getElementById("looks");
+  looksSection.innerHTML = '';
+  const looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
+  looks.forEach((look) => {
+    const tShirtImage = { src: look.item_img_1, alt: "Item 1" };
+    const pantImage = { src: look.item_img_2, alt: "Item 2" };
+    const shoeImage = { src: look.item_img_3, alt: "Item 3" };
+    const lookCard = createLookCard(tShirtImage, pantImage, shoeImage, look.look_id, look.look_status);
+    looksSection.appendChild(lookCard);
+  });
+}
 
-//   const editButton = document.createElement("button");
-//   editButton.className = "empty-button";
-//   const editSpan = document.createElement("span");
-//   editSpan.className = "material-symbols-outlined edit-look-wardrobe";
-//   editSpan.textContent = "edit";
-//   editButton.appendChild(editSpan);
-//   lookCard.appendChild(editButton);
+function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
+  const lookCard = document.createElement("div");
+  lookCard.className = "item-card-fully-looks";
 
-//   const ul = document.createElement("ul");
-//   ul.className = "list-unstyled";
+  const ellipseSpan = document.createElement("span");
+  ellipseSpan.className = "elipse-item-looks";
 
-//   const li1 = document.createElement("li");
-//   const li2 = document.createElement("li");
-//   const li3 = document.createElement("li");
+  if (lookStatus === 0) {
+    ellipseSpan.style.backgroundColor = "red";
+  }
+  lookCard.appendChild(ellipseSpan);
 
-//   const imgTShirt = createItemImage(tShirt.src, tShirt.alt);
-//   const imgPants = createItemImage(pant.src, pant.alt);
-//   const imgShoes = createItemImage(shoe.src, shoe.alt);
+  const editButton = document.createElement("button");
+  editButton.className = "empty-button";
+  const editSpan = document.createElement("span");
+  editSpan.className = "material-symbols-outlined edit-look-wardrobe";
+  editSpan.textContent = "edit";
+  editButton.appendChild(editSpan);
+  lookCard.appendChild(editButton);
 
-//   li1.appendChild(imgTShirt);
-//   li2.appendChild(imgPants);
-//   li3.appendChild(imgShoes);
+  const ul = document.createElement("ul");
+  ul.className = "list-unstyled";
 
-//   ul.appendChild(li1);
-//   ul.appendChild(li2);
-//   ul.appendChild(li3);
+  const li1 = document.createElement("li");
+  const li2 = document.createElement("li");
+  const li3 = document.createElement("li");
 
-//   lookCard.appendChild(ul);
+  const imgTShirt = createItemImage(tShirtImage.src, tShirtImage.alt);
+  const imgPants = createItemImage(pantImage.src, pantImage.alt);
+  const imgShoes = createItemImage(shoeImage.src, shoeImage.alt);
 
-//   return lookCard;
-// }
+  li1.appendChild(imgTShirt);
+  li2.appendChild(imgPants);
+  li3.appendChild(imgShoes);
+
+  ul.appendChild(li1);
+  ul.appendChild(li2);
+  ul.appendChild(li3);
+
+  lookCard.appendChild(ul);
+
+  lookCard.dataset.lookId = lookId;
+  lookCard.dataset.lookStatus = lookStatus;
+
+  return lookCard;
+}
+
 
 function loadListItems() {
   const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];

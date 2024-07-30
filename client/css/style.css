@@ -667,7 +667,6 @@ main {
 
 .item-card-fully-looks {
   width: 233px;
-  height: 337px;
   background: #fff;
   display: flex;
   align-items: center;
@@ -675,7 +674,15 @@ main {
   border-radius: 50px;
   margin-right: 50px;
   margin-bottom: 50px;
+  height: auto; 
+  overflow: hidden;
+  position: relative; 
+  border: 1px solid #ccc; 
+  padding: 10px; 
+  box-sizing: border-box; 
 }
+
+
 
 .item-card-fully-looks > ul {
   list-style: none;
@@ -723,21 +730,21 @@ main {
 }
 
 .edit-look-wardrobe {
-  font-size: 28px !important;
-  margin-top: -280px;
-  margin-left: 175px;
-  background: none;
-  position: absolute;
+  font-size: 28px !important; 
+  background: none; 
+  position: absolute; 
+  top: 15px; 
+  right: 15px; 
 }
 
 .elipse-item-looks {
   width: 18px;
-  height: 18px;
-  background: aquamarine;
-  border-radius: 100%;
-  margin-top: 285px;
-  margin-left: -170px;
+  height: 18px; 
+  background: aquamarine; 
+  border-radius: 100%; 
   position: absolute;
+  bottom: 15px; 
+  left: 20px; 
 }
 
 .modal-overlay {
