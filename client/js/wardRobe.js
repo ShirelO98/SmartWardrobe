@@ -137,6 +137,7 @@ function changeButtonState(event) {
   let lookSpan = lookBut.querySelector("span");
 
   if (event.currentTarget === itemBut) {
+    document.getElementById("types-of-items").style.display = "flex";
     document.getElementById("looks").style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
     const tableSection = document.getElementById("itemsTable");
@@ -152,6 +153,7 @@ function changeButtonState(event) {
     lookBut.style.backgroundColor = "white";
     lookSpan.style.color = "black";
   } else if (event.currentTarget === lookBut) {
+    document.getElementById("types-of-items").style.display = "none";
     lookBut.style.backgroundColor = "black";
     lookSpan.style.color = "white";
     itemBut.style.backgroundColor = "white";

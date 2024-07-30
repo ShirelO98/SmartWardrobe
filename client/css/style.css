@@ -153,6 +153,7 @@ header > h3 {
 
 .dropdown-item:hover {
   color: #0d6efd !important;
+  cursor: pointer;
 }
 .dropdown-toggle > img {
   background: none;
@@ -674,15 +675,13 @@ main {
   border-radius: 50px;
   margin-right: 50px;
   margin-bottom: 50px;
-  height: auto; 
+  height: auto;
   overflow: hidden;
-  position: relative; 
-  border: 1px solid #ccc; 
-  padding: 10px; 
-  box-sizing: border-box; 
+  position: relative;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-sizing: border-box;
 }
-
-
 
 .item-card-fully-looks > ul {
   list-style: none;
@@ -730,21 +729,21 @@ main {
 }
 
 .edit-look-wardrobe {
-  font-size: 28px !important; 
-  background: none; 
-  position: absolute; 
-  top: 15px; 
-  right: 15px; 
+  font-size: 28px !important;
+  background: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 
 .elipse-item-looks {
   width: 18px;
-  height: 18px; 
-  background: aquamarine; 
-  border-radius: 100%; 
+  height: 18px;
+  background: aquamarine;
+  border-radius: 100%;
   position: absolute;
-  bottom: 15px; 
-  left: 20px; 
+  bottom: 15px;
+  left: 20px;
 }
 
 .modal-overlay {
@@ -843,13 +842,22 @@ main {
   background: none;
 }
 
+@media (max-width: 800px) {
+  .dropdown-toggle > img {
+    display: none;
+  }
+  .header-container > h1,
+  .header-container > h3 {
+    display: none;
+  }
+}
+
 @media (max-width: 500px) {
   .sidebar {
     transform: translateX(-100%);
   }
   .sidebar.show {
     transform: translateX(0);
-    width: 100%;
     z-index: 3;
   }
   .content {
