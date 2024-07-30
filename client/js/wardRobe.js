@@ -16,6 +16,8 @@ function initWardrobe() {
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   fetchAllLooks();
+  document.getElementById('filter-button').addEventListener('click', showColorMenu);
+  document.getElementById('sort-button').addEventListener('click', sortItemsByStatus);
 }
 
 async function fetchItems() {
@@ -517,4 +519,70 @@ function initUserDate() {
   const userName = document.getElementById("userName");
   userImg.src = dataObject.userImgUrl;
   userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
+}
+
+// Color filter:
+function getUniqueColors(items) {
+  const colors = new Set();
+  items.forEach(item => colors.add(item.item_color));
+  return Array.from(colors);
+}
+
+function showColorMenu() {
+  const colorMenu = document.getElementById('color-menu');
+  colorMenu.innerHTML = '';
+  const title = document.createElement('h4');
+  title.textContent = 'Filter Items By Color';
+  title.style.textAlign = 'center'; 
+  colorMenu.appendChild(title);
+
+  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const uniqueColors = getUniqueColors(items);
+
+  uniqueColors.forEach(color => {
+    const button = document.createElement('button');
+    button.textContent = color;
+    button.style.backgroundColor = color;
+    button.style.color = 'white'; 
+    button.onclick = () => filterByColor(color);
+    colorMenu.appendChild(button);
+  });
+
+  const filterButton = document.getElementById('filter-button');
+  const rect = filterButton.getBoundingClientRect();
+  colorMenu.style.top = `${rect.bottom + window.scrollY}px`;
+  colorMenu.style.left = `${rect.left}px`; 
+  
+  colorMenu.classList.toggle('hidden');
+}
+
+function filterByColor(color) {
+  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const filteredItems = items.filter(item => item.item_color === color);
+  updateDisplay(filteredItems);
+}
+
+function updateDisplay(items) {
+  const wardrobeSection = document.getElementById('wardRobe');
+  wardrobeSection.innerHTML = '';
+  items.forEach(item => {
+    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
+    wardrobeSection.appendChild(itemCard);
+  });
+  const tableSection = document.getElementById('itemsTable');
+  tableSection.style.display = 'none';
+  const button = document.getElementById('layout-button');
+  button.textContent = 'list';
+}
+
+
+let isAscending = true;
+function sortItemsByStatus() {
+  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const sortedItems = items.sort((a, b) => {
+    return isAscending ? a.item_status - b.item_status : b.item_status - a.item_status;
+  });
+
+  updateDisplay(sortedItems);
+  isAscending = !isAscending;
 }
