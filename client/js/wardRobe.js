@@ -18,6 +18,7 @@ function initWardrobe() {
   fetchAllLooks();
   document.getElementById('filter-button').addEventListener('click', showColorMenu);
   document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
+  localStorage.setItem("currentItemType", 'All');
 }
 
 async function fetchItems() {
