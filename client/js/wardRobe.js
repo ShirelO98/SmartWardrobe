@@ -300,8 +300,8 @@ function deleteItem(item_id, itemCard) {
       return response.json();
     })
     .then(data => {
-      console.log('Item deleted:', data);
       itemCard.remove();
+      fetchAllLooks();
     })
     .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
@@ -333,6 +333,7 @@ function editStatusItem(item_id, itemCard) {
         else {
           ellipseSpan.style.backgroundColor = 'red';
         }
+        fetchAllLooks();
       }
     })
     .catch(error => {
