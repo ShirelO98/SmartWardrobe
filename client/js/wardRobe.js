@@ -17,7 +17,7 @@ function initWardrobe() {
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   fetchAllLooks();
   document.getElementById('filter-button').addEventListener('click', showColorMenu);
-  document.getElementById('sort-button').addEventListener('click', sortItemsByStatus);
+  document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
 }
 
 async function fetchItems() {
@@ -137,7 +137,6 @@ function changeButtonState(event) {
   let itemSpan = itemBut.querySelector("span");
   let lookBut = document.getElementById("looks-button");
   let lookSpan = lookBut.querySelector("span");
-
   if (event.currentTarget === itemBut) {
     document.getElementById("types-of-items").style.display = "flex";
     document.getElementById("looks").style.display = "none";
@@ -154,6 +153,7 @@ function changeButtonState(event) {
     itemSpan.style.color = "white";
     lookBut.style.backgroundColor = "white";
     lookSpan.style.color = "black";
+    document.getElementById("filter-button").style.display = "flex";
   } else if (event.currentTarget === lookBut) {
     document.getElementById("types-of-items").style.display = "none";
     lookBut.style.backgroundColor = "black";
@@ -170,6 +170,7 @@ function changeButtonState(event) {
     lastCrumb.textContent = "Looks";
     let button = document.getElementById("layout-button");
     button.textContent = "";
+    document.getElementById("filter-button").style.display = "none";
   }
 }
 
@@ -207,6 +208,8 @@ async function ItemTypeSelectorBtn(event) {
   currentBtn.style.backgroundColor = "black";
   let span = currentBtn.querySelector("span");
   span.style.color = "white";
+  let currentItemType = span.textContent.trim();
+  localStorage.setItem("currentItemType", currentItemType);
 
   if (span.textContent.trim() === "Shirt") {
     await handleFilterButtonClick(1);
@@ -362,10 +365,13 @@ async function fetchAllLooks() {
 }
 
 
-function renderLooksCards() {
+function renderLooksCards(lookForSort = []) {
   const looksSection = document.getElementById("looks");
   looksSection.innerHTML = '';
-  const looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
+  let looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
+  if (lookForSort.length != 0) {
+    looks = lookForSort;
+  }
   looks.forEach((look) => {
     const tShirtImage = { src: look.item_img_1, alt: "Item 1" };
     const pantImage = { src: look.item_img_2, alt: "Item 2" };
@@ -386,15 +392,6 @@ function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
     ellipseSpan.style.backgroundColor = "red";
   }
   lookCard.appendChild(ellipseSpan);
-
-  const editButton = document.createElement("button");
-  editButton.className = "empty-button";
-  const editSpan = document.createElement("span");
-  editSpan.className = "material-symbols-outlined edit-look-wardrobe";
-  editSpan.textContent = "edit";
-  editButton.appendChild(editSpan);
-  lookCard.appendChild(editButton);
-
   const ul = document.createElement("ul");
   ul.className = "list-unstyled";
 
@@ -441,6 +438,10 @@ function loadListItems() {
 }
 
 function loadListItemsByFilter(items) {
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
   clearTable();
   const table = document.getElementById("itemsTable");
   items.forEach(item => {
@@ -530,6 +531,7 @@ function getUniqueColors(items) {
 function showColorMenu() {
   const colorMenu = document.getElementById('color-menu');
   colorMenu.innerHTML = '';
+
   const title = document.createElement('h4');
   title.textContent = 'Filter Items By Color';
   title.style.textAlign = 'center';
@@ -542,17 +544,24 @@ function showColorMenu() {
     const button = document.createElement('button');
     button.textContent = color;
     button.style.backgroundColor = color;
-    button.style.color = 'white';
+    button.style.color = getContrastingColor(color);
     button.onclick = () => filterByColor(color);
     colorMenu.appendChild(button);
   });
 
   const filterButton = document.getElementById('filter-button');
   const rect = filterButton.getBoundingClientRect();
+  colorMenu.style.position = 'absolute';
   colorMenu.style.top = `${rect.bottom + window.scrollY}px`;
   colorMenu.style.left = `${rect.left}px`;
-
   colorMenu.classList.toggle('hidden');
+}
+
+function getContrastingColor(color) {
+  if (color.toLowerCase() === 'white') {
+    return 'black';
+  }
+  return 'white';
 }
 
 function filterByColor(color) {
@@ -567,6 +576,10 @@ function filterByColor(color) {
 }
 
 function updateDisplay(items) {
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
   const wardrobeSection = document.getElementById('wardRobe');
   wardrobeSection.innerHTML = '';
   items.forEach(item => {
@@ -575,18 +588,44 @@ function updateDisplay(items) {
   });
   const tableSection = document.getElementById('itemsTable');
   tableSection.style.display = 'none';
-  const button = document.getElementById('layout-button');
-  button.textContent = 'list';
 }
 
+function SortLooksOrItemByStatus() {
+  const itemsButton = document.getElementById('items-button');
+  const looksButton = document.getElementById('looks-button');
 
-let isAscending = true;
+  if (itemsButton.style.backgroundColor === 'black') {
+    sortItemsByStatus();
+  } else if (looksButton.style.backgroundColor === 'black') {
+    sortLooksByStatus();
+  }
+}
+
+let isAscendingItem = true;
 function sortItemsByStatus() {
-  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  let state = document.getElementById("layout-button").textContent.trim();
+  let items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
   const sortedItems = items.sort((a, b) => {
-    return isAscending ? a.item_status - b.item_status : b.item_status - a.item_status;
+    return isAscendingItem ? a.item_status - b.item_status : b.item_status - a.item_status;
   });
+  if (state != 'grid_view') {
+    updateDisplay(sortedItems);
+  } else {
+    loadListItemsByFilter(sortedItems);
+  }
+  isAscendingItem = !isAscendingItem;
+}
 
-  updateDisplay(sortedItems);
-  isAscending = !isAscending;
+let isAscendingLook = true;
+function sortLooksByStatus() {
+  let looks = JSON.parse(localStorage.getItem('looksOfCurrentWardrobe')) || [];
+  const sortedLooks = looks.sort((a, b) => {
+    return isAscendingLook ? a.look_status - b.look_status : b.look_status - a.look_status;
+  });
+  renderLooksCards(sortedLooks);
+  isAscendingLook = !isAscendingLook;
 }
