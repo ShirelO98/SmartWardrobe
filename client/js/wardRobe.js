@@ -422,8 +422,8 @@ function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
   return lookCard;
 }
 
-
 function loadListItems() {
+  clearTable();
   const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
   const table = document.getElementById("itemsTable");
 
@@ -521,7 +521,6 @@ function initUserDate() {
   userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
 }
 
-// Color filter:
 function getUniqueColors(items) {
   const colors = new Set();
   items.forEach(item => colors.add(item.item_color));
@@ -533,7 +532,7 @@ function showColorMenu() {
   colorMenu.innerHTML = '';
   const title = document.createElement('h4');
   title.textContent = 'Filter Items By Color';
-  title.style.textAlign = 'center'; 
+  title.style.textAlign = 'center';
   colorMenu.appendChild(title);
 
   const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
@@ -543,7 +542,7 @@ function showColorMenu() {
     const button = document.createElement('button');
     button.textContent = color;
     button.style.backgroundColor = color;
-    button.style.color = 'white'; 
+    button.style.color = 'white';
     button.onclick = () => filterByColor(color);
     colorMenu.appendChild(button);
   });
@@ -551,15 +550,20 @@ function showColorMenu() {
   const filterButton = document.getElementById('filter-button');
   const rect = filterButton.getBoundingClientRect();
   colorMenu.style.top = `${rect.bottom + window.scrollY}px`;
-  colorMenu.style.left = `${rect.left}px`; 
-  
+  colorMenu.style.left = `${rect.left}px`;
+
   colorMenu.classList.toggle('hidden');
 }
 
 function filterByColor(color) {
+  let state = document.getElementById("layout-button").textContent.trim();
   const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
   const filteredItems = items.filter(item => item.item_color === color);
-  updateDisplay(filteredItems);
+  if (state != 'grid_view') {
+    updateDisplay(filteredItems);
+  } else {
+    loadListItemsByFilter(filteredItems);
+  }
 }
 
 function updateDisplay(items) {

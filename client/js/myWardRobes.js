@@ -268,5 +268,3 @@ function updateDropdown(oldName, newName) {
     }
   });
 }
-
-window.onload = initMyWardrobe;
