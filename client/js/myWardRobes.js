@@ -2,14 +2,11 @@ async function initMyWardrobe() {
   try {
     const jsonString = localStorage.getItem("UserData");
     const dataObject = JSON.parse(jsonString);
-    console.log("Parsed Object:", dataObject);
     const userId = dataObject.UserID;
     const userImg = document.getElementById("userImg_Name");
     const userName = document.getElementById("userName");
     userImg.src = dataObject.userImgUrl;
     userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
-
-    console.log(userId);
     const response = await fetch(
       `http://localhost:8081/wardrobe/all/${userId}`
     );
@@ -160,7 +157,9 @@ function createWardrobeCard(
     const saveButton = document.createElement("button");
     saveButton.className = "btn btn-primary";
     saveButton.textContent = "Save";
-    saveButton.addEventListener("click", async function () {
+    saveButton.addEventListener("click", async function (event) {
+      event.stopPropagation(); 
+      event.preventDefault(); 
       const newName = inputField.value.trim();
       try {
         const response = await fetch(
@@ -207,6 +206,7 @@ function createWardrobeCard(
     }
   });
 }
+
 function createButton(className, text) {
   const button = document.createElement("button");
   button.classList.add("empty-button");

@@ -1,19 +1,25 @@
 window.onload = () => {
-  initUserDetails();
   initSideNav();
-  updateBreadCrumbsinnerText();
+  initWardrobesOfClients();
 };
+
+initWardrobesOfClients = () => {
+  updateBreadCrumbsinnerText();
+  initUserDetails();
+  initializeDropdown();
+}
 
 const updateBreadCrumbsinnerText = () => {
   const currentUserName = localStorage.getItem("currentClientName");
   const userNameElement = document.getElementById("breadcrumbUserName");
-  
+
   if (currentUserName && userNameElement) {
     userNameElement.innerText = currentUserName;
   } else {
     console.error("Unable to update breadcrumbs: currentClientName or breadcrumbUserName element not found.");
   }
 }
+
 // להפעיל רק כשנכנסים ללקוח ספציפי
 // const initWardrobesOfClients = async (userId, userFirstName, userLastName) => {
 //   const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);

@@ -12,10 +12,11 @@ async function initClients() {
 
     const response = await fetch(`http://localhost:8081/stylist/${userId}`);
     const clients = await response.json();
+    localStorage.setItem('clients', JSON.stringify(clients));
 
     const container = document.getElementById('my-clients');
-    container.innerHTML = ''; 
-
+    container.innerHTML = '';
+    
     clients.forEach(client => {
       const cardHtml = `
         <div class="card" style="width: 18rem;">
@@ -37,7 +38,7 @@ async function initClients() {
       `;
       container.insertAdjacentHTML('beforeend', cardHtml);
     });
-
+    initializeDropdown();
     const wardrobeLinks = document.querySelectorAll('.wardrobe-link');
     wardrobeLinks.forEach(link => {
       link.addEventListener('click', (event) => {
@@ -65,22 +66,34 @@ function initUserDetails() {
   userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
 }
 
-// function addToDropdown(wardrobeName, wardrobeCode) {
-//   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
-//   const dropdownItem = document.createElement("a");
-//   dropdownItem.classList.add("dropdown-item");
-//   dropdownItem.addEventListener("click", function (event) {
-//     const wardrobeCode1 = JSON.stringify(wardrobeCode);
-//     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+function addToDropdownSta(clientName, clientId) {
+  const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
+  const dropdownItem = document.createElement("a");
+  dropdownItem.classList.add("dropdown-item");
+  dropdownItem.addEventListener('click', (event) => {
+    localStorage.setItem('CurrentClientId', clientId);
+    localStorage.setItem('currentClientName', clientName);
+    window.location.href = "stylist-myWardrobe.html";
+  });
+  const closetImg = document.createElement("img");
+  closetImg.src = "images/closet.png";
+  closetImg.alt = "";
+  closetImg.classList.add("closet_img");
+  const wardrobeText = document.createTextNode(`${clientName}`);
+  dropdownItem.appendChild(closetImg);
+  dropdownItem.appendChild(wardrobeText);
+  wardrobeInAccordion.appendChild(dropdownItem);
+}
 
-//     window.location.href = "wardrobe.html";
-//   });
-//   const closetImg = document.createElement("img");
-//   closetImg.src = "images/closet.png";
-//   closetImg.alt = "";
-//   closetImg.classList.add("closet_img");
-//   const wardrobeText = document.createTextNode(`${wardrobeName}`);
-//   dropdownItem.appendChild(closetImg);
-//   dropdownItem.appendChild(wardrobeText);
-//   wardrobeInAccordion.appendChild(dropdownItem);
-// }
+function initializeDropdown() {
+  const clients = JSON.parse(localStorage.getItem('clients'));
+  if (!clients) {
+    console.error("No clients data found in local storage.");
+    return;
+  }
+  const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
+  wardrobeInAccordion.innerHTML = ''; 
+  clients.forEach(client => {
+    addToDropdownSta(`${client.f_name} ${client.l_name}`, client.id);
+  });
+}
