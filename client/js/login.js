@@ -26,7 +26,7 @@ async function loginUser() {
     if (userData.user_type === 1) {
       window.location.href = "./index.html";
     } else if (userData.user_type === "2") {
-      window.location.href = "#"; // Add the path to the stylist page
+      window.location.href = "./stylist.html"; 
     } else {
       alert("Unknown user type!");
     }
