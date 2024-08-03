@@ -277,7 +277,10 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   itemCard.appendChild(deleteButton);
 
   deleteButton.addEventListener('click', function () {
-    deleteItem(deleteButton.dataset.id, itemCard);
+    const confirmed = confirm('Are you sure you want to delete this item?');
+    if (confirmed) {
+      deleteItem(deleteButton.dataset.id, itemCard);
+    }
   });
 
   const img = document.createElement("img");
