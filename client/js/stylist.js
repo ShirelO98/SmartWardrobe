@@ -1,3 +1,8 @@
+window.onload = () => {
+  initClients();
+  initUserDetails();
+};
+
 async function initClients() {
   try {
     const jsonString = localStorage.getItem("UserData");
@@ -7,16 +12,14 @@ async function initClients() {
     const response = await fetch(`http://localhost:8081/stylist/${userId}`);
     const clients = await response.json();
     clients.forEach((client) => {
-     initWardrobesOfClients(client.client_id);
+      initWardrobesOfClients(client.client_id);
     });
   } catch (error) {
     console.error("Failed to fetch clients:", error);
   }
 }
 const initWardrobesOfClients = async (userId) => {
-  const res = await fetch(
-    `http://localhost:8081/wardrobe/all/${userId}`
-  );
+  const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
   const wardrobes = await res.json();
   localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
   wardrobes.forEach((wardrobe) => {
