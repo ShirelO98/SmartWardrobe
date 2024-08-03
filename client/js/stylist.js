@@ -20,7 +20,7 @@ const initWardrobesOfClients = async (userId) => {
   const wardrobes = await res.json();
   localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
   wardrobes.forEach((wardrobe) => {
-    createWardrobeCard(
+    createWardrobeCardStylist(
       wardrobe.wardrobe_name,
       wardrobe.items,
       wardrobe.looks,
@@ -38,7 +38,7 @@ function initUserDetails() {
   userImg.src = dataObject.userImgUrl;
   userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
 }
-function createWardrobeCard(
+function createWardrobeCardStylist(
   wardrobeName,
   clothesNumber,
   outfitsNumber,
