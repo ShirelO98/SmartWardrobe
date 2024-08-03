@@ -229,7 +229,6 @@ function addToDropdown(wardrobeName, wardrobeCode) {
   const dropdownItem = document.createElement("a");
   dropdownItem.classList.add("dropdown-item");
   dropdownItem.addEventListener("click", function (event) {
-    console.log("hi");
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
 

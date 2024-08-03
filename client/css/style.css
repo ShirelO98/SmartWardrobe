@@ -873,6 +873,25 @@ main {
 background: none;
 }
 
+#my-clients {
+  margin-left: 89px;
+  margin-top: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: absolute;
+}
+
+.card {
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+.list-group-item > a {
+  background: none;
+  text-decoration: none;
+}
+
 
 
 @media (max-width: 800px) {

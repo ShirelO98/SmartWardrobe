@@ -3,7 +3,6 @@ function initSideNav() {
   document.getElementById("sidebarToggle").onclick = closeOpenSideNav;
 }
 
-
 function dropDownSideNav() {
   const dropdownContent = document.querySelector(".dropdown-menu-side");
   if (dropdownContent.style.display === "block") {
@@ -12,7 +11,6 @@ function dropDownSideNav() {
     dropdownContent.style.display = "block";
   }
 }
-
 
 function closeOpenSideNav() {
   let sidebar = document.getElementById('sidebar');
