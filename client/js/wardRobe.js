@@ -277,9 +277,15 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   itemCard.appendChild(deleteButton);
 
   deleteButton.addEventListener('click', function () {
-    const confirmed = confirm('Are you sure you want to delete this item?');
-    if (confirmed) {
-      deleteItem(deleteButton.dataset.id, itemCard);
+    const CurrentuserType = localStorage.getItem("UserData");
+    let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+    if (CurrentuserTypeJson.user_type === 1) {
+      const confirmed = confirm('Are you sure you want to delete this item?');
+      if (confirmed) {
+        deleteItem(deleteButton.dataset.id, itemCard);
+      }
+    } else if (CurrentuserTypeJson.user_type === 2) {
+      alert("You are not allowed to delete items");
     }
   });
 
@@ -313,8 +319,19 @@ function deleteItem(item_id, itemCard) {
 
 
 function editStatusItem(item_id, itemCard) {
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    alert("You are not allowed to edit items");
+    return;
+  }
+
   const ellipseSpan = itemCard.querySelector('.elipse-item');
   const newStatus = confirm('Click OK for change status of item or Cancel for close this window');
+
+  if (newStatus === false) {
+    return;
+  }
 
   fetch(`http://localhost:8081/items/${item_id}`, {
     method: 'PUT',
@@ -329,16 +346,15 @@ function editStatusItem(item_id, itemCard) {
       return response.json();
     })
     .then(data => {
-      if (newStatus === true) {
-        if (ellipseSpan.style.backgroundColor === 'red') {
-          ellipseSpan.style.backgroundColor = 'aquamarine';
-        }
-        else {
-          ellipseSpan.style.backgroundColor = 'red';
-        }
-        fetchAllLooks();
+      if (ellipseSpan.style.backgroundColor === 'red') {
+        ellipseSpan.style.backgroundColor = 'aquamarine';
       }
-    })
+      else {
+        ellipseSpan.style.backgroundColor = 'red';
+      }
+      fetchAllLooks();
+    }
+    )
     .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
     });

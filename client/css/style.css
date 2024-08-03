@@ -892,6 +892,10 @@ background: none;
   text-decoration: none;
 }
 
+.clients
+{
+  margin-top: 120px !important;
+}
 
 
 @media (max-width: 800px) {

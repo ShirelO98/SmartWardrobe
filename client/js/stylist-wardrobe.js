@@ -1,12 +1,21 @@
 window.onload = () => {
   initSideNav();
-  initWardrobesOfClients();
+  initClientData();
 };
 
-initWardrobesOfClients = () => {
+initClientData = () => {
   updateBreadCrumbsinnerText();
   initUserDetails();
   initializeDropdown();
+  let clients = localStorage.getItem("clients");
+  clients = JSON.parse(clients);
+  let clientID = localStorage.getItem("CurrentClientId");
+  clientID = JSON.parse(clientID);
+  clients.forEach((client) => {
+    if (client.id === clientID) {
+      initWardrobesOfClients(client.id, client.f_name, client.l_name);
+    }
+});
 }
 
 const updateBreadCrumbsinnerText = () => {
@@ -20,23 +29,22 @@ const updateBreadCrumbsinnerText = () => {
   }
 }
 
-// להפעיל רק כשנכנסים ללקוח ספציפי
-// const initWardrobesOfClients = async (userId, userFirstName, userLastName) => {
-//   const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
-//   const wardrobes = await res.json();
-//   localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
-//   wardrobes.forEach((wardrobe) => {
-//     createWardrobeCardStylist(
-//       wardrobe.wardrobe_name,
-//       wardrobe.items,
-//       wardrobe.looks,
-//       wardrobe.readytowear,
-//       wardrobe.wardrobe_code,
-//       userFirstName,
-//       userLastName
-//     );
-//   });
-// };
+initWardrobesOfClients = async (userId, userFirstName, userLastName) => {
+  const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
+  const wardrobes = await res.json();
+  localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
+  wardrobes.forEach((wardrobe) => {
+    createWardrobeCardStylist(
+      wardrobe.wardrobe_name,
+      wardrobe.items,
+      wardrobe.looks,
+      wardrobe.readytowear,
+      wardrobe.wardrobe_code,
+      userFirstName,
+      userLastName
+    );
+  });
+};
 
 function createWardrobeCardStylist(
   wardrobeName,
@@ -44,8 +52,6 @@ function createWardrobeCardStylist(
   outfitsNumber,
   readyToWearPercentage,
   wardrobeCode,
-  userFirstName,
-  userLastName
 ) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
@@ -55,7 +61,6 @@ function createWardrobeCardStylist(
   buttonUserName.classList.add("empty-button");
   const userNameHeader = document.createElement("h3");
   userNameHeader.classList.add("wardrobe-name");
-  userNameHeader.textContent = `${userFirstName} ${userLastName}`;
   const nameHeader = document.createElement("h3");
   nameHeader.classList.add("wardrobe-name");
   nameHeader.textContent = wardrobeName;
@@ -81,7 +86,7 @@ function createWardrobeCardStylist(
   wardrobeCard.appendChild(clothesNumberHeader);
   wardrobeCard.appendChild(outfitsNumberHeader);
   wardrobeCard.appendChild(readyToWearHeader);
-  const myWardRobesSection = document.getElementById("my-wardRobes");
+  const myWardRobesSection = document.getElementById("my-clients");
   myWardRobesSection.appendChild(wardrobeCard);
   buttonWardrobeTitle.addEventListener("click", function (event) {
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
