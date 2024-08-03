@@ -7,20 +7,23 @@ async function initClients() {
   try {
     const jsonString = localStorage.getItem("UserData");
     const dataObject = JSON.parse(jsonString);
-    console.log("Parsed Object:", dataObject);
     const userId = dataObject.UserID;
     const response = await fetch(`http://localhost:8081/stylist/${userId}`);
+    console.log(response);
     const clients = await response.json();
+    console.log(clients);
     clients.forEach((client) => {
-      initWardrobesOfClients(client.client_id);
+      initWardrobesOfClients(client.id);
     });
   } catch (error) {
     console.error("Failed to fetch clients:", error);
   }
 }
 const initWardrobesOfClients = async (userId) => {
+  console.log(userId);
   const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
   const wardrobes = await res.json();
+  console.log(wardrobes);
   localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
   wardrobes.forEach((wardrobe) => {
     createWardrobeCardStylist(
@@ -86,4 +89,20 @@ function createWardrobeCardStylist(
       window.location.href = "wardrobe.html";
     }
   });
+}
+function createButton(className, text) {
+  const button = document.createElement("button");
+  button.classList.add("empty-button");
+  const span = document.createElement("span");
+  span.classList.add("material-symbols-outlined", className);
+  span.textContent = text;
+  button.appendChild(span);
+  return button;
+}
+
+function createHeader(text, classNames) {
+  const header = document.createElement("h5");
+  classNames.forEach((className) => header.classList.add(className));
+  header.textContent = text;
+  return header;
 }

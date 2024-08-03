@@ -22,10 +22,9 @@ async function loginUser() {
     const userData = await response.json();
     const userDataString = JSON.stringify(userData);
     localStorage.setItem("UserData", userDataString);
-    const retrievedUserDataString = localStorage.getItem("UserData");
     if (userData.user_type === 1) {
       window.location.href = "./index.html";
-    } else if (userData.user_type === "2") {
+    } else if (userData.user_type === 2) {
       window.location.href = "./stylist.html"; 
     } else {
       alert("Unknown user type!");
