@@ -1,6 +1,7 @@
 window.onload = () => {
   initClients();
   initUserDetails();
+  initSideNav();
 };
 
 async function initClients() {
@@ -89,6 +90,7 @@ function createWardrobeCardStylist(
       window.location.href = "wardrobe.html";
     }
   });
+  addToDropdown(wardrobeName, wardrobeCode);
 }
 function createButton(className, text) {
   const button = document.createElement("button");
@@ -105,4 +107,26 @@ function createHeader(text, classNames) {
   classNames.forEach((className) => header.classList.add(className));
   header.textContent = text;
   return header;
+}
+function addToDropdown(wardrobeName, wardrobeCode) {
+  console.log("added to drop down");
+  const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
+  const dropdownItem = document.createElement("a");
+  dropdownItem.classList.add("dropdown-item");
+  dropdownItem.addEventListener("click", function (event) {
+    console.log("hi");
+    const wardrobeCode1 = JSON.stringify(wardrobeCode);
+    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+
+    window.location.href = "wardrobe.html";
+  });
+  const closetImg = document.createElement("img");
+  closetImg.src = "images/closet.png";
+  closetImg.alt = "";
+  closetImg.classList.add("closet_img");
+  const wardrobeText = document.createTextNode(`${wardrobeName}`);
+  dropdownItem.appendChild(closetImg);
+  dropdownItem.appendChild(wardrobeText);
+  wardrobeInAccordion.appendChild(dropdownItem);
+  console.log("added to drop down");
 }
