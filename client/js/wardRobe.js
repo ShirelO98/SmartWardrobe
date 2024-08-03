@@ -15,7 +15,10 @@ function initWardrobe() {
   looksButton.addEventListener("click", changeButtonState);
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
-  createLooksCards();
+  fetchAllLooks();
+  document.getElementById('filter-button').addEventListener('click', showColorMenu);
+  document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
+  localStorage.setItem("currentItemType", 'All');
 }
 
 async function fetchItems() {
@@ -135,8 +138,8 @@ function changeButtonState(event) {
   let itemSpan = itemBut.querySelector("span");
   let lookBut = document.getElementById("looks-button");
   let lookSpan = lookBut.querySelector("span");
-
   if (event.currentTarget === itemBut) {
+    document.getElementById("types-of-items").style.display = "flex";
     document.getElementById("looks").style.display = "none";
     document.getElementById("wardRobe").style.display = "flex";
     const tableSection = document.getElementById("itemsTable");
@@ -151,7 +154,9 @@ function changeButtonState(event) {
     itemSpan.style.color = "white";
     lookBut.style.backgroundColor = "white";
     lookSpan.style.color = "black";
+    document.getElementById("filter-button").style.display = "flex";
   } else if (event.currentTarget === lookBut) {
+    document.getElementById("types-of-items").style.display = "none";
     lookBut.style.backgroundColor = "black";
     lookSpan.style.color = "white";
     itemBut.style.backgroundColor = "white";
@@ -166,6 +171,7 @@ function changeButtonState(event) {
     lastCrumb.textContent = "Looks";
     let button = document.getElementById("layout-button");
     button.textContent = "";
+    document.getElementById("filter-button").style.display = "none";
   }
 }
 
@@ -203,6 +209,8 @@ async function ItemTypeSelectorBtn(event) {
   currentBtn.style.backgroundColor = "black";
   let span = currentBtn.querySelector("span");
   span.style.color = "white";
+  let currentItemType = span.textContent.trim();
+  localStorage.setItem("currentItemType", currentItemType);
 
   if (span.textContent.trim() === "Shirt") {
     await handleFilterButtonClick(1);
@@ -229,12 +237,12 @@ function createItemsCards(items) {
   }
 
   items.forEach(item => {
-    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status);
+    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
     wardRobeSection.appendChild(itemCard);
   });
 }
 
-function createItemCard(imageSrc, altText, itemStatus) {
+function createItemCard(imageSrc, altText, itemStatus, item_id) {
   const itemCard = document.createElement("div");
   itemCard.className = "item-card-fully";
 
@@ -248,11 +256,29 @@ function createItemCard(imageSrc, altText, itemStatus) {
 
   const editButton = document.createElement("button");
   editButton.className = "empty-button";
+  editButton.dataset.id = item_id;
   const editSpan = document.createElement("span");
   editSpan.className = "material-symbols-outlined edit-item-wardrobe";
   editSpan.textContent = "edit";
   editButton.appendChild(editSpan);
   itemCard.appendChild(editButton);
+
+  editButton.addEventListener('click', function () {
+    editStatusItem(editButton.dataset.id, itemCard);
+  });
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "empty-button";
+  deleteButton.dataset.id = item_id;
+  const deleteSpan = document.createElement("span");
+  deleteSpan.className = "material-symbols-outlined delete-icon-wardrobe";
+  deleteSpan.textContent = "delete";
+  deleteButton.appendChild(deleteSpan);
+  itemCard.appendChild(deleteButton);
+
+  deleteButton.addEventListener('click', function () {
+    deleteItem(deleteButton.dataset.id, itemCard);
+  });
 
   const img = document.createElement("img");
   img.src = imageSrc;
@@ -263,75 +289,140 @@ function createItemCard(imageSrc, altText, itemStatus) {
 }
 
 
-// looks
-// function createLooksCards() {
-//   console.log("GET/Wardrobes/:id/Looks ");
-//   const looksSection = document.getElementById("looks");
+function deleteItem(item_id, itemCard) {
+  fetch(`http://localhost:8081/items/${item_id}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      itemCard.remove();
+      fetchAllLooks();
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+}
 
-//   const tShirts = [];
-//   for (let i = 1; i <= 4; i++) {
-//     tShirts.push({ src: `images/items/t-shirt/${i}.png`, alt: `T-Shirt ${i}` });
-//   }
-//   const pants = [];
-//   for (let i = 1; i <= 3; i++) {
-//     pants.push({ src: `images/items/pants/${i}.png`, alt: `Pants ${i}` });
-//   }
-//   const shoes = [];
-//   for (let i = 1; i <= 4; i++) {
-//     shoes.push({ src: `images/items/shoes/${i}.png`, alt: `Shoes ${i}` });
-//   }
 
-//   tShirts.forEach((tShirt) => {
-//     pants.forEach((pant) => {
-//       shoes.forEach((shoe) => {
-//         const lookCard = createLookCard(tShirt, pant, shoe);
-//         looksSection.appendChild(lookCard);
-//       });
-//     });
-//   });
-// }
+function editStatusItem(item_id, itemCard) {
+  const ellipseSpan = itemCard.querySelector('.elipse-item');
+  const newStatus = confirm('Click OK for change status of item or Cancel for close this window');
 
-// function createLookCard(tShirt, pant, shoe) {
-//   const lookCard = document.createElement("div");
-//   lookCard.className = "item-card-fully-looks";
+  fetch(`http://localhost:8081/items/${item_id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (newStatus === true) {
+        if (ellipseSpan.style.backgroundColor === 'red') {
+          ellipseSpan.style.backgroundColor = 'aquamarine';
+        }
+        else {
+          ellipseSpan.style.backgroundColor = 'red';
+        }
+        fetchAllLooks();
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    });
+}
 
-//   const ellipseSpan = document.createElement("span");
-//   ellipseSpan.className = "elipse-item-looks";
-//   lookCard.appendChild(ellipseSpan);
+async function fetchAllLooks() {
+  try {
+    const wardrobeCode = getCurrentWardrobe();
+    const response = await fetch(`http://localhost:8081/looks/${wardrobeCode}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
 
-//   const editButton = document.createElement("button");
-//   editButton.className = "empty-button";
-//   const editSpan = document.createElement("span");
-//   editSpan.className = "material-symbols-outlined edit-look-wardrobe";
-//   editSpan.textContent = "edit";
-//   editButton.appendChild(editSpan);
-//   lookCard.appendChild(editButton);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to fetch looks");
+    }
 
-//   const ul = document.createElement("ul");
-//   ul.className = "list-unstyled";
+    const looks = await response.json();
+    localStorage.setItem("looksOfCurrentWardrobe", JSON.stringify(looks));
+    renderLooksCards(looks);
 
-//   const li1 = document.createElement("li");
-//   const li2 = document.createElement("li");
-//   const li3 = document.createElement("li");
+  } catch (error) {
+    console.error("Failed to fetch looks:", error.message);
+    alert("Failed to fetch looks: " + error.message);
+  }
+}
 
-//   const imgTShirt = createItemImage(tShirt.src, tShirt.alt);
-//   const imgPants = createItemImage(pant.src, pant.alt);
-//   const imgShoes = createItemImage(shoe.src, shoe.alt);
 
-//   li1.appendChild(imgTShirt);
-//   li2.appendChild(imgPants);
-//   li3.appendChild(imgShoes);
+function renderLooksCards(lookForSort = []) {
+  const looksSection = document.getElementById("looks");
+  looksSection.innerHTML = '';
+  let looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
+  if (lookForSort.length != 0) {
+    looks = lookForSort;
+  }
+  looks.forEach((look) => {
+    const tShirtImage = { src: look.item_img_1, alt: "Item 1" };
+    const pantImage = { src: look.item_img_2, alt: "Item 2" };
+    const shoeImage = { src: look.item_img_3, alt: "Item 3" };
+    const lookCard = createLookCard(tShirtImage, pantImage, shoeImage, look.look_id, look.look_status);
+    looksSection.appendChild(lookCard);
+  });
+}
 
-//   ul.appendChild(li1);
-//   ul.appendChild(li2);
-//   ul.appendChild(li3);
+function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
+  const lookCard = document.createElement("div");
+  lookCard.className = "item-card-fully-looks";
 
-//   lookCard.appendChild(ul);
+  const ellipseSpan = document.createElement("span");
+  ellipseSpan.className = "elipse-item-looks";
 
-//   return lookCard;
-// }
+  if (lookStatus === 0) {
+    ellipseSpan.style.backgroundColor = "red";
+  }
+  lookCard.appendChild(ellipseSpan);
+  const ul = document.createElement("ul");
+  ul.className = "list-unstyled";
+
+  const li1 = document.createElement("li");
+  const li2 = document.createElement("li");
+  const li3 = document.createElement("li");
+
+  const imgTShirt = createItemImage(tShirtImage.src, tShirtImage.alt);
+  const imgPants = createItemImage(pantImage.src, pantImage.alt);
+  const imgShoes = createItemImage(shoeImage.src, shoeImage.alt);
+
+  li1.appendChild(imgTShirt);
+  li2.appendChild(imgPants);
+  li3.appendChild(imgShoes);
+
+  ul.appendChild(li1);
+  ul.appendChild(li2);
+  ul.appendChild(li3);
+
+  lookCard.appendChild(ul);
+
+  lookCard.dataset.lookId = lookId;
+  lookCard.dataset.lookStatus = lookStatus;
+
+  return lookCard;
+}
 
 function loadListItems() {
+  clearTable();
   const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
   const table = document.getElementById("itemsTable");
 
@@ -349,6 +440,10 @@ function loadListItems() {
 }
 
 function loadListItemsByFilter(items) {
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
   clearTable();
   const table = document.getElementById("itemsTable");
   items.forEach(item => {
@@ -420,12 +515,119 @@ const updateBreadCrumbsinnerText = () => {
   wardrobeName.innerText = currentWardrobeName;
 }
 
-function initUserDate ()
-{
+function initUserDate() {
   const jsonString = localStorage.getItem("UserData");
   const dataObject = JSON.parse(jsonString);
   const userImg = document.getElementById("userImg_Name");
   const userName = document.getElementById("userName");
   userImg.src = dataObject.userImgUrl;
-  userName.innerText = `${ dataObject.userFirstName } ${ dataObject.userLastName }`;
+  userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
+}
+
+function getUniqueColors(items) {
+  const colors = new Set();
+  items.forEach(item => colors.add(item.item_color));
+  return Array.from(colors);
+}
+
+function showColorMenu() {
+  const colorMenu = document.getElementById('color-menu');
+  colorMenu.innerHTML = '';
+
+  const title = document.createElement('h4');
+  title.textContent = 'Filter Items By Color';
+  title.style.textAlign = 'center';
+  colorMenu.appendChild(title);
+
+  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const uniqueColors = getUniqueColors(items);
+
+  uniqueColors.forEach(color => {
+    const button = document.createElement('button');
+    button.textContent = color;
+    button.style.backgroundColor = color;
+    button.style.color = getContrastingColor(color);
+    button.onclick = () => filterByColor(color);
+    colorMenu.appendChild(button);
+  });
+
+  const filterButton = document.getElementById('filter-button');
+  const rect = filterButton.getBoundingClientRect();
+  colorMenu.style.position = 'absolute';
+  colorMenu.style.top = `${rect.bottom + window.scrollY}px`;
+  colorMenu.style.left = `${rect.left}px`;
+  colorMenu.classList.toggle('hidden');
+}
+
+function getContrastingColor(color) {
+  if (color.toLowerCase() === 'white') {
+    return 'black';
+  }
+  return 'white';
+}
+
+function filterByColor(color) {
+  let state = document.getElementById("layout-button").textContent.trim();
+  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const filteredItems = items.filter(item => item.item_color === color);
+  if (state != 'grid_view') {
+    updateDisplay(filteredItems);
+  } else {
+    loadListItemsByFilter(filteredItems);
+  }
+}
+
+function updateDisplay(items) {
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
+  const wardrobeSection = document.getElementById('wardRobe');
+  wardrobeSection.innerHTML = '';
+  items.forEach(item => {
+    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
+    wardrobeSection.appendChild(itemCard);
+  });
+  const tableSection = document.getElementById('itemsTable');
+  tableSection.style.display = 'none';
+}
+
+function SortLooksOrItemByStatus() {
+  const itemsButton = document.getElementById('items-button');
+  const looksButton = document.getElementById('looks-button');
+
+  if (itemsButton.style.backgroundColor === 'black') {
+    sortItemsByStatus();
+  } else if (looksButton.style.backgroundColor === 'black') {
+    sortLooksByStatus();
+  }
+}
+
+let isAscendingItem = true;
+function sortItemsByStatus() {
+  let state = document.getElementById("layout-button").textContent.trim();
+  let items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const currentItemType = localStorage.getItem('currentItemType');
+  if (currentItemType != 'All') {
+    items = items.filter(item => item.item_type === currentItemType);
+  }
+  const sortedItems = items.sort((a, b) => {
+    return isAscendingItem ? a.item_status - b.item_status : b.item_status - a.item_status;
+  });
+  if (state != 'grid_view') {
+    updateDisplay(sortedItems);
+  } else {
+    loadListItemsByFilter(sortedItems);
+  }
+  isAscendingItem = !isAscendingItem;
+}
+
+let isAscendingLook = true;
+function sortLooksByStatus() {
+  let looks = JSON.parse(localStorage.getItem('looksOfCurrentWardrobe')) || [];
+  const sortedLooks = looks.sort((a, b) => {
+    return isAscendingLook ? a.look_status - b.look_status : b.look_status - a.look_status;
+  });
+  renderLooksCards(sortedLooks);
+  isAscendingLook = !isAscendingLook;
 }

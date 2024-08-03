@@ -107,11 +107,11 @@ function createWardrobeCard(
   nameHeader.classList.add("wardrobe-name");
   nameHeader.textContent = wardrobeName;
   buttonWardrobeTitle.appendChild(nameHeader);
-  const clothesNumberHeader = createHeader(`Clothes - ${clothesNumber}`, [
+  const clothesNumberHeader = createHeader(`Items - ${clothesNumber}`, [
     "clothes-number",
     "cards-write",
   ]);
-  const outfitsNumberHeader = createHeader(`Outfits - ${outfitsNumber}`, [
+  const outfitsNumberHeader = createHeader(`Looks - ${outfitsNumber}`, [
     "outfits-number",
     "cards-write",
   ]);
@@ -268,5 +268,3 @@ function updateDropdown(oldName, newName) {
     }
   });
 }
-
-window.onload = initMyWardrobe;

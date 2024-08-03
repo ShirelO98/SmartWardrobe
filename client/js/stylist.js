@@ -1,176 +1,86 @@
-window.onload = () => {
-  initSideNav();
-  initWardrobe();
+async function initClients() {
+  try {
+    const jsonString = localStorage.getItem("UserData");
+    const dataObject = JSON.parse(jsonString);
+    console.log("Parsed Object:", dataObject);
+    const userId = dataObject.UserID;
+    const response = await fetch(`http://localhost:8081/stylist/${userId}`);
+    const clients = await response.json();
+    clients.forEach((client) => {
+     initWardrobesOfClients(client.client_id);
+    });
+  } catch (error) {
+    console.error("Failed to fetch clients:", error);
+  }
+}
+const initWardrobesOfClients = async (userId) => {
+  const res = await fetch(
+    `http://localhost:8081/wardrobe/all/${userId}`
+  );
+  const wardrobes = await res.json();
+  localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
+  wardrobes.forEach((wardrobe) => {
+    createWardrobeCard(
+      wardrobe.wardrobe_name,
+      wardrobe.items,
+      wardrobe.looks,
+      wardrobe.readytowear,
+      wardrobe.wardrobe_code
+    );
+  });
 };
 
-function initWardrobe() {
-  fetchItems();
-  /* initialItems();*/
-  fetchAndInitWardrobeDropdown();
-  createLooksCards();
-  let addItemBttable = document.getElementsByClassName(
-    "plus-item-button-table"
-  )[0];
-  addItemBttable.onclick = () => {
-    let button = document.getElementById("layout-button");
-    button.textContent = "list";
-    const tableSection = document.getElementById("itemsTable");
-    tableSection.style.display = "none";
-    document.getElementById("wardRobe").style.display = "flex";
-  };
+function initUserDetails() {
+  const jsonString = localStorage.getItem("UserData");
+  const dataObject = JSON.parse(jsonString);
+  const userImg = document.getElementById("userImg_Name");
+  const userName = document.getElementById("userName");
+  userImg.src = dataObject.userImgUrl;
+  userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
 }
-
-async function fetchItems() {
-  try {
-    const wardrobeCode = getCurrentWardrobe();
-    const response = await fetch(
-      `http://localhost:8081/items/${wardrobeCode}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to fetch items");
-    }
-
-    const items = await response.json();
-    createItemsCards(items);
-    const itemTypes = getUniqueItemTypes(items);
-    createItemTypeButtons(itemTypes);
-  } catch (error) {
-    console.error("Failed to fetch items:", error.message);
-    alert("Failed to fetch items: " + error.message);
-  }
-}
-
-function initialItems() {
-  let button = document.getElementById("items-button");
-  let span = button.querySelector("span");
-  button.style.backgroundColor = "black";
-  span.style.color = "white";
-  document.querySelectorAll(".items-type span").forEach((item) => {
-    if (item.textContent.trim() === "All") {
-      allButton = item.parentElement;
-      allButton.style.backgroundColor = "black";
-      item.style.color = "white";
-    }
-  });
-}
-
-function getUniqueItemTypes(items) {
-  const itemTypeSet = new Set();
-
-  items.forEach((item) => {
-    if (item.item_type) {
-      itemTypeSet.add(item.item_type);
-    }
-  });
-  return Array.from(itemTypeSet);
-}
-
-async function (filterValue) {
-  try {
-    const wardrobeCode = getCurrentWardrobe();
-    const response = await fetch(
-      `http://localhost:8081/items/${wardrobeCode}/${filterValue}`
-    );
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Failed to fetch items");
-    }
-
-    const items = await response.json();
-    createItemsCards(items);
-  } catch (error) {
-    console.error("Failed to fetch items:", error.message);
-    alert("Failed to fetch items: " + error.message);
-  }
-}
-
-function createItemsCards(items) {
-  const wardRobeSection = document.getElementById("wardRobe");
-  const addItemCard = wardRobeSection.querySelector(".item-card-empty");
-  wardRobeSection.innerHTML = "";
-  if (addItemCard) {
-    wardRobeSection.appendChild(addItemCard);
-  }
-
-  items.forEach((item) => {
-    const itemCard = createItemCard(
-      item.item_img,
-      item.item_name,
-      item.item_status
-    );
-    wardRobeSection.appendChild(itemCard);
-  });
-}
-
-function createItemCard(imageSrc, altText, itemStatus) {
-  const itemCard = document.createElement("div");
-  itemCard.className = "item-card-fully";
-
-  const ellipseSpan = document.createElement("span");
-  ellipseSpan.className = "elipse-item";
-  itemCard.appendChild(ellipseSpan);
-
-  if (itemStatus === 0) {
-    ellipseSpan.style.backgroundColor = "red";
-  }
-
-  const editButton = document.createElement("button");
-  editButton.className = "empty-button";
-  const editSpan = document.createElement("span");
-  editSpan.className = "material-symbols-outlined edit-item-wardrobe";
-  editSpan.textContent = "edit";
-  editButton.appendChild(editSpan);
-  itemCard.appendChild(editButton);
-
-  const img = document.createElement("img");
-  img.src = imageSrc;
-  img.alt = altText;
-  itemCard.appendChild(img);
-
-  return itemCard;
-}
-
-function getCurrentWardrobe() {
-  const currWardrobe = localStorage.getItem("currentWardrobeCode");
-  return currWardrobe;
-}
-
-function addToDropdown(wardrobeName, wardrobeCode) {
-  const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
-  const dropdownItem = document.createElement("a");
-  dropdownItem.classList.add("dropdown-item");
-  dropdownItem.addEventListener("click", function (event) {
+function createWardrobeCard(
+  wardrobeName,
+  clothesNumber,
+  outfitsNumber,
+  readyToWearPercentage,
+  wardrobeCode
+) {
+  const wardrobeCard = document.createElement("div");
+  wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
+  const buttonWardrobeTitle = document.createElement("button");
+  buttonWardrobeTitle.classList.add("empty-button");
+  const nameHeader = document.createElement("h3");
+  nameHeader.classList.add("wardrobe-name");
+  nameHeader.textContent = wardrobeName;
+  buttonWardrobeTitle.appendChild(nameHeader);
+  const clothesNumberHeader = createHeader(`Items - ${clothesNumber}`, [
+    "clothes-number",
+    "cards-write",
+  ]);
+  const outfitsNumberHeader = createHeader(`Looks - ${outfitsNumber}`, [
+    "outfits-number",
+    "cards-write",
+  ]);
+  const readyToWearHeader = document.createElement("h5");
+  readyToWearHeader.classList.add("ready-to-wear");
+  readyToWearHeader.textContent = "Ready to wear ";
+  const readyToWearSpan = document.createElement("span");
+  readyToWearSpan.classList.add("ready-to-wear-dont-bold", "ready-to-wear");
+  readyToWearSpan.textContent = readyToWearPercentage + "%";
+  readyToWearHeader.appendChild(readyToWearSpan);
+  wardrobeCard.appendChild(buttonWardrobeTitle);
+  wardrobeCard.appendChild(clothesNumberHeader);
+  wardrobeCard.appendChild(outfitsNumberHeader);
+  wardrobeCard.appendChild(readyToWearHeader);
+  const myWardRobesSection = document.getElementById("my-wardRobes");
+  myWardRobesSection.appendChild(wardrobeCard);
+  buttonWardrobeTitle.addEventListener("click", function (event) {
     const wardrobeCode1 = JSON.stringify(wardrobeCode);
     localStorage.setItem("currentWardrobeCode", wardrobeCode1);
-
-    window.location.href = "wardrobe.html";
+    localStorage.setItem("currentWardrobeName", wardrobeName);
+    const cursorStyle = getComputedStyle(event.target).cursor;
+    if (cursorStyle === "pointer") {
+      window.location.href = "wardrobe.html";
+    }
   });
-  const closetImg = document.createElement("img");
-  closetImg.src = "images/closet.png";
-  closetImg.alt = "";
-  closetImg.classList.add("closet_img");
-  const wardrobeText = document.createTextNode(`${wardrobeName}`);
-  dropdownItem.appendChild(closetImg);
-  dropdownItem.appendChild(wardrobeText);
-  wardrobeInAccordion.appendChild(dropdownItem);
-}
-
-function fetchAndInitWardrobeDropdown() {
-  const wardrobesJson = localStorage.getItem("wardrobesOfUser");
-  if (wardrobesJson) {
-    const wardrobes = JSON.parse(wardrobesJson);
-    wardrobes.forEach((wardrobe) => {
-      addToDropdown(wardrobe.wardrobe_name, wardrobe.wardrobe_code);
-    });
-  } else {
-    console.error("No wardrobes found in local storage.");
-  }
 }
