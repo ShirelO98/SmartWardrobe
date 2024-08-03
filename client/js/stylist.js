@@ -14,14 +14,13 @@ async function initClients() {
     const clients = await response.json();
     console.log(clients);
     clients.forEach((client) => {
-      initWardrobesOfClients(client.id);
+      initWardrobesOfClients(client.id, client.f_name, client.l_name);
     });
   } catch (error) {
     console.error("Failed to fetch clients:", error);
   }
 }
-const initWardrobesOfClients = async (userId) => {
-  console.log(userId);
+const initWardrobesOfClients = async (userId, userFirstName, userLastName) => {
   const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
   const wardrobes = await res.json();
   console.log(wardrobes);
@@ -32,7 +31,9 @@ const initWardrobesOfClients = async (userId) => {
       wardrobe.items,
       wardrobe.looks,
       wardrobe.readytowear,
-      wardrobe.wardrobe_code
+      wardrobe.wardrobe_code,
+      userFirstName,
+      userLastName
     );
   });
 };
@@ -50,15 +51,23 @@ function createWardrobeCardStylist(
   clothesNumber,
   outfitsNumber,
   readyToWearPercentage,
-  wardrobeCode
+  wardrobeCode,
+  userFirstName,
+  userLastName
 ) {
   const wardrobeCard = document.createElement("div");
   wardrobeCard.classList.add("wardrobe-card", "wardrobe-card-fully");
   const buttonWardrobeTitle = document.createElement("button");
   buttonWardrobeTitle.classList.add("empty-button");
+  const buttonUserName = document.createElement("button");
+  buttonUserName.classList.add("empty-button");
+  const userNameHeader = document.createElement("h3");
+  userNameHeader.classList.add("wardrobe-name");
+  userNameHeader.textContent = `${userFirstName} ${userLastName}`;
   const nameHeader = document.createElement("h3");
   nameHeader.classList.add("wardrobe-name");
   nameHeader.textContent = wardrobeName;
+  buttonUserName.appendChild(userNameHeader);
   buttonWardrobeTitle.appendChild(nameHeader);
   const clothesNumberHeader = createHeader(`Items - ${clothesNumber}`, [
     "clothes-number",
@@ -75,6 +84,7 @@ function createWardrobeCardStylist(
   readyToWearSpan.classList.add("ready-to-wear-dont-bold", "ready-to-wear");
   readyToWearSpan.textContent = readyToWearPercentage + "%";
   readyToWearHeader.appendChild(readyToWearSpan);
+  wardrobeCard.appendChild(buttonUserName);
   wardrobeCard.appendChild(buttonWardrobeTitle);
   wardrobeCard.appendChild(clothesNumberHeader);
   wardrobeCard.appendChild(outfitsNumberHeader);
