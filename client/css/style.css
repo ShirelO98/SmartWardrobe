@@ -873,6 +873,81 @@ main {
 background: none;
 }
 
+#my-clients {
+  margin-left: 89px;
+  margin-top: 70px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: absolute;
+}
+
+.card {
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+.list-group-item > a {
+  background: none;
+  text-decoration: none;
+}
+
+.clients
+{
+  margin-top: 120px !important;
+}
+
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #a1d8a1;
+  color: #333;
+  border-radius: 12px; 
+  padding: 20px 30px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); 
+  z-index: 1000;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border: 1px solid #a1d8a1; 
+}
+
+.hidden {
+  display: none;
+}
+
+#notificationCloseBtn {
+  background-color: #007bff; 
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px; 
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  outline: none; 
+}
+
+#notificationCloseBtn:hover {
+  background-color: #0056b3; 
+  transform: scale(1.05); 
+}
+
+#notificationCloseBtn:focus {
+  outline: none;
+}
+
+#notificationContent {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
 
 
 @media (max-width: 800px) {

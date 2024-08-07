@@ -1,7 +1,19 @@
+
+
 window.onload = () => {
   initSideNav();
   initWardrobe();
+
 };
+
+function showAlert(message) {
+  const alertElement = document.getElementById('myAlert');
+  alertElement.textContent = message;
+  alertElement.classList.remove('d-none');
+  setTimeout(() => {
+    alertElement.classList.add('d-none');
+  }, 3500);
+}
 
 function initWardrobe() {
   updateBreadCrumbsinnerText();
@@ -19,6 +31,11 @@ function initWardrobe() {
   document.getElementById('filter-button').addEventListener('click', showColorMenu);
   document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
   localStorage.setItem("currentItemType", 'All');
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    upDateWordrobePageForStylist();
+  }
 }
 
 async function fetchItems() {
@@ -277,9 +294,15 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   itemCard.appendChild(deleteButton);
 
   deleteButton.addEventListener('click', function () {
-    const confirmed = confirm('Are you sure you want to delete this item?');
-    if (confirmed) {
-      deleteItem(deleteButton.dataset.id, itemCard);
+    const CurrentuserType = localStorage.getItem("UserData");
+    let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+    if (CurrentuserTypeJson.user_type === 1) {
+      const confirmed = confirm('Are you sure you want to delete this item?');
+      if (confirmed) {
+        deleteItem(deleteButton.dataset.id, itemCard);
+      }
+    } else if (CurrentuserTypeJson.user_type === 2) {
+      alert("You are not allowed to delete items");
     }
   });
 
@@ -313,8 +336,19 @@ function deleteItem(item_id, itemCard) {
 
 
 function editStatusItem(item_id, itemCard) {
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    alert("You are not allowed to edit items");
+    return;
+  }
+
   const ellipseSpan = itemCard.querySelector('.elipse-item');
   const newStatus = confirm('Click OK for change status of item or Cancel for close this window');
+
+  if (newStatus === false) {
+    return;
+  }
 
   fetch(`http://localhost:8081/items/${item_id}`, {
     method: 'PUT',
@@ -329,16 +363,15 @@ function editStatusItem(item_id, itemCard) {
       return response.json();
     })
     .then(data => {
-      if (newStatus === true) {
-        if (ellipseSpan.style.backgroundColor === 'red') {
-          ellipseSpan.style.backgroundColor = 'aquamarine';
-        }
-        else {
-          ellipseSpan.style.backgroundColor = 'red';
-        }
-        fetchAllLooks();
+      if (ellipseSpan.style.backgroundColor === 'red') {
+        ellipseSpan.style.backgroundColor = 'aquamarine';
       }
-    })
+      else {
+        ellipseSpan.style.backgroundColor = 'red';
+      }
+      fetchAllLooks();
+    }
+    )
     .catch(error => {
       console.error('There was a problem with the fetch operation:', error);
     });
@@ -384,6 +417,13 @@ function renderLooksCards(lookForSort = []) {
     const lookCard = createLookCard(tShirtImage, pantImage, shoeImage, look.look_id, look.look_status);
     looksSection.appendChild(lookCard);
   });
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    upDateLooks();
+    showAlert('Select Look');
+  }
+
 }
 
 function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
@@ -633,4 +673,94 @@ function sortLooksByStatus() {
   });
   renderLooksCards(sortedLooks);
   isAscendingLook = !isAscendingLook;
+}
+
+function upDateWordrobePageForStylist() {
+  const sideBar = document.getElementById('side_bar');
+
+  const logoLink = sideBar.querySelector('a');
+  logoLink.href = 'stylist.html';
+
+  const dropdownToggle = sideBar.querySelector('.nav-link.dropdown-toggle');
+  dropdownToggle.innerHTML = `
+    <img id="Mywardrobe_logoS" alt="logoMy" src="images/Rectangle4.png" />
+    <img id="Mywardrobe_logo" alt="logoMy" src="images/vector.png" />
+    My Clients
+  `;
+  const navItems = sideBar.querySelectorAll('.nav-item');
+  if (navItems.length > 2) {
+    const tasksItem = navItems[2];
+    const tasksLink = tasksItem.querySelector('a');
+    if (tasksLink) {
+      tasksLink.innerHTML = '';
+      const tasksImage = document.createElement('img');
+      tasksImage.src = 'images/Tasks-icon.png';
+      tasksImage.alt = 'Tasks Icon';
+      tasksImage.classList.add('Icons_');
+      tasksLink.appendChild(tasksImage);
+      const tasksText = document.createTextNode('Tasks');
+      tasksLink.appendChild(tasksText);
+    }
+  }
+
+  const shoppingItem = sideBar.querySelector('.nav-item:nth-child(4)');
+  if (shoppingItem) {
+    shoppingItem.remove();
+  }
+
+  const breadcrumbItems = document.querySelectorAll('.breadcrumb-item');
+
+  if (breadcrumbItems.length > 0) {
+    const firstItem = breadcrumbItems[0];
+    const link = firstItem.querySelector('a');
+    if (link) {
+      link.textContent = 'My Clients';
+      link.href = 'stylist.html';
+    }
+  }
+}
+
+async function upDateLooks() {
+  const looks = document.querySelectorAll('#looks .item-card-fully-looks');
+
+  looks.forEach(look => {
+    const button = document.createElement('button');
+    button.classList.add('empty-button');
+    button.appendChild(look.cloneNode(true));
+    look.parentNode.replaceChild(button, look);
+    button.addEventListener('click', () => {
+      const lookId = button.querySelector('.item-card-fully-looks').getAttribute('data-look-id');
+      sendLook(lookId);
+    });
+  });
+}
+
+async function sendLook(lookId) {
+  try {
+    const currentClient = localStorage.getItem('CurrentClientId');
+    const CurrentuserType = localStorage.getItem("UserData");
+    let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+    let userID = CurrentuserTypeJson.UserID;
+
+    const response = await fetch(`http://localhost:8081/stylist/${lookId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        stylistId: userID,
+        clientID: currentClient
+      })
+    });
+    if (response.ok) {
+      alert("Look sent to client");
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to select look");
+    }
+  } catch (error) {
+    alert("Failed to select look: " + error.message);
+  }
 }
