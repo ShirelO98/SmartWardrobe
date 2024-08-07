@@ -1,7 +1,19 @@
+
+
 window.onload = () => {
   initSideNav();
   initWardrobe();
+
 };
+
+function showAlert(message) {
+  const alertElement = document.getElementById('myAlert');
+  alertElement.textContent = message;
+  alertElement.classList.remove('d-none');
+  setTimeout(() => {
+    alertElement.classList.add('d-none');
+  }, 3500);
+}
 
 function initWardrobe() {
   updateBreadCrumbsinnerText();
@@ -405,6 +417,13 @@ function renderLooksCards(lookForSort = []) {
     const lookCard = createLookCard(tShirtImage, pantImage, shoeImage, look.look_id, look.look_status);
     looksSection.appendChild(lookCard);
   });
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    upDateLooks();
+    showAlert('Select Look');
+  }
+
 }
 
 function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
@@ -658,7 +677,7 @@ function sortLooksByStatus() {
 
 function upDateWordrobePageForStylist() {
   const sideBar = document.getElementById('side_bar');
-  
+
   const logoLink = sideBar.querySelector('a');
   logoLink.href = 'stylist.html';
 
@@ -670,7 +689,7 @@ function upDateWordrobePageForStylist() {
   `;
   const navItems = sideBar.querySelectorAll('.nav-item');
   if (navItems.length > 2) {
-    const tasksItem = navItems[2]; 
+    const tasksItem = navItems[2];
     const tasksLink = tasksItem.querySelector('a');
     if (tasksLink) {
       tasksLink.innerHTML = '';
@@ -688,9 +707,9 @@ function upDateWordrobePageForStylist() {
   if (shoppingItem) {
     shoppingItem.remove();
   }
-  
+
   const breadcrumbItems = document.querySelectorAll('.breadcrumb-item');
-  
+
   if (breadcrumbItems.length > 0) {
     const firstItem = breadcrumbItems[0];
     const link = firstItem.querySelector('a');
@@ -698,5 +717,50 @@ function upDateWordrobePageForStylist() {
       link.textContent = 'My Clients';
       link.href = 'stylist.html';
     }
+  }
+}
+
+async function upDateLooks() {
+  const looks = document.querySelectorAll('#looks .item-card-fully-looks');
+
+  looks.forEach(look => {
+    const button = document.createElement('button');
+    button.classList.add('empty-button');
+    button.appendChild(look.cloneNode(true));
+    look.parentNode.replaceChild(button, look);
+    button.addEventListener('click', () => {
+      const lookId = button.querySelector('.item-card-fully-looks').getAttribute('data-look-id');
+      sendLook(lookId);
+    });
+  });
+}
+
+async function sendLook(lookId) {
+  try {
+    const currentClient = localStorage.getItem('CurrentClientId');
+    const CurrentuserType = localStorage.getItem("UserData");
+    let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+    let userID = CurrentuserTypeJson.UserID;
+
+    const response = await fetch(`http://localhost:8081/stylist/${lookId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        stylistId: userID,
+        clientID: currentClient
+      })
+    });
+    if (response.ok) {
+      alert("Look sent to client");
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to select look");
+    }
+  } catch (error) {
+    alert("Failed to select look: " + error.message);
   }
 }
