@@ -1,8 +1,34 @@
 window.onload = () => {
-  initClients();
   initUserDetails();
-  initSideNav();
+  showNotification()
+    .then(() => {
+      initClients();
+      initSideNav();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 };
+
+function showNotification() {
+  return new Promise((resolve, reject) => {
+    const notification = document.getElementById('notification');
+    const closeButton = document.getElementById('notificationCloseBtn');
+
+    if (notification && closeButton) {
+      notification.classList.remove('hidden');
+      closeButton.addEventListener('click', () => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+          notification.classList.add('hidden');
+          resolve();
+        }, 300);
+      });
+    } else {
+      reject(new Error('Notification or close button not found.'));
+    }
+  });
+}
 
 async function initClients() {
   try {
@@ -16,7 +42,7 @@ async function initClients() {
 
     const container = document.getElementById('my-clients');
     container.innerHTML = '';
-    
+
     clients.forEach(client => {
       const cardHtml = `
         <div class="card" style="width: 18rem;">
@@ -48,7 +74,7 @@ async function initClients() {
 
         localStorage.setItem('CurrentClientId', clientId);
         localStorage.setItem('currentClientName', clientName);
-        window.location.href = 'stylist-myWardrobe.html'; 
+        window.location.href = 'stylist-myWardrobe.html';
       });
     });
 
@@ -92,7 +118,7 @@ function initializeDropdown() {
     return;
   }
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");
-  wardrobeInAccordion.innerHTML = ''; 
+  wardrobeInAccordion.innerHTML = '';
   clients.forEach(client => {
     addToDropdownSta(`${client.f_name} ${client.l_name}`, client.id);
   });
