@@ -3,7 +3,6 @@ window.onload = () => {
   initUserDetails();
   initSideNav();
 };
-
 async function initClients() {
   try {
     const jsonString = localStorage.getItem("UserData");
