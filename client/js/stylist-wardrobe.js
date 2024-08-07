@@ -15,7 +15,7 @@ initClientData = () => {
     if (client.id === clientID) {
       initWardrobesOfClients(client.id, client.f_name, client.l_name);
     }
-});
+  });
 }
 
 const updateBreadCrumbsinnerText = () => {
@@ -136,3 +136,4 @@ function addToDropdown(wardrobeName, wardrobeCode) {
   dropdownItem.appendChild(wardrobeText);
   wardrobeInAccordion.appendChild(dropdownItem);
 }
+

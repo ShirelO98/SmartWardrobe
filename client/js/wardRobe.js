@@ -19,6 +19,11 @@ function initWardrobe() {
   document.getElementById('filter-button').addEventListener('click', showColorMenu);
   document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
   localStorage.setItem("currentItemType", 'All');
+  const CurrentuserType = localStorage.getItem("UserData");
+  let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  if (CurrentuserTypeJson.user_type === 2) {
+    upDateWordrobePageForStylist();
+  }
 }
 
 async function fetchItems() {
@@ -649,4 +654,49 @@ function sortLooksByStatus() {
   });
   renderLooksCards(sortedLooks);
   isAscendingLook = !isAscendingLook;
+}
+
+function upDateWordrobePageForStylist() {
+  const sideBar = document.getElementById('side_bar');
+  
+  const logoLink = sideBar.querySelector('a');
+  logoLink.href = 'stylist.html';
+
+  const dropdownToggle = sideBar.querySelector('.nav-link.dropdown-toggle');
+  dropdownToggle.innerHTML = `
+    <img id="Mywardrobe_logoS" alt="logoMy" src="images/Rectangle4.png" />
+    <img id="Mywardrobe_logo" alt="logoMy" src="images/vector.png" />
+    My Clients
+  `;
+  const navItems = sideBar.querySelectorAll('.nav-item');
+  if (navItems.length > 2) {
+    const tasksItem = navItems[2]; 
+    const tasksLink = tasksItem.querySelector('a');
+    if (tasksLink) {
+      tasksLink.innerHTML = '';
+      const tasksImage = document.createElement('img');
+      tasksImage.src = 'images/Tasks-icon.png';
+      tasksImage.alt = 'Tasks Icon';
+      tasksImage.classList.add('Icons_');
+      tasksLink.appendChild(tasksImage);
+      const tasksText = document.createTextNode('Tasks');
+      tasksLink.appendChild(tasksText);
+    }
+  }
+
+  const shoppingItem = sideBar.querySelector('.nav-item:nth-child(4)');
+  if (shoppingItem) {
+    shoppingItem.remove();
+  }
+  
+  const breadcrumbItems = document.querySelectorAll('.breadcrumb-item');
+  
+  if (breadcrumbItems.length > 0) {
+    const firstItem = breadcrumbItems[0];
+    const link = firstItem.querySelector('a');
+    if (link) {
+      link.textContent = 'My Clients';
+      link.href = 'stylist.html';
+    }
+  }
 }
