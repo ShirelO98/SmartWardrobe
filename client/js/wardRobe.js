@@ -3,7 +3,7 @@
 window.onload = () => {
   initSideNav();
   initWardrobe();
-
+  setupWeatherForm();
 };
 
 function showAlert(message) {

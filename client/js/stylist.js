@@ -8,6 +8,7 @@ window.onload = () => {
     .catch(error => {
       console.error('Error:', error);
     });
+  setupWeatherForm();
 };
 
 function showNotification() {

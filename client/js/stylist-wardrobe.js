@@ -1,6 +1,7 @@
 window.onload = () => {
   initSideNav();
   initClientData();
+  setupWeatherForm();
 };
 
 initClientData = () => {
