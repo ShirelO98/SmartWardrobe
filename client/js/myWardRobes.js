@@ -22,7 +22,7 @@ async function initMyWardrobe() {
       );
     });
   } catch (error) {
-    console.error("Failed to fetch wardrobes:", error);
+   alert("Failed to fetch wardrobes:", error);
   }
   document.querySelector(".plus-wardrobe-button").onclick = createWardrobeForm;
 }
@@ -78,7 +78,7 @@ function createWardrobeForm() {
       const wardrobeCode = data.wardrobeCode;
       createWardrobeCard(wardrobeNewName, 0, 0, 0, wardrobeCode);
     } catch (error) {
-      console.error("Failed to add wardrobe:", error);
+     alert("Failed to add wardrobe:", error);
     }
   });
 }
@@ -179,7 +179,7 @@ function createWardrobeCard(
         updateDropdown(wardrobeName, newName);
         wardrobeName = newName;
       } catch (error) {
-        console.error("Failed to update wardrobe:", error);
+       alert("Failed to update wardrobe:", error);
       } finally {
         inputContainer.replaceWith(nameHeader);
       }

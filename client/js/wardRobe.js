@@ -1,5 +1,3 @@
-
-
 window.onload = () => {
   initSideNav();
   initWardrobe();
@@ -7,11 +5,11 @@ window.onload = () => {
 };
 
 function showAlert(message) {
-  const alertElement = document.getElementById('myAlert');
+  const alertElement = document.getElementById("myAlert");
   alertElement.textContent = message;
-  alertElement.classList.remove('d-none');
+  alertElement.classList.remove("d-none");
   setTimeout(() => {
-    alertElement.classList.add('d-none');
+    alertElement.classList.add("d-none");
   }, 3500);
 }
 
@@ -28,9 +26,13 @@ function initWardrobe() {
   let layoutBtn = document.getElementById("layout-button");
   layoutBtn.addEventListener("click", layoutDisplayBtn);
   fetchAllLooks();
-  document.getElementById('filter-button').addEventListener('click', showColorMenu);
-  document.getElementById('sort-button').addEventListener('click', SortLooksOrItemByStatus);
-  localStorage.setItem("currentItemType", 'All');
+  document
+    .getElementById("filter-button")
+    .addEventListener("click", showColorMenu);
+  document
+    .getElementById("sort-button")
+    .addEventListener("click", SortLooksOrItemByStatus);
+  localStorage.setItem("currentItemType", "All");
   const CurrentuserType = localStorage.getItem("UserData");
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
@@ -41,12 +43,15 @@ function initWardrobe() {
 async function fetchItems() {
   try {
     const wardrobeCode = getCurrentWardrobe();
-    const response = await fetch(`http://localhost:8081/items/${wardrobeCode}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:8081/items/${wardrobeCode}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -58,9 +63,7 @@ async function fetchItems() {
     createItemsCards(items);
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
-
   } catch (error) {
-    console.error("Failed to fetch items:", error.message);
     alert("Failed to fetch items: " + error.message);
   }
 }
@@ -82,7 +85,7 @@ function initialItems() {
 function getUniqueItemTypes(items) {
   const itemTypeSet = new Set();
 
-  items.forEach(item => {
+  items.forEach((item) => {
     if (item.item_type) {
       itemTypeSet.add(item.item_type);
     }
@@ -93,7 +96,7 @@ function getUniqueItemTypes(items) {
 function createItemTypeButtons(types) {
   const typesSection = document.getElementById("types-of-items");
   const existingButtons = typesSection.querySelectorAll(".items-type");
-  existingButtons.forEach(button => button.remove());
+  existingButtons.forEach((button) => button.remove());
   const addSpan = document.createElement("span");
   addSpan.className = "material-symbols-outlined plus-item-type";
   addSpan.textContent = "add_circle";
@@ -104,7 +107,7 @@ function createItemTypeButtons(types) {
   allButton.appendChild(allSpan);
   typesSection.appendChild(allButton);
 
-  types.forEach(type => {
+  types.forEach((type) => {
     const button = document.createElement("button");
     button.className = "empty-button items-type";
     const span = document.createElement("span");
@@ -127,12 +130,15 @@ function createItemTypeButtons(types) {
 async function handleFilterButtonClick(filterValue) {
   try {
     const wardrobeCode = getCurrentWardrobe();
-    const response = await fetch(`http://localhost:8081/items/${wardrobeCode}/${filterValue}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:8081/items/${wardrobeCode}/${filterValue}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -143,9 +149,7 @@ async function handleFilterButtonClick(filterValue) {
     createItemsCards(items);
     clearTable();
     loadListItemsByFilter(items);
-
   } catch (error) {
-    console.error("Failed to fetch items:", error.message);
     alert("Failed to fetch items: " + error.message);
   }
 }
@@ -231,14 +235,11 @@ async function ItemTypeSelectorBtn(event) {
 
   if (span.textContent.trim() === "Shirt") {
     await handleFilterButtonClick(1);
-  }
-  else if (span.textContent.trim() === "Pants") {
+  } else if (span.textContent.trim() === "Pants") {
     await handleFilterButtonClick(2);
-  }
-  else if (span.textContent.trim() === "Shoes") {
+  } else if (span.textContent.trim() === "Shoes") {
     await handleFilterButtonClick(3);
-  }
-  else if (span.textContent.trim() === "All") {
+  } else if (span.textContent.trim() === "All") {
     clearTable();
     loadListItems();
     await fetchItems();
@@ -248,13 +249,18 @@ async function ItemTypeSelectorBtn(event) {
 function createItemsCards(items) {
   const wardRobeSection = document.getElementById("wardRobe");
   const addItemCard = wardRobeSection.querySelector(".item-card-empty");
-  wardRobeSection.innerHTML = '';
+  wardRobeSection.innerHTML = "";
   if (addItemCard) {
     wardRobeSection.appendChild(addItemCard);
   }
 
-  items.forEach(item => {
-    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
+  items.forEach((item) => {
+    const itemCard = createItemCard(
+      item.item_img,
+      item.item_name,
+      item.item_status,
+      item.id
+    );
     wardRobeSection.appendChild(itemCard);
   });
 }
@@ -280,7 +286,7 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   editButton.appendChild(editSpan);
   itemCard.appendChild(editButton);
 
-  editButton.addEventListener('click', function () {
+  editButton.addEventListener("click", function () {
     editStatusItem(editButton.dataset.id, itemCard);
   });
 
@@ -293,11 +299,11 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   deleteButton.appendChild(deleteSpan);
   itemCard.appendChild(deleteButton);
 
-  deleteButton.addEventListener('click', function () {
+  deleteButton.addEventListener("click", function () {
     const CurrentuserType = localStorage.getItem("UserData");
     let CurrentuserTypeJson = JSON.parse(CurrentuserType);
     if (CurrentuserTypeJson.user_type === 1) {
-      const confirmed = confirm('Are you sure you want to delete this item?');
+      const confirmed = confirm("Are you sure you want to delete this item?");
       if (confirmed) {
         deleteItem(deleteButton.dataset.id, itemCard);
       }
@@ -314,26 +320,23 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   return itemCard;
 }
 
-
-function deleteItem(item_id, itemCard) {
-  fetch(`http://localhost:8081/items/${item_id}`, {
-    method: 'DELETE'
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      itemCard.remove();
-      fetchAllLooks();
-    })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
+async function deleteItem(item_id, itemCard) {
+  try {
+    const response = await fetch(`http://localhost:8081/items/${item_id}`, {
+      method: "DELETE",
     });
-}
 
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    itemCard.remove();
+    fetchAllLooks();
+  } catch (error) {
+    alert("There was a problem with the fetch operation: " + error.message);
+  }
+}
 
 function editStatusItem(item_id, itemCard) {
   const CurrentuserType = localStorage.getItem("UserData");
@@ -343,49 +346,52 @@ function editStatusItem(item_id, itemCard) {
     return;
   }
 
-  const ellipseSpan = itemCard.querySelector('.elipse-item');
-  const newStatus = confirm('Click OK for change status of item or Cancel for close this window');
+  const ellipseSpan = itemCard.querySelector(".elipse-item");
+  const newStatus = confirm(
+    "Click OK for change status of item or Cancel for close this window"
+  );
 
   if (newStatus === false) {
     return;
   }
 
   fetch(`http://localhost:8081/items/${item_id}`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
       return response.json();
     })
-    .then(data => {
-      if (ellipseSpan.style.backgroundColor === 'red') {
-        ellipseSpan.style.backgroundColor = 'aquamarine';
-      }
-      else {
-        ellipseSpan.style.backgroundColor = 'red';
+    .then((data) => {
+      if (ellipseSpan.style.backgroundColor === "red") {
+        ellipseSpan.style.backgroundColor = "aquamarine";
+      } else {
+        ellipseSpan.style.backgroundColor = "red";
       }
       fetchAllLooks();
-    }
-    )
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
+    })
+    .catch((error) => {
+      alert("There was a problem with the fetch operation:", error);
     });
 }
 
 async function fetchAllLooks() {
   try {
     const wardrobeCode = getCurrentWardrobe();
-    const response = await fetch(`http://localhost:8081/looks/${wardrobeCode}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `http://localhost:8081/looks/${wardrobeCode}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -395,17 +401,14 @@ async function fetchAllLooks() {
     const looks = await response.json();
     localStorage.setItem("looksOfCurrentWardrobe", JSON.stringify(looks));
     renderLooksCards(looks);
-
   } catch (error) {
-    console.error("Failed to fetch looks:", error.message);
     alert("Failed to fetch looks: " + error.message);
   }
 }
 
-
 function renderLooksCards(lookForSort = []) {
   const looksSection = document.getElementById("looks");
-  looksSection.innerHTML = '';
+  looksSection.innerHTML = "";
   let looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
   if (lookForSort.length != 0) {
     looks = lookForSort;
@@ -414,16 +417,21 @@ function renderLooksCards(lookForSort = []) {
     const tShirtImage = { src: look.item_img_1, alt: "Item 1" };
     const pantImage = { src: look.item_img_2, alt: "Item 2" };
     const shoeImage = { src: look.item_img_3, alt: "Item 3" };
-    const lookCard = createLookCard(tShirtImage, pantImage, shoeImage, look.look_id, look.look_status);
+    const lookCard = createLookCard(
+      tShirtImage,
+      pantImage,
+      shoeImage,
+      look.look_id,
+      look.look_status
+    );
     looksSection.appendChild(lookCard);
   });
   const CurrentuserType = localStorage.getItem("UserData");
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
     upDateLooks();
-    showAlert('Select Look');
+    showAlert("Select Look");
   }
-
 }
 
 function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
@@ -466,10 +474,11 @@ function createLookCard(tShirtImage, pantImage, shoeImage, lookId, lookStatus) {
 
 function loadListItems() {
   clearTable();
-  const items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
+  const items =
+    JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
   const table = document.getElementById("itemsTable");
 
-  items.forEach(item => {
+  items.forEach((item) => {
     const itemRow = document.createElement("tr");
     const statusText = item.item_status == 1 ? "Available" : "Not Available";
     itemRow.innerHTML = `
@@ -478,18 +487,18 @@ function loadListItems() {
       <td>${item.item_season}</td>
       <td>${statusText}</td>
     `;
-    table.querySelector('tbody').appendChild(itemRow);
+    table.querySelector("tbody").appendChild(itemRow);
   });
 }
 
 function loadListItemsByFilter(items) {
-  const currentItemType = localStorage.getItem('currentItemType');
-  if (currentItemType != 'All') {
-    items = items.filter(item => item.item_type === currentItemType);
+  const currentItemType = localStorage.getItem("currentItemType");
+  if (currentItemType != "All") {
+    items = items.filter((item) => item.item_type === currentItemType);
   }
   clearTable();
   const table = document.getElementById("itemsTable");
-  items.forEach(item => {
+  items.forEach((item) => {
     const itemRow = document.createElement("tr");
     const statusText = item.item_status == 1 ? "Available" : "Not Available";
     itemRow.innerHTML = `
@@ -498,14 +507,14 @@ function loadListItemsByFilter(items) {
       <td>${item.item_season}</td>
       <td>${statusText}</td>
     `;
-    table.querySelector('tbody').appendChild(itemRow);
+    table.querySelector("tbody").appendChild(itemRow);
   });
 }
 
 function clearTable() {
   const table = document.getElementById("itemsTable");
-  const tbody = table.querySelector('tbody');
-  tbody.innerHTML = '';
+  const tbody = table.querySelector("tbody");
+  tbody.innerHTML = "";
 }
 
 function createItemImage(src, alt) {
@@ -556,7 +565,7 @@ const updateBreadCrumbsinnerText = () => {
   const currentWardrobeName = localStorage.getItem("currentWardrobeName");
   const wardrobeName = document.getElementById("breadcrumbWardrobeName");
   wardrobeName.innerText = currentWardrobeName;
-}
+};
 
 function initUserDate() {
   const jsonString = localStorage.getItem("UserData");
@@ -569,24 +578,25 @@ function initUserDate() {
 
 function getUniqueColors(items) {
   const colors = new Set();
-  items.forEach(item => colors.add(item.item_color));
+  items.forEach((item) => colors.add(item.item_color));
   return Array.from(colors);
 }
 
 function showColorMenu() {
-  const colorMenu = document.getElementById('color-menu');
-  colorMenu.innerHTML = '';
+  const colorMenu = document.getElementById("color-menu");
+  colorMenu.innerHTML = "";
 
-  const title = document.createElement('h4');
-  title.textContent = 'Filter Items By Color';
-  title.style.textAlign = 'center';
+  const title = document.createElement("h4");
+  title.textContent = "Filter Items By Color";
+  title.style.textAlign = "center";
   colorMenu.appendChild(title);
 
-  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
+  const items =
+    JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
   const uniqueColors = getUniqueColors(items);
 
-  uniqueColors.forEach(color => {
-    const button = document.createElement('button');
+  uniqueColors.forEach((color) => {
+    const button = document.createElement("button");
     button.textContent = color;
     button.style.backgroundColor = color;
     button.style.color = getContrastingColor(color);
@@ -594,26 +604,27 @@ function showColorMenu() {
     colorMenu.appendChild(button);
   });
 
-  const filterButton = document.getElementById('filter-button');
+  const filterButton = document.getElementById("filter-button");
   const rect = filterButton.getBoundingClientRect();
-  colorMenu.style.position = 'absolute';
+  colorMenu.style.position = "absolute";
   colorMenu.style.top = `${rect.bottom + window.scrollY}px`;
   colorMenu.style.left = `${rect.left}px`;
-  colorMenu.classList.toggle('hidden');
+  colorMenu.classList.toggle("hidden");
 }
 
 function getContrastingColor(color) {
-  if (color.toLowerCase() === 'white') {
-    return 'black';
+  if (color.toLowerCase() === "white") {
+    return "black";
   }
-  return 'white';
+  return "white";
 }
 
 function filterByColor(color) {
   let state = document.getElementById("layout-button").textContent.trim();
-  const items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
-  const filteredItems = items.filter(item => item.item_color === color);
-  if (state != 'grid_view') {
+  const items =
+    JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
+  const filteredItems = items.filter((item) => item.item_color === color);
+  if (state != "grid_view") {
     updateDisplay(filteredItems);
   } else {
     loadListItemsByFilter(filteredItems);
@@ -621,27 +632,32 @@ function filterByColor(color) {
 }
 
 function updateDisplay(items) {
-  const currentItemType = localStorage.getItem('currentItemType');
-  if (currentItemType != 'All') {
-    items = items.filter(item => item.item_type === currentItemType);
+  const currentItemType = localStorage.getItem("currentItemType");
+  if (currentItemType != "All") {
+    items = items.filter((item) => item.item_type === currentItemType);
   }
-  const wardrobeSection = document.getElementById('wardRobe');
-  wardrobeSection.innerHTML = '';
-  items.forEach(item => {
-    const itemCard = createItemCard(item.item_img, item.item_name, item.item_status, item.id);
+  const wardrobeSection = document.getElementById("wardRobe");
+  wardrobeSection.innerHTML = "";
+  items.forEach((item) => {
+    const itemCard = createItemCard(
+      item.item_img,
+      item.item_name,
+      item.item_status,
+      item.id
+    );
     wardrobeSection.appendChild(itemCard);
   });
-  const tableSection = document.getElementById('itemsTable');
-  tableSection.style.display = 'none';
+  const tableSection = document.getElementById("itemsTable");
+  tableSection.style.display = "none";
 }
 
 function SortLooksOrItemByStatus() {
-  const itemsButton = document.getElementById('items-button');
-  const looksButton = document.getElementById('looks-button');
+  const itemsButton = document.getElementById("items-button");
+  const looksButton = document.getElementById("looks-button");
 
-  if (itemsButton.style.backgroundColor === 'black') {
+  if (itemsButton.style.backgroundColor === "black") {
     sortItemsByStatus();
-  } else if (looksButton.style.backgroundColor === 'black') {
+  } else if (looksButton.style.backgroundColor === "black") {
     sortLooksByStatus();
   }
 }
@@ -649,15 +665,17 @@ function SortLooksOrItemByStatus() {
 let isAscendingItem = true;
 function sortItemsByStatus() {
   let state = document.getElementById("layout-button").textContent.trim();
-  let items = JSON.parse(localStorage.getItem('itemsOfCurrentWardrobe')) || [];
-  const currentItemType = localStorage.getItem('currentItemType');
-  if (currentItemType != 'All') {
-    items = items.filter(item => item.item_type === currentItemType);
+  let items = JSON.parse(localStorage.getItem("itemsOfCurrentWardrobe")) || [];
+  const currentItemType = localStorage.getItem("currentItemType");
+  if (currentItemType != "All") {
+    items = items.filter((item) => item.item_type === currentItemType);
   }
   const sortedItems = items.sort((a, b) => {
-    return isAscendingItem ? a.item_status - b.item_status : b.item_status - a.item_status;
+    return isAscendingItem
+      ? a.item_status - b.item_status
+      : b.item_status - a.item_status;
   });
-  if (state != 'grid_view') {
+  if (state != "grid_view") {
     updateDisplay(sortedItems);
   } else {
     loadListItemsByFilter(sortedItems);
@@ -667,69 +685,73 @@ function sortItemsByStatus() {
 
 let isAscendingLook = true;
 function sortLooksByStatus() {
-  let looks = JSON.parse(localStorage.getItem('looksOfCurrentWardrobe')) || [];
+  let looks = JSON.parse(localStorage.getItem("looksOfCurrentWardrobe")) || [];
   const sortedLooks = looks.sort((a, b) => {
-    return isAscendingLook ? a.look_status - b.look_status : b.look_status - a.look_status;
+    return isAscendingLook
+      ? a.look_status - b.look_status
+      : b.look_status - a.look_status;
   });
   renderLooksCards(sortedLooks);
   isAscendingLook = !isAscendingLook;
 }
 
 function upDateWordrobePageForStylist() {
-  const sideBar = document.getElementById('side_bar');
+  const sideBar = document.getElementById("side_bar");
 
-  const logoLink = sideBar.querySelector('a');
-  logoLink.href = 'stylist.html';
+  const logoLink = sideBar.querySelector("a");
+  logoLink.href = "stylist.html";
 
-  const dropdownToggle = sideBar.querySelector('.nav-link.dropdown-toggle');
+  const dropdownToggle = sideBar.querySelector(".nav-link.dropdown-toggle");
   dropdownToggle.innerHTML = `
     <img id="Mywardrobe_logoS" alt="logoMy" src="images/Rectangle4.png" />
     <img id="Mywardrobe_logo" alt="logoMy" src="images/vector.png" />
     My Clients
   `;
-  const navItems = sideBar.querySelectorAll('.nav-item');
+  const navItems = sideBar.querySelectorAll(".nav-item");
   if (navItems.length > 2) {
     const tasksItem = navItems[2];
-    const tasksLink = tasksItem.querySelector('a');
+    const tasksLink = tasksItem.querySelector("a");
     if (tasksLink) {
-      tasksLink.innerHTML = '';
-      const tasksImage = document.createElement('img');
-      tasksImage.src = 'images/Tasks-icon.png';
-      tasksImage.alt = 'Tasks Icon';
-      tasksImage.classList.add('Icons_');
+      tasksLink.innerHTML = "";
+      const tasksImage = document.createElement("img");
+      tasksImage.src = "images/Tasks-icon.png";
+      tasksImage.alt = "Tasks Icon";
+      tasksImage.classList.add("Icons_");
       tasksLink.appendChild(tasksImage);
-      const tasksText = document.createTextNode('Tasks');
+      const tasksText = document.createTextNode("Tasks");
       tasksLink.appendChild(tasksText);
     }
   }
 
-  const shoppingItem = sideBar.querySelector('.nav-item:nth-child(4)');
+  const shoppingItem = sideBar.querySelector(".nav-item:nth-child(4)");
   if (shoppingItem) {
     shoppingItem.remove();
   }
 
-  const breadcrumbItems = document.querySelectorAll('.breadcrumb-item');
+  const breadcrumbItems = document.querySelectorAll(".breadcrumb-item");
 
   if (breadcrumbItems.length > 0) {
     const firstItem = breadcrumbItems[0];
-    const link = firstItem.querySelector('a');
+    const link = firstItem.querySelector("a");
     if (link) {
-      link.textContent = 'My Clients';
-      link.href = 'stylist.html';
+      link.textContent = "My Clients";
+      link.href = "stylist.html";
     }
   }
 }
 
 async function upDateLooks() {
-  const looks = document.querySelectorAll('#looks .item-card-fully-looks');
+  const looks = document.querySelectorAll("#looks .item-card-fully-looks");
 
-  looks.forEach(look => {
-    const button = document.createElement('button');
-    button.classList.add('empty-button');
+  looks.forEach((look) => {
+    const button = document.createElement("button");
+    button.classList.add("empty-button");
     button.appendChild(look.cloneNode(true));
     look.parentNode.replaceChild(button, look);
-    button.addEventListener('click', () => {
-      const lookId = button.querySelector('.item-card-fully-looks').getAttribute('data-look-id');
+    button.addEventListener("click", () => {
+      const lookId = button
+        .querySelector(".item-card-fully-looks")
+        .getAttribute("data-look-id");
       sendLook(lookId);
     });
   });
@@ -737,7 +759,7 @@ async function upDateLooks() {
 
 async function sendLook(lookId) {
   try {
-    const currentClient = localStorage.getItem('CurrentClientId');
+    const currentClient = localStorage.getItem("CurrentClientId");
     const CurrentuserType = localStorage.getItem("UserData");
     let CurrentuserTypeJson = JSON.parse(CurrentuserType);
     let userID = CurrentuserTypeJson.UserID;
@@ -749,8 +771,8 @@ async function sendLook(lookId) {
       },
       body: JSON.stringify({
         stylistId: userID,
-        clientID: currentClient
-      })
+        clientID: currentClient,
+      }),
     });
     if (response.ok) {
       alert("Look sent to client");
