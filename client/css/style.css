@@ -875,7 +875,7 @@ background: none;
 
 #my-clients {
   margin-left: 89px;
-  margin-top: 70px;
+  margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
