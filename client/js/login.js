@@ -23,7 +23,7 @@ async function loginUser() {
     const userDataString = JSON.stringify(userData);
     localStorage.setItem("UserData", userDataString);
     if (userData.user_type === 1) {
-      window.location.href = "./index.html";
+      window.location.href = "./wardrobesClient.html";
     } else if (userData.user_type === 2) {
       window.location.href = "./stylist.html"; 
     } else {
