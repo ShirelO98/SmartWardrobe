@@ -418,7 +418,7 @@ main {
   margin-right: 28px;
 }
 #logo {
-  background-image: url(/client/images/logo-no-background3.png);
+  background-image: url(./images/logo-no-background3.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #000;
