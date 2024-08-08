@@ -15,6 +15,7 @@
   <script src="js/sidebar.js"></script>
   <script src="js/stylist-wardrobe.js"></script>
   <script src="js/wardRobe.js"></script>
+  <script src="js/wether.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
@@ -76,9 +77,23 @@
           list
         </span>
       </button>
+      <div class="weather-container">
+        <form id="weatherForm" class="weather-form">
+          <label for="cityName">Enter City:</label>
+          <input type="text" id="cityName" name="cityName" required>
+          <button type="submit">Get Weather</button>
+        </form>
+        <div id="weatherResult" class="weather-result hidden">
+          <button id="weatherResultClose" class="close-button" aria-label="Close">&times;</button>
+          <h2 id="cityTitle"></h2>
+          <p id="temperature"></p>
+          <p id="description"></p>
+          <span id="weatherIcon" class="weather-icon"></span>
+        </div>
+        <div id="error" class="error-message hidden"></div>
+      </div>
     </section>
     <section id="my-clients" class="clients">
-
     </section>
     <section id="side_bar">
       <button class="hamburger" id="sidebarToggle">

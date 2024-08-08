@@ -8,6 +8,7 @@ window.onload = () => {
     .catch(error => {
       console.error('Error:', error);
     });
+  setupWeatherForm();
 };
 
 function showNotification() {
@@ -50,7 +51,7 @@ async function initClients() {
           <div class="card-body">
             <h4 class="card-title">${client.f_name} ${client.l_name}</h4>
             <h6 class="card-title"><b>Message:</b></h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">${client.msg_client_to_stylist}</p>
           </div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
