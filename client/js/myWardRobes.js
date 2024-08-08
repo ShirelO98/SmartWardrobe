@@ -144,67 +144,85 @@ function createWardrobeCard(
     }
   });
 
-  editButton.addEventListener("click", function () {
-    const currentName = nameHeader.textContent.trim();
-    const inputContainer = document.createElement("div");
-    inputContainer.classList.add("edit-input-container");
-    const inputField = document.createElement("input");
-    inputField.className = "form-control ed";
-    inputField.type = "text";
-    inputField.maxLength = 18;
-    inputField.value = currentName;
-    inputContainer.appendChild(inputField);
-    const saveButton = document.createElement("button");
-    saveButton.className = "btn btn-primary";
-    saveButton.textContent = "Save";
-    saveButton.addEventListener("click", async function (event) {
-      event.stopPropagation(); 
-      event.preventDefault(); 
-      const newName = inputField.value.trim();
-      try {
-        const response = await fetch(
-          `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ wardrobeName: newName }),
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to update wardrobe");
+  let isEditing = false; 
+editButton.addEventListener("click", function () {
+  if (isEditing) return;
+  isEditing = true; 
+  const currentName = nameHeader.textContent.trim();
+  const inputContainer = document.createElement("div");
+  inputContainer.classList.add("edit-input-container");
+
+  const inputField = document.createElement("input");
+  inputField.className = "form-control ed";
+  inputField.type = "text";
+  inputField.maxLength = 18;
+  inputField.value = currentName;
+  inputContainer.appendChild(inputField);
+
+  const saveButton = document.createElement("button");
+  saveButton.className = "btn btn-primary";
+  saveButton.textContent = "Save";
+
+  saveButton.addEventListener("click", async function (event) {
+    event.stopPropagation(); 
+    event.preventDefault(); 
+
+    const newName = inputField.value.trim();
+    try {
+      const response = await fetch(
+        `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ wardrobeName: newName }),
         }
-        nameHeader.textContent = newName;
-        updateDropdown(wardrobeName, newName);
-        wardrobeName = newName;
-      } catch (error) {
-       alert("Failed to update wardrobe:", error);
-      } finally {
-        inputContainer.replaceWith(nameHeader);
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update wardrobe");
       }
-    });
-    inputContainer.appendChild(saveButton);
-    nameHeader.replaceWith(inputContainer);
-    inputField.focus();
-    inputField.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        saveButton.click();
-      }
-    });
-    inputField.addEventListener("blur", function () {
-      saveButton.click();
-    });
-  });
-  buttonWardrobeTitle.addEventListener("click", function (event) {
-    const wardrobeCode1 = JSON.stringify(wardrobeCode);
-    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
-    localStorage.setItem("currentWardrobeName", wardrobeName);
-    const cursorStyle = getComputedStyle(event.target).cursor;
-    if (cursorStyle === "pointer") {
-      window.location.href = "wardrobe.html";
+      nameHeader.textContent = newName;
+      updateDropdown(wardrobeName, newName);
+      wardrobeName = newName;
+    } catch (error) {
+      alert("Failed to update wardrobe: " + error.message);
+    } finally {
+      inputContainer.replaceWith(nameHeader);
+      isEditing = false; 
     }
   });
+
+  inputContainer.appendChild(saveButton);
+  nameHeader.replaceWith(inputContainer);
+  inputField.focus();
+
+  inputField.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      saveButton.click();
+    }
+  });
+
+  inputField.addEventListener("blur", function () {
+    if (inputField.value.trim() !== currentName) {
+      saveButton.click();
+    } else {
+      inputContainer.replaceWith(nameHeader);
+      isEditing = false;
+    }
+  });
+});
+
+buttonWardrobeTitle.addEventListener("click", function (event) {
+  const wardrobeCode1 = JSON.stringify(wardrobeCode);
+  localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+  localStorage.setItem("currentWardrobeName", wardrobeName);
+
+  const cursorStyle = getComputedStyle(event.target).cursor;
+  if (cursorStyle === "pointer" && !isEditing) {
+    window.location.href = "wardrobe.html";
+  }
+});
 }
 
 function createButton(className, text) {
