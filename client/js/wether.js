@@ -17,7 +17,7 @@ function setupWeatherForm() {
       }
   
       try {
-        const response = await fetch(`http://localhost:8081/weather/${cityName}`); 
+        const response = await fetch(`https://smartwardrobe-server.onrender.com/weather/${cityName}`); 
         if (!response.ok) throw new Error('City not found');
   
         const data = await response.json();

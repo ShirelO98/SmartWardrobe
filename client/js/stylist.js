@@ -37,7 +37,7 @@ async function initClients() {
     const dataObject = JSON.parse(jsonString);
     const userId = dataObject.UserID;
 
-    const response = await fetch(`http://localhost:8081/stylist/${userId}`);
+    const response = await fetch(`https://smartwardrobe-server.onrender.com/stylist/${userId}`);
     const clients = await response.json();
     localStorage.setItem('clients', JSON.stringify(clients));
 

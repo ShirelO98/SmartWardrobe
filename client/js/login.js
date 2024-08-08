@@ -7,7 +7,7 @@ async function loginUser() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
   try {
-    const response = await fetch("http://localhost:8081/user/login", {
+    const response = await fetch("https://smartwardrobe-server.onrender.com/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

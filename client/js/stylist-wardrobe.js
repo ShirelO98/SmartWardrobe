@@ -29,7 +29,7 @@ const updateBreadCrumbsinnerText = () => {
 }
 
 initWardrobesOfClients = async (userId, userFirstName, userLastName) => {
-  const res = await fetch(`http://localhost:8081/wardrobe/all/${userId}`);
+  const res = await fetch(`https://smartwardrobe-server.onrender.com/wardrobe/all/${userId}`);
   const wardrobes = await res.json();
   localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
   wardrobes.forEach((wardrobe) => {

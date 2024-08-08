@@ -8,7 +8,7 @@ async function initMyWardrobe() {
     userImg.src = dataObject.userImgUrl;
     userName.innerText = `${dataObject.userFirstName} ${dataObject.userLastName}`;
     const response = await fetch(
-      `http://localhost:8081/wardrobe/all/${userId}`
+      `https://smartwardrobe-server.onrender.com/wardrobe/all/${userId}`
     );
     const wardrobes = await response.json();
     localStorage.setItem("wardrobesOfUser", JSON.stringify(wardrobes));
@@ -60,7 +60,7 @@ function createWardrobeForm() {
     const UserId = dataObject.UserID;
     console.log(UserId);
     try {
-      const response = await fetch(`http://localhost:8081/wardrobe/`, {
+      const response = await fetch(`https://smartwardrobe-server.onrender.com/wardrobe/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -129,7 +129,7 @@ function createWardrobeCard(
   deleteButton.addEventListener("click", async function () {
     try {
       const response = await fetch(
-        `http://localhost:8081/wardrobe/${wardrobeCode}`,
+        `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
         {
           method: "DELETE",
         }
@@ -163,7 +163,7 @@ function createWardrobeCard(
       const newName = inputField.value.trim();
       try {
         const response = await fetch(
-          `http://localhost:8081/wardrobe/${wardrobeCode}`,
+          `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
           {
             method: "PUT",
             headers: {

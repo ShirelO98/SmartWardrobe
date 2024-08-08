@@ -44,7 +44,7 @@ async function fetchItems() {
   try {
     const wardrobeCode = getCurrentWardrobe();
     const response = await fetch(
-      `http://localhost:8081/items/${wardrobeCode}`,
+      `https://smartwardrobe-server.onrender.com/items/${wardrobeCode}`,
       {
         method: "GET",
         headers: {
@@ -131,7 +131,7 @@ async function handleFilterButtonClick(filterValue) {
   try {
     const wardrobeCode = getCurrentWardrobe();
     const response = await fetch(
-      `http://localhost:8081/items/${wardrobeCode}/${filterValue}`,
+      `https://smartwardrobe-server.onrender.com/items/${wardrobeCode}/${filterValue}`,
       {
         method: "GET",
         headers: {
@@ -322,7 +322,7 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
 
 async function deleteItem(item_id, itemCard) {
   try {
-    const response = await fetch(`http://localhost:8081/items/${item_id}`, {
+    const response = await fetch(`https://smartwardrobe-server.onrender.com/items/${item_id}`, {
       method: "DELETE",
     });
 
@@ -355,7 +355,7 @@ function editStatusItem(item_id, itemCard) {
     return;
   }
 
-  fetch(`http://localhost:8081/items/${item_id}`, {
+  fetch(`https://smartwardrobe-server.onrender.com/items/${item_id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -384,7 +384,7 @@ async function fetchAllLooks() {
   try {
     const wardrobeCode = getCurrentWardrobe();
     const response = await fetch(
-      `http://localhost:8081/looks/${wardrobeCode}`,
+      `https://smartwardrobe-server.onrender.com/looks/${wardrobeCode}`,
       {
         method: "GET",
         headers: {
@@ -764,7 +764,7 @@ async function sendLook(lookId) {
     let CurrentuserTypeJson = JSON.parse(CurrentuserType);
     let userID = CurrentuserTypeJson.UserID;
 
-    const response = await fetch(`http://localhost:8081/stylist/${lookId}`, {
+    const response = await fetch(`https://smartwardrobe-server.onrender.com/stylist/${lookId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
