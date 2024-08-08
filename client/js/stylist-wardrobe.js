@@ -25,8 +25,6 @@ const updateBreadCrumbsinnerText = () => {
 
   if (currentUserName && userNameElement) {
     userNameElement.innerText = currentUserName;
-  } else {
-    console.error("Unable to update breadcrumbs: currentClientName or breadcrumbUserName element not found.");
   }
 }
 

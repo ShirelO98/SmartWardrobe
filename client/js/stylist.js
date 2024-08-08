@@ -6,7 +6,7 @@ window.onload = () => {
       initSideNav();
     })
     .catch(error => {
-      console.error('Error:', error);
+      alert('Failed to show notification: ' + error.message);
     });
   setupWeatherForm();
 };
@@ -80,7 +80,7 @@ async function initClients() {
     });
 
   } catch (error) {
-    console.error("Failed to fetch clients:", error);
+    alert("Failed to fetch clients: " + error.message);
   }
 }
 
@@ -115,7 +115,6 @@ function addToDropdownSta(clientName, clientId) {
 function initializeDropdown() {
   const clients = JSON.parse(localStorage.getItem('clients'));
   if (!clients) {
-    console.error("No clients data found in local storage.");
     return;
   }
   const wardrobeInAccordion = document.getElementById("wardrobe-in-accordion");

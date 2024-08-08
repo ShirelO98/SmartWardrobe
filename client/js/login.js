@@ -30,7 +30,6 @@ async function loginUser() {
       alert("Unknown user type!");
     }
   } catch (error) {
-    console.error("Login failed:", error.message);
     alert("Login failed: " + error.message);
   }
 }
