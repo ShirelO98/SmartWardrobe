@@ -135,24 +135,44 @@ function createWardrobeCard(
   myWardRobesSection.appendChild(wardrobeCard);
   addToDropdown(wardrobeName, wardrobeCode);
   deleteButton.addEventListener("click", async function () {
-    try {
-      const response = await fetch(
-        `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
-        {
-          method: "DELETE",
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to delete this wardrobe?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
+          {
+            method: "DELETE",
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Failed to delete wardrobe");
         }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete wardrobe");
+  
+        wardrobeCard.remove();
+        removeFromDropdown(wardrobeName);
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'The wardrobe has been deleted.',
+        });
+  
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to Delete Wardrobe',
+          text: error.message,
+        });
       }
-      wardrobeCard.remove();
-      removeFromDropdown(wardrobeName);
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Failed to Delete Wardrobe',
-        text: error.message,
-      });
     }
   });
 

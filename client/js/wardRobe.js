@@ -298,22 +298,46 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
   deleteButton.appendChild(deleteSpan);
   itemCard.appendChild(deleteButton);
 
-  deleteButton.addEventListener("click", function () {
+  deleteButton.addEventListener("click", async function () {
     const CurrentuserType = localStorage.getItem("UserData");
     let CurrentuserTypeJson = JSON.parse(CurrentuserType);
+  
     if (CurrentuserTypeJson.user_type === 1) {
-      const confirmed = confirm("Are you sure you want to delete this item?");
-      if (confirmed) {
-        deleteItem(deleteButton.dataset.id, itemCard);
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to delete this item?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+      });
+  
+      if (result.isConfirmed) {
+        try {
+          await deleteItem(deleteButton.dataset.id, itemCard);
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'The item has been deleted.',
+          });
+  
+        } catch (error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed to Delete Item',
+            text: 'There was a problem with deleting the item: ' + error.message,
+          });
+        }
       }
     } else if (CurrentuserTypeJson.user_type === 2) {
       Swal.fire({
         icon: 'warning',
-        title: 'You are not allowed to delete items',
-        text: error.message,
+        title: 'Access Denied',
+        text: 'You are not allowed to delete items.',
       });
     }
   });
+  
 
   const img = document.createElement("img");
   img.src = imageSrc;
@@ -349,24 +373,29 @@ async function deleteItem(item_id, itemCard) {
   }
 }
 
-function editStatusItem(item_id, itemCard) {
+async function editStatusItem(item_id, itemCard) {
   const CurrentuserType = localStorage.getItem("UserData");
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
     Swal.fire({
       icon: 'warning',
-      title: 'You are not allowed to delete items',
-      text: error.message,
+      title: 'Access Denied',
+      text: 'You are not allowed to edit items.',
     });
     return;
   }
 
   const ellipseSpan = itemCard.querySelector(".elipse-item");
-  const newStatus = confirm(
-    "Click OK for change status of item or Cancel for close this window"
-  );
-
-  if (newStatus === false) {
+  const result = await Swal.fire({
+    title: 'Change Item Status',
+    text: "Click 'Yes' to change the status of the item or 'No' to cancel.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    cancelButtonText: 'No',
+  });
+  
+  if (!result.isConfirmed) {
     return;
   }
 
@@ -454,11 +483,15 @@ function renderLooksCards(lookForSort = []) {
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
     upDateLooks();
-    Swal.fire({
-      icon: 'info',
-      title: 'Selection Required',
-      text: 'Please select a look.',
-    });
+    if (!sessionStorage.getItem("lookAlertShown")) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Selection Required',
+        text: 'Please select a look.',
+      }).then(() => {
+        sessionStorage.setItem("lookAlertShown", "true");
+      });
+    }
   }
 }
 
