@@ -12,7 +12,11 @@ function setupWeatherForm() {
       }
   
       if (!isTitleCase(cityName)) {
-        alert('Please enter the city name in Title Case (e.g., "Tel Aviv").');
+        Swal.fire({
+          icon: 'info',
+          title: 'Input Required',
+          text: 'Please enter the city name in Title Case (e.g., "Tel Aviv").',
+        });
         return;
       }
   

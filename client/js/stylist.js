@@ -6,7 +6,11 @@ window.onload = () => {
       initSideNav();
     })
     .catch(error => {
-      alert('Failed to show notification: ' + error.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to Show Notification',
+        text: 'Failed to show notification: ' + error.message,
+      });
     });
   setupWeatherForm();
 };
@@ -80,7 +84,11 @@ async function initClients() {
     });
 
   } catch (error) {
-    alert("Failed to fetch clients: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Fetch Failed',
+      text: 'Failed to fetch clients: ' + error.message,
+    });
   }
 }
 

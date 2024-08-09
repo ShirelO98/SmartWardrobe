@@ -4,15 +4,6 @@ window.onload = () => {
   setupWeatherForm();
 };
 
-function showAlert(message) {
-  const alertElement = document.getElementById("myAlert");
-  alertElement.textContent = message;
-  alertElement.classList.remove("d-none");
-  setTimeout(() => {
-    alertElement.classList.add("d-none");
-  }, 3500);
-}
-
 function initWardrobe() {
   updateBreadCrumbsinnerText();
   fetchItems();
@@ -64,7 +55,11 @@ async function fetchItems() {
     const itemTypes = getUniqueItemTypes(items);
     createItemTypeButtons(itemTypes);
   } catch (error) {
-    alert("Failed to fetch items: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Fetch Failed',
+      text: 'Failed to fetch items: ' + error.message,
+    });
   }
 }
 
@@ -150,7 +145,11 @@ async function handleFilterButtonClick(filterValue) {
     clearTable();
     loadListItemsByFilter(items);
   } catch (error) {
-    alert("Failed to fetch items: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Fetch Failed',
+      text: 'Failed to fetch clients: ' + error.message,
+    });
   }
 }
 
@@ -308,7 +307,11 @@ function createItemCard(imageSrc, altText, itemStatus, item_id) {
         deleteItem(deleteButton.dataset.id, itemCard);
       }
     } else if (CurrentuserTypeJson.user_type === 2) {
-      alert("You are not allowed to delete items");
+      Swal.fire({
+        icon: 'warning',
+        title: 'You are not allowed to delete items',
+        text: error.message,
+      });
     }
   });
 
@@ -329,12 +332,20 @@ async function deleteItem(item_id, itemCard) {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-
     const data = await response.json();
     itemCard.remove();
     fetchAllLooks();
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Item has been successfully deleted.',
+    });
   } catch (error) {
-    alert("There was a problem with the fetch operation: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Fetch Error',
+      text: 'There was a problem with the fetch operation: ' + error.message,
+    });
   }
 }
 
@@ -342,7 +353,11 @@ function editStatusItem(item_id, itemCard) {
   const CurrentuserType = localStorage.getItem("UserData");
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
-    alert("You are not allowed to edit items");
+    Swal.fire({
+      icon: 'warning',
+      title: 'You are not allowed to delete items',
+      text: error.message,
+    });
     return;
   }
 
@@ -374,9 +389,14 @@ function editStatusItem(item_id, itemCard) {
         ellipseSpan.style.backgroundColor = "red";
       }
       fetchAllLooks();
+
     })
     .catch((error) => {
-      alert("There was a problem with the fetch operation:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Fetch Error',
+        text: 'There was a problem with the fetch operation: ' + error.message,
+      });
     });
 }
 
@@ -402,7 +422,11 @@ async function fetchAllLooks() {
     localStorage.setItem("looksOfCurrentWardrobe", JSON.stringify(looks));
     renderLooksCards(looks);
   } catch (error) {
-    alert("Failed to fetch looks: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Fetch Error',
+      text: 'There was a problem with the fetch operation: ' + error.message,
+    });
   }
 }
 
@@ -430,7 +454,11 @@ function renderLooksCards(lookForSort = []) {
   let CurrentuserTypeJson = JSON.parse(CurrentuserType);
   if (CurrentuserTypeJson.user_type === 2) {
     upDateLooks();
-    showAlert("Select Look");
+    Swal.fire({
+      icon: 'info',
+      title: 'Selection Required',
+      text: 'Please select a look.',
+    });
   }
 }
 
@@ -775,7 +803,11 @@ async function sendLook(lookId) {
       }),
     });
     if (response.ok) {
-      alert("Look sent to client");
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Look sent to client.',
+      });
     }
 
     if (!response.ok) {
@@ -783,6 +815,10 @@ async function sendLook(lookId) {
       throw new Error(errorData.error || "Failed to select look");
     }
   } catch (error) {
-    alert("Failed to select look: " + error.message);
+    Swal.fire({
+      icon: 'error',
+      title: 'Selection Error',
+      text: 'Failed to select look: ' + error.message,
+    });
   }
 }

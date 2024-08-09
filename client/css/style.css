@@ -1,7 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  background: #f3f3f3;
   font-family: "Source Sans 3";
 }
 
@@ -13,6 +12,12 @@ section,
 header,
 div {
   display: block;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #f3f3f3;
 }
 
 .empty-button {
@@ -29,6 +34,7 @@ div {
   background: none;
   display: block;
   margin-left: 330px;
+  background: #fff;
 }
 
 header > h3 {
@@ -175,11 +181,6 @@ header > h3 {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-}
-
-body {
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .main-Breadcrumb {
@@ -1134,6 +1135,83 @@ background: none;
   height: auto;
   border-radius: 8px;
   background: none;
+}
+
+.login-container {
+  font-family: 'Source Sans 3', sans-serif;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 320px;
+  max-width: 100%;
+  margin: auto;
+  margin-top: 2%;
+}
+
+.login-container h1 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+  background: none;
+}
+
+.login-container img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.signup-link {
+  margin-top: 1rem;
+  background: none;
+}
+
+.signup-link p {
+  font-size: 0.875rem;
+  color: #555;
+  font-family: 'Source Sans 3', sans-serif;
+  background: none;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+  background: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.login-container button:hover {
+  background-color: #0056b3;
 }
 
 @media (max-width: 800px) {

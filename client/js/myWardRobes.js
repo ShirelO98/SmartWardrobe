@@ -22,7 +22,11 @@ async function initMyWardrobe() {
       );
     });
   } catch (error) {
-   alert("Failed to fetch wardrobes:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Fetch Wardrobes',
+      text: error.message,
+    });
   }
   document.querySelector(".plus-wardrobe-button").onclick = createWardrobeForm;
 }
@@ -78,7 +82,11 @@ function createWardrobeForm() {
       const wardrobeCode = data.wardrobeCode;
       createWardrobeCard(wardrobeNewName, 0, 0, 0, wardrobeCode);
     } catch (error) {
-     alert("Failed to add wardrobe:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Addition Failed',
+        text: 'Failed to add wardrobe: ' + error.message,
+      });
     }
   });
 }
@@ -140,89 +148,97 @@ function createWardrobeCard(
       wardrobeCard.remove();
       removeFromDropdown(wardrobeName);
     } catch (error) {
-      alert("Failed to delete wardrobe:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed to Delete Wardrobe',
+        text: error.message,
+      });
     }
   });
 
-  let isEditing = false; 
-editButton.addEventListener("click", function () {
-  if (isEditing) return;
-  isEditing = true; 
-  const currentName = nameHeader.textContent.trim();
-  const inputContainer = document.createElement("div");
-  inputContainer.classList.add("edit-input-container");
+  let isEditing = false;
+  editButton.addEventListener("click", function () {
+    if (isEditing) return;
+    isEditing = true;
+    const currentName = nameHeader.textContent.trim();
+    const inputContainer = document.createElement("div");
+    inputContainer.classList.add("edit-input-container");
 
-  const inputField = document.createElement("input");
-  inputField.className = "form-control ed";
-  inputField.type = "text";
-  inputField.maxLength = 18;
-  inputField.value = currentName;
-  inputContainer.appendChild(inputField);
+    const inputField = document.createElement("input");
+    inputField.className = "form-control ed";
+    inputField.type = "text";
+    inputField.maxLength = 18;
+    inputField.value = currentName;
+    inputContainer.appendChild(inputField);
 
-  const saveButton = document.createElement("button");
-  saveButton.className = "btn btn-primary";
-  saveButton.textContent = "Save";
+    const saveButton = document.createElement("button");
+    saveButton.className = "btn btn-primary";
+    saveButton.textContent = "Save";
 
-  saveButton.addEventListener("click", async function (event) {
-    event.stopPropagation(); 
-    event.preventDefault(); 
+    saveButton.addEventListener("click", async function (event) {
+      event.stopPropagation();
+      event.preventDefault();
 
-    const newName = inputField.value.trim();
-    try {
-      const response = await fetch(
-        `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ wardrobeName: newName }),
+      const newName = inputField.value.trim();
+      try {
+        const response = await fetch(
+          `https://smartwardrobe-server.onrender.com/wardrobe/${wardrobeCode}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ wardrobeName: newName }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Failed to update wardrobe");
         }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to update wardrobe");
+        nameHeader.textContent = newName;
+        updateDropdown(wardrobeName, newName);
+        wardrobeName = newName;
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: 'Failed to update wardrobe: ' + error.message,
+        });
+      } finally {
+        inputContainer.replaceWith(nameHeader);
+        isEditing = false;
       }
-      nameHeader.textContent = newName;
-      updateDropdown(wardrobeName, newName);
-      wardrobeName = newName;
-    } catch (error) {
-      alert("Failed to update wardrobe: " + error.message);
-    } finally {
-      inputContainer.replaceWith(nameHeader);
-      isEditing = false; 
-    }
+    });
+
+    inputContainer.appendChild(saveButton);
+    nameHeader.replaceWith(inputContainer);
+    inputField.focus();
+
+    inputField.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        saveButton.click();
+      }
+    });
+
+    inputField.addEventListener("blur", function () {
+      if (inputField.value.trim() !== currentName) {
+        saveButton.click();
+      } else {
+        inputContainer.replaceWith(nameHeader);
+        isEditing = false;
+      }
+    });
   });
 
-  inputContainer.appendChild(saveButton);
-  nameHeader.replaceWith(inputContainer);
-  inputField.focus();
+  buttonWardrobeTitle.addEventListener("click", function (event) {
+    const wardrobeCode1 = JSON.stringify(wardrobeCode);
+    localStorage.setItem("currentWardrobeCode", wardrobeCode1);
+    localStorage.setItem("currentWardrobeName", wardrobeName);
 
-  inputField.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      saveButton.click();
+    const cursorStyle = getComputedStyle(event.target).cursor;
+    if (cursorStyle === "pointer" && !isEditing) {
+      window.location.href = "wardrobe.html";
     }
   });
-
-  inputField.addEventListener("blur", function () {
-    if (inputField.value.trim() !== currentName) {
-      saveButton.click();
-    } else {
-      inputContainer.replaceWith(nameHeader);
-      isEditing = false;
-    }
-  });
-});
-
-buttonWardrobeTitle.addEventListener("click", function (event) {
-  const wardrobeCode1 = JSON.stringify(wardrobeCode);
-  localStorage.setItem("currentWardrobeCode", wardrobeCode1);
-  localStorage.setItem("currentWardrobeName", wardrobeName);
-
-  const cursorStyle = getComputedStyle(event.target).cursor;
-  if (cursorStyle === "pointer" && !isEditing) {
-    window.location.href = "wardrobe.html";
-  }
-});
 }
 
 function createButton(className, text) {
